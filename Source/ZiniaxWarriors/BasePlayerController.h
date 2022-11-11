@@ -22,4 +22,9 @@ protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
+
+	void BasicAttackPressed();
+	void FirstAbilityPressed();
+	void SecondAbilityPressed();
+	void ThirdAbilityPressed();
 };

@@ -18,4 +18,25 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 void ABasePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+
+	InputComponent->BindAction("BasicAbility", IE_Pressed, this, &ABasePlayerController::BasicAttackPressed);
+	InputComponent->BindAction("SpecialAbility1", IE_Pressed, this, &ABasePlayerController::FirstAbilityPressed);
+	InputComponent->BindAction("SpecialAbility2", IE_Pressed, this, &ABasePlayerController::SecondAbilityPressed);
+	InputComponent->BindAction("SpecialAbility3", IE_Pressed, this, &ABasePlayerController::ThirdAbilityPressed);
+}
+
+void ABasePlayerController::BasicAttackPressed()
+{
+}
+
+void ABasePlayerController::FirstAbilityPressed()
+{
+}
+
+void ABasePlayerController::SecondAbilityPressed()
+{
+}
+
+void ABasePlayerController::ThirdAbilityPressed()
+{
 }
