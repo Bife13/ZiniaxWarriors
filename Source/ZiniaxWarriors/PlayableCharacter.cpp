@@ -44,17 +44,26 @@ APlayableCharacter::APlayableCharacter()
 	// Create a decal in the world to show the cursor's location
 	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
 	CursorToWorld->SetupAttachment(RootComponent);
-	// static ConstructorHelpers::FObjectFinder<UMaterial> DecalMaterialAsset(TEXT("Material'/Game/TopDownCPP/Blueprints/M_Cursor_Decal.M_Cursor_Decal'"));
-	// if (DecalMaterialAsset.Succeeded())
-	// {
-	// 	CursorToWorld->SetDecalMaterial(DecalMaterialAsset.Object);
-	// }
-	// CursorToWorld->DecalSize = FVector(16.0f, 32.0f, 32.0f);
-	// CursorToWorld->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
 
-	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+}
+
+void APlayableCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (UWorld* World = GetWorld())
+	{
+		CachedWorld = World;
+	}
+
+	for (USkillBase* Skill : Skills)
+	{
+		Skill = NewObject<USkillBase>(this);
+		Skill->InitializeSkill(this, CachedWorld);
+		RuntimeSkills.Add(Skill);
+	}
 }
 
 // Called every frame
@@ -74,5 +83,44 @@ void APlayableCharacter::Tick(float DeltaTime)
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
 	}
+}
 
+void APlayableCharacter::UseBasicAttack()
+{
+	if (Skills.IsValidIndex(0))
+	{
+		FVector v = FVector::ZeroVector;
+		float ZDirection = 60.0f;
+		RuntimeSkills[0]->UseSkill(v, ZDirection);
+	}
+}
+
+void APlayableCharacter::UseFirstAbility()
+{
+	if (Skills.IsValidIndex(1))
+	{
+		FVector v = FVector::ZeroVector;
+		float ZDirection = 60.0f;
+		RuntimeSkills[1]->UseSkill(v, ZDirection);
+	}
+}
+
+void APlayableCharacter::UseSecondAbility()
+{
+	if (Skills.IsValidIndex(2))
+	{
+		FVector v = FVector::ZeroVector;
+		float ZDirection = 60.0f;
+		RuntimeSkills[2]->UseSkill(v, ZDirection);
+	}
+}
+
+void APlayableCharacter::UseThirdAbility()
+{
+	if (Skills.IsValidIndex(3))
+	{
+		FVector v = FVector::ZeroVector;
+		float ZDirection = 60.0f;
+		RuntimeSkills[3]->UseSkill(v, ZDirection);
+	}
 }

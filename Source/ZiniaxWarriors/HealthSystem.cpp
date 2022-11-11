@@ -1,0 +1,66 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "HealthSystem.h"
+
+#pragma region MustHaveFunctions
+UHealthSystem::UHealthSystem()
+{
+	// This is a component that doesn't need a tick so lets disable it
+	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bStartWithTickEnabled = false;
+}
+
+void UHealthSystem::BeginPlay()
+{
+	Super::BeginPlay();
+}
+#pragma endregion
+#pragma region GeneralFunctions
+void UHealthSystem::TakeDamage(const float Amount)
+{
+	if (Amount > 0)
+	{
+		Health -= Amount;
+
+		OnDamageTakenEvent.Broadcast(Amount);
+	}
+}
+
+void UHealthSystem::RecoverHealth(const float Amount)
+{
+	if (Amount > 0)
+	{
+		Health += Amount;
+
+		OnDamageHealedEvent.Broadcast(Amount);
+	}
+}
+#pragma endregion
+#pragma region Gets
+float UHealthSystem::GetHealth() const
+{
+	return Health;
+}
+
+float UHealthSystem::GetMaxHealth() const
+{
+	return MaxHealth;
+}
+
+float UHealthSystem::GetHealthAsPercentage() const
+{
+	return Health / MaxHealth;
+}
+#pragma endregion
+#pragma region Sets
+void UHealthSystem::SetHealthToMaxHealth()
+{
+	Health = MaxHealth;
+}
+
+void UHealthSystem::SetMaxHealth(float Amount)
+{
+	MaxHealth = Amount;
+}
+#pragma endregion

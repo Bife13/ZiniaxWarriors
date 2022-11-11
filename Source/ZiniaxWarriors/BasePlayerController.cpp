@@ -27,16 +27,32 @@ void ABasePlayerController::SetupInputComponent()
 
 void ABasePlayerController::BasicAttackPressed()
 {
+	if (CachedPawnInterface)
+	{
+		CachedPawnInterface->UseBasicAttack();
+	}
 }
 
 void ABasePlayerController::FirstAbilityPressed()
 {
+	if (CachedPawnInterface)
+	{
+		CachedPawnInterface->UseFirstAbility();
+	}
 }
 
 void ABasePlayerController::SecondAbilityPressed()
 {
+	if (CachedPawnInterface)
+	{
+		CachedPawnInterface->UseSecondAbility();
+	}
 }
 
 void ABasePlayerController::ThirdAbilityPressed()
 {
+	if (CachedPawnInterface)
+	{
+		CachedPawnInterface->UseThirdAbility();
+	}
 }

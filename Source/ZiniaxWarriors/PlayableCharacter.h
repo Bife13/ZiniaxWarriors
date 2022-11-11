@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SkillBase.h"
+#include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
 
 UCLASS()
-class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter
+class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot
 {
 	GENERATED_BODY()
 
@@ -17,6 +19,7 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -24,6 +27,16 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld subobject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
+
+	virtual void UseBasicAttack() override;
+	virtual void UseFirstAbility() override;
+	virtual void UseSecondAbility() override;
+	virtual void UseThirdAbility() override;
+
+	TArray<USkillBase*> Skills;
+	TArray<USkillBase*> RuntimeSkills;
+
+	UWorld* CachedWorld;
 
 private:
 	/** Top down camera */
@@ -38,4 +51,3 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* CursorToWorld;
 };
-

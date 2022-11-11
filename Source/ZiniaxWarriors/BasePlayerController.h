@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UsableCharacterSkillSlot.h"
 #include "GameFramework/PlayerController.h"
 #include "BasePlayerController.generated.h"
 
@@ -17,7 +18,6 @@ class ZINIAXWARRIORS_API ABasePlayerController : public APlayerController
 public:
 	ABasePlayerController();
 
-
 protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
@@ -27,4 +27,6 @@ protected:
 	void FirstAbilityPressed();
 	void SecondAbilityPressed();
 	void ThirdAbilityPressed();
+
+	IUsableCharacterSkillSlot* CachedPawnInterface;
 };
