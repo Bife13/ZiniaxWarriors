@@ -48,7 +48,6 @@ APlayableCharacter::APlayableCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
-	// Skills.Add(projectile);
 }
 
 void APlayableCharacter::BeginPlay()

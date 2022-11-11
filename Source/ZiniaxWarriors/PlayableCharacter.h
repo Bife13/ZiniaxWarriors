@@ -40,10 +40,6 @@ public:
 
 	UWorld* CachedWorld;
 
-	UPROPERTY(EditAnywhere)
-
-	USkillBase* projectile;
-
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
