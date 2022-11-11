@@ -33,10 +33,16 @@ public:
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
 
-	TArray<USkillBase*> Skills;
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<USkillBase>> Skills;
+	UPROPERTY()
 	TArray<USkillBase*> RuntimeSkills;
 
 	UWorld* CachedWorld;
+
+	UPROPERTY(EditAnywhere)
+
+	USkillBase* projectile;
 
 private:
 	/** Top down camera */

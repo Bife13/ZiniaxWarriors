@@ -5,15 +5,17 @@
 
 void USkillBase::InitializeSkill(APawn* Pawn, UWorld* World)
 {
-	OnInitialize(Pawn, World);
+	OwnerPawn = Pawn;
+	OnInitialize();
 }
 
 void USkillBase::UseSkill(FVector& SkillInstanceLocation, float& ZDirection)
 {
-	OnUseSkill(SkillInstanceLocation, ZDirection);
+	OnUse();
 }
 
 void USkillBase::SetCooldown(float Amount)
 {
 	Cooldown = Amount;
 }
+

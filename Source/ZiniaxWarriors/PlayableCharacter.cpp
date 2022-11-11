@@ -47,6 +47,8 @@ APlayableCharacter::APlayableCharacter()
 
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	// Skills.Add(projectile);
 }
 
 void APlayableCharacter::BeginPlay()
@@ -57,12 +59,13 @@ void APlayableCharacter::BeginPlay()
 	{
 		CachedWorld = World;
 	}
-
-	for (USkillBase* Skill : Skills)
+	for (int i = 0; i < Skills.Num(); ++i)
 	{
-		Skill = NewObject<USkillBase>(this);
-		Skill->InitializeSkill(this, CachedWorld);
-		RuntimeSkills.Add(Skill);
+		if(USkillBase* newSkill = NewObject<USkillBase>(this, Skills[i]))
+		{
+			newSkill->InitializeSkill(this, CachedWorld);
+			RuntimeSkills.Add(newSkill);
+		};
 	}
 }
 
@@ -87,7 +90,7 @@ void APlayableCharacter::Tick(float DeltaTime)
 
 void APlayableCharacter::UseBasicAttack()
 {
-	if (Skills.IsValidIndex(0))
+	if (RuntimeSkills.IsValidIndex(0))
 	{
 		FVector v = FVector::ZeroVector;
 		float ZDirection = 60.0f;
@@ -97,7 +100,7 @@ void APlayableCharacter::UseBasicAttack()
 
 void APlayableCharacter::UseFirstAbility()
 {
-	if (Skills.IsValidIndex(1))
+	if (RuntimeSkills.IsValidIndex(1))
 	{
 		FVector v = FVector::ZeroVector;
 		float ZDirection = 60.0f;
@@ -107,7 +110,7 @@ void APlayableCharacter::UseFirstAbility()
 
 void APlayableCharacter::UseSecondAbility()
 {
-	if (Skills.IsValidIndex(2))
+	if (RuntimeSkills.IsValidIndex(2))
 	{
 		FVector v = FVector::ZeroVector;
 		float ZDirection = 60.0f;
@@ -117,7 +120,7 @@ void APlayableCharacter::UseSecondAbility()
 
 void APlayableCharacter::UseThirdAbility()
 {
-	if (Skills.IsValidIndex(3))
+	if (RuntimeSkills.IsValidIndex(3))
 	{
 		FVector v = FVector::ZeroVector;
 		float ZDirection = 60.0f;

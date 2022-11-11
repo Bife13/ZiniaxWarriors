@@ -15,6 +15,13 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 }
 
+void ABasePlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	CachedPawnInterface = Cast<IUsableCharacterSkillSlot>(InPawn);
+}
+
 void ABasePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();

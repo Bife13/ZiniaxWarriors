@@ -22,6 +22,7 @@ protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
+	virtual void OnPossess(APawn* InPawn) override;
 
 	void BasicAttackPressed();
 	void FirstAbilityPressed();

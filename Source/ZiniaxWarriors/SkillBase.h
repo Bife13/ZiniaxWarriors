@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
 public:
@@ -20,14 +20,18 @@ public:
 	virtual void UseSkill(FVector& SkillInstanceLocation, float& ZDirection) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnUseSkill(FVector& SkillInstanceLocation, float& ZDirection);
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnInitialize(APawn* Pawn, UWorld* World);
+	void OnUse();
 
-	
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInitialize();
+
+
 	UPROPERTY(BlueprintReadWrite)
 	float Cooldown;
 	UFUNCTION(BlueprintCallable)
 	void SetCooldown(float Amount);
+
+	UPROPERTY(BlueprintReadWrite)
+	APawn* OwnerPawn;
 	
 };
