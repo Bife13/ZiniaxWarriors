@@ -20,6 +20,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -29,13 +30,25 @@ public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
 
 protected:
+	UFUNCTION()
 	void LockRotation();
+	UFUNCTION()
 	void ConfigureCharacterMovement() const;
+	UFUNCTION()
 	void SetupCameraBoom();
+	UFUNCTION()
 	void SetupTopDownCamera();
+	UFUNCTION()
 	void CalculateCursorPosition() const;
+	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
+	UFUNCTION()
 	void PopulateSkillArray();
+
+	UFUNCTION()
+	void MoveVertical(float Value);
+	UFUNCTION()
+	void MoveHorizontal(float Value);
 
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
@@ -47,8 +60,9 @@ protected:
 	UPROPERTY()
 	TArray<USkillBase*> RuntimeSkills;
 
+	UPROPERTY()
 	UWorld* CachedWorld;
-
+	UPROPERTY()
 	FRotator RuntimeLookRotator;
 
 private:

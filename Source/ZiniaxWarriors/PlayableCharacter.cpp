@@ -50,6 +50,14 @@ void APlayableCharacter::BeginPlay()
 	PopulateSkillArray();
 }
 
+void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis("MoveVertical", this, &APlayableCharacter::MoveVertical);
+	PlayerInputComponent->BindAxis("MoveHorizontal", this, &APlayableCharacter::MoveHorizontal);
+}
+
 // Called every frame
 void APlayableCharacter::Tick(const float DeltaTime)
 {
@@ -133,6 +141,18 @@ void APlayableCharacter::PopulateSkillArray()
 			RuntimeSkills.Add(NewSkill);
 		};
 	}
+}
+
+void APlayableCharacter::MoveVertical(float Value)
+{
+	const FVector MoveDirection = {1, 0, 0};
+	AddMovementInput(MoveDirection, Value);
+}
+
+void APlayableCharacter::MoveHorizontal(float Value)
+{
+	const FVector MoveDirection = {0, 1, 0};
+	AddMovementInput(MoveDirection, Value);
 }
 
 void APlayableCharacter::UseBasicAttack()
