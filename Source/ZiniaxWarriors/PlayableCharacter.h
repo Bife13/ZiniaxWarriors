@@ -29,14 +29,14 @@ public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
 
 protected:
-
 	void LockRotation();
 	void ConfigureCharacterMovement() const;
 	void SetupCameraBoom();
 	void SetupTopDownCamera();
 	void CalculateCursorPosition() const;
+	FRotator CalculateLookingDirection() const;
 	void PopulateSkillArray();
-	
+
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
 	virtual void UseSecondAbility() override;
@@ -48,6 +48,8 @@ protected:
 	TArray<USkillBase*> RuntimeSkills;
 
 	UWorld* CachedWorld;
+
+	FRotator RuntimeLookRotator;
 
 private:
 	/** Top down camera */

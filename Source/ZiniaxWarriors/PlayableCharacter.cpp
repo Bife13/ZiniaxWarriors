@@ -7,6 +7,8 @@
 #include "Components/DecalComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetNodeHelperLibrary.h"
 
 // Sets default values
 APlayableCharacter::APlayableCharacter()
@@ -53,6 +55,7 @@ void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CalculateLookingDirection();
 	CalculateCursorPosition();
 }
 
@@ -104,6 +107,22 @@ void APlayableCharacter::CalculateCursorPosition() const
 	}
 }
 
+FRotator APlayableCharacter::CalculateLookingDirection() const
+{
+	if (CursorToWorld != nullptr)
+	{
+		const FVector PlayerPosition = this->GetTransform().GetLocation();
+		const FVector CursorPosition = CursorToWorld->GetComponentLocation();
+		FRotator ActualRotation = UKismetMathLibrary::FindLookAtRotation(PlayerPosition, CursorPosition);
+		ActualRotation.Roll = 0;
+		ActualRotation.Pitch = 0;
+		GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+		return ActualRotation;
+	}
+	return FRotator::ZeroRotator;
+}
+
+
 void APlayableCharacter::PopulateSkillArray()
 {
 	for (int i = 0; i < Skills.Num(); ++i)
@@ -120,8 +139,8 @@ void APlayableCharacter::UseBasicAttack()
 {
 	if (RuntimeSkills.IsValidIndex(0))
 	{
-		FVector v = this->GetTransform().GetLocation();
-		FRotator LookRotator = FRotator::ZeroRotator;
+		FVector v = CursorToWorld->GetComponentLocation();
+		FRotator LookRotator = CalculateLookingDirection();
 		RuntimeSkills[0]->UseSkill(v, LookRotator);
 	}
 }
