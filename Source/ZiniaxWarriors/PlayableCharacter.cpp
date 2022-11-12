@@ -101,6 +101,7 @@ void APlayableCharacter::SetupTopDownCamera()
 
 void APlayableCharacter::CalculateCursorPosition() const
 {
+	// TODO Look at this for the cursor position, its not fully right 
 	if (CursorToWorld != nullptr)
 	{
 		if (const APlayerController* PC = Cast<APlayerController>(GetController()))
@@ -157,40 +158,33 @@ void APlayableCharacter::MoveHorizontal(float Value)
 
 void APlayableCharacter::UseBasicAttack()
 {
-	if (RuntimeSkills.IsValidIndex(0))
+	if (RuntimeSkills.IsValidIndex(0) && !bIsCasting)
 	{
-		FVector SkillOrigin = CursorToWorld->GetComponentLocation();
-		FRotator LookRotator = CalculateLookingDirection();
-		RuntimeSkills[0]->UseSkill(SkillOrigin, LookRotator);
+		RuntimeSkills[0]->CastSkill();
 	}
 }
 
 void APlayableCharacter::UseFirstAbility()
 {
-	if (RuntimeSkills.IsValidIndex(1))
+	if (RuntimeSkills.IsValidIndex(1) && !bIsCasting)
 	{
-		FVector v = this->GetTransform().GetLocation();
-		FRotator LookRotator = FRotator::ZeroRotator;
-		RuntimeSkills[1]->UseSkill(v, LookRotator);
+		RuntimeSkills[1]->CastSkill();
 	}
 }
 
 void APlayableCharacter::UseSecondAbility()
 {
-	if (RuntimeSkills.IsValidIndex(2))
+	if (RuntimeSkills.IsValidIndex(2) && !bIsCasting)
 	{
-		FVector v = this->GetTransform().GetLocation();
-		FRotator LookRotator = FRotator::ZeroRotator;
-		RuntimeSkills[2]->UseSkill(v, LookRotator);
+
+		RuntimeSkills[2]->CastSkill();
 	}
 }
 
 void APlayableCharacter::UseThirdAbility()
 {
-	if (RuntimeSkills.IsValidIndex(3))
+	if (RuntimeSkills.IsValidIndex(3) && !bIsCasting)
 	{
-		FVector v = this->GetTransform().GetLocation();
-		FRotator LookRotator = FRotator::ZeroRotator;
-		RuntimeSkills[3]->UseSkill(v, LookRotator);
+		RuntimeSkills[3]->CastSkill();
 	}
 }

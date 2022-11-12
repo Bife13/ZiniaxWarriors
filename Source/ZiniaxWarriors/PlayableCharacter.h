@@ -29,6 +29,17 @@ public:
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
 
+	FORCEINLINE bool GetIsCasting() { return bIsCasting; }
+
+	FORCEINLINE bool SetIsCasting() { return bIsCasting = false; }
+
+	UFUNCTION()
+	FRotator CalculateLookingDirection() const;
+
+	UPROPERTY()
+	mutable bool bIsCasting = false;
+
+
 protected:
 	UFUNCTION()
 	void LockRotation();
@@ -40,8 +51,6 @@ protected:
 	void SetupTopDownCamera();
 	UFUNCTION()
 	void CalculateCursorPosition() const;
-	UFUNCTION()
-	FRotator CalculateLookingDirection() const;
 	UFUNCTION()
 	void PopulateSkillArray();
 
@@ -55,7 +64,7 @@ protected:
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
 
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY()
 	TArray<USkillBase*> RuntimeSkills;

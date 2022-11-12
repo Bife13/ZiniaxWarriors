@@ -24,5 +24,6 @@ class ZINIAXWARRIORS_API IUsableSkill
 public:
 	// TODO 
 	virtual void InitializeSkill(APawn* Pawn, UWorld* World) = 0;
-	virtual void UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanceRotation) = 0;
+	virtual void UseSkill() = 0;
+	virtual void CastSkill() =0;
 };

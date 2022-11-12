@@ -2,6 +2,8 @@
 
 
 #include "SkillBase.h"
+#include "PlayableCharacter.h"
+#include "Components/DecalComponent.h"
 
 void USkillBase::InitializeSkill(APawn* Pawn, UWorld* World)
 {
@@ -10,14 +12,16 @@ void USkillBase::InitializeSkill(APawn* Pawn, UWorld* World)
 	OnInitialize();
 }
 
-void USkillBase::UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanceRotation)
+
+void USkillBase::CastSkill()
 {
-	if (bCanUse)
+	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerPawn);
+
+	if (bCanUse && !PlayableCharacter->bIsCasting)
 	{
-		AbilityPosition = SkillInstanceLocation;
-		AbilityRotation = SkillInstanceRotation;
+		PlayableCharacter->bIsCasting = true;
 		bCanUse = false;
-		OnUse();
+		OnCast();
 	}
 	else
 	{
@@ -25,17 +29,34 @@ void USkillBase::UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanc
 	}
 }
 
+
 void USkillBase::StartCooldownTimer()
 {
 	FTimerHandle THandle;
 	const float Delay = Cooldown;
-	GetWorld()->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
+	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
+}
+
+void USkillBase::StartCastTimer()
+{
+	FTimerHandle THandle;
+	const float Delay = 1;
+	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
 }
 
 void USkillBase::ResetCooldown()
 {
 	bCanUse = true;
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Green, "Reset");
+}
+
+void USkillBase::UseSkill()
+{
+	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerPawn);
+	AbilityRotation = PlayableCharacter->CalculateLookingDirection();
+	PlayableCharacter->bIsCasting = false;
+
+	OnUse();
 }
 
 void USkillBase::SetCooldown(float Amount)

@@ -17,16 +17,21 @@ public:
 	GENERATED_BODY()
 
 	virtual void InitializeSkill(APawn* Pawn, UWorld* World) override;
-	virtual void UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanceRotation) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void UseSkill() override;
+	virtual void CastSkill() override;
 
 	UFUNCTION(BlueprintCallable, Category = Test)
 	void StartCooldownTimer();
+	UFUNCTION(BlueprintCallable, Category = Test)
+	void StartCastTimer();
 
 	void ResetCooldown();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void OnCast();
+	UFUNCTION(BlueprintImplementableEvent)
 	void OnUse();
-
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnInitialize();
 
@@ -53,4 +58,5 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);
+
 };
