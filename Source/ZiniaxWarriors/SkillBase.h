@@ -20,18 +20,17 @@ public:
 	virtual void UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanceRotation) override;
 
 	UFUNCTION(BlueprintCallable, Category = Test)
-	void CallCooldownTimer();
+	void StartCooldownTimer();
 
 	void ResetCooldown();
-	
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnUse();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnInitialize();
 
-
-	UPROPERTY(BlueprintReadWrite,EditInstanceOnly)
+	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float Cooldown;
 	UFUNCTION(BlueprintCallable)
 	void SetCooldown(float Amount);

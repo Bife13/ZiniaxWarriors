@@ -159,9 +159,9 @@ void APlayableCharacter::UseBasicAttack()
 {
 	if (RuntimeSkills.IsValidIndex(0))
 	{
-		FVector v = CursorToWorld->GetComponentLocation();
+		FVector SkillOrigin = CursorToWorld->GetComponentLocation();
 		FRotator LookRotator = CalculateLookingDirection();
-		RuntimeSkills[0]->UseSkill(v, LookRotator);
+		RuntimeSkills[0]->UseSkill(SkillOrigin, LookRotator);
 	}
 }
 

@@ -25,7 +25,7 @@ void USkillBase::UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanc
 	}
 }
 
-void USkillBase::CallCooldownTimer()
+void USkillBase::StartCooldownTimer()
 {
 	FTimerHandle THandle;
 	const float Delay = Cooldown;
