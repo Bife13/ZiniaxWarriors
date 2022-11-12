@@ -18,28 +18,15 @@ APlayableCharacter::APlayableCharacter()
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	// Don't rotate character to camera direction
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
+	LockRotation();
 
-	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate character to moving direction
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
-	GetCharacterMovement()->bConstrainToPlane = true;
-	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+	ConfigureCharacterMovement();
 
 	// Create a camera boom...
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
-	CameraBoom->TargetArmLength = 1000.f;
-	CameraBoom->SetRelativeRotation(FRotator(-65.f, 0.f, 0.f));
-	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+	SetupCameraBoom();
 
 	// Create a camera...
-	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	SetupTopDownCamera();
 
 	// Create a decal in the world to show the cursor's location
 	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
@@ -57,14 +44,8 @@ void APlayableCharacter::BeginPlay()
 	{
 		CachedWorld = World;
 	}
-	for (int i = 0; i < Skills.Num(); ++i)
-	{
-		if (USkillBase* NewSkill = NewObject<USkillBase>(this, Skills[i]))
-		{
-			NewSkill->InitializeSkill(this, CachedWorld);
-			RuntimeSkills.Add(NewSkill);
-		};
-	}
+
+	PopulateSkillArray();
 }
 
 // Called every frame
@@ -72,6 +53,43 @@ void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CalculateCursorPosition();
+}
+
+void APlayableCharacter::LockRotation()
+{
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+}
+
+void APlayableCharacter::ConfigureCharacterMovement() const
+{
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate character to moving direction
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+}
+
+void APlayableCharacter::SetupCameraBoom()
+{
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
+	CameraBoom->TargetArmLength = 1000.f;
+	CameraBoom->SetRelativeRotation(FRotator(-65.f, 0.f, 0.f));
+	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+}
+
+void APlayableCharacter::SetupTopDownCamera()
+{
+	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+}
+
+void APlayableCharacter::CalculateCursorPosition() const
+{
 	if (CursorToWorld != nullptr)
 	{
 		if (const APlayerController* PC = Cast<APlayerController>(GetController()))
@@ -83,6 +101,18 @@ void APlayableCharacter::Tick(const float DeltaTime)
 			CursorToWorld->SetWorldLocation(TraceHitResult.Location);
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
+	}
+}
+
+void APlayableCharacter::PopulateSkillArray()
+{
+	for (int i = 0; i < Skills.Num(); ++i)
+	{
+		if (USkillBase* NewSkill = NewObject<USkillBase>(this, Skills[i]))
+		{
+			NewSkill->InitializeSkill(this, CachedWorld);
+			RuntimeSkills.Add(NewSkill);
+		};
 	}
 }
 

@@ -31,7 +31,7 @@ public:
 	void OnInitialize();
 
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite,EditInstanceOnly)
 	float Cooldown;
 	UFUNCTION(BlueprintCallable)
 	void SetCooldown(float Amount);

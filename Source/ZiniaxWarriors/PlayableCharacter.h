@@ -21,19 +21,28 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
-	/** Returns TopDownCameraComponent subobject **/
+	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
-	/** Returns CameraBoom subobject **/
+	/** Returns CameraBoom SubObject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns CursorToWorld subobject **/
-	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
+	/** Returns CursorToWorld SubObject **/
+	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
 
+protected:
+
+	void LockRotation();
+	void ConfigureCharacterMovement() const;
+	void SetupCameraBoom();
+	void SetupTopDownCamera();
+	void CalculateCursorPosition() const;
+	void PopulateSkillArray();
+	
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditInstanceOnly)
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY()
 	TArray<USkillBase*> RuntimeSkills;
