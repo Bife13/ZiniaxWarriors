@@ -17,7 +17,7 @@ public:
 	GENERATED_BODY()
 
 	virtual void InitializeSkill(APawn* Pawn, UWorld* World) override;
-	virtual void UseSkill(FVector& SkillInstanceLocation, float& ZDirection) override;
+	virtual void UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanceRotation) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnUse();
@@ -33,5 +33,16 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	APawn* OwnerPawn;
+	UPROPERTY(BlueprintReadWrite)
+	UWorld* CachedWorld;
 	
+	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
+	TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(BlueprintReadWrite)
+	FVector AbilityPosition;
+	UPROPERTY(BlueprintReadWrite)
+	FRotator AbilityRotation;
+	
+private:
+	void SpawnSkillActor(UWorld& World, const FVector& Position, const FRotator& Rotation) const;
 };

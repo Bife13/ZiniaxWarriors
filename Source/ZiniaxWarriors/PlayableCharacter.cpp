@@ -47,7 +47,6 @@ APlayableCharacter::APlayableCharacter()
 
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
-
 }
 
 void APlayableCharacter::BeginPlay()
@@ -60,27 +59,27 @@ void APlayableCharacter::BeginPlay()
 	}
 	for (int i = 0; i < Skills.Num(); ++i)
 	{
-		if(USkillBase* newSkill = NewObject<USkillBase>(this, Skills[i]))
+		if (USkillBase* NewSkill = NewObject<USkillBase>(this, Skills[i]))
 		{
-			newSkill->InitializeSkill(this, CachedWorld);
-			RuntimeSkills.Add(newSkill);
+			NewSkill->InitializeSkill(this, CachedWorld);
+			RuntimeSkills.Add(NewSkill);
 		};
 	}
 }
 
 // Called every frame
-void APlayableCharacter::Tick(float DeltaTime)
+void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	if (CursorToWorld != nullptr)
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		if (const APlayerController* PC = Cast<APlayerController>(GetController()))
 		{
 			FHitResult TraceHitResult;
 			PC->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
-			FVector CursorFV = TraceHitResult.ImpactNormal;
-			FRotator CursorR = CursorFV.Rotation();
+			const FVector CursorFv = TraceHitResult.ImpactNormal;
+			const FRotator CursorR = CursorFv.Rotation();
 			CursorToWorld->SetWorldLocation(TraceHitResult.Location);
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
@@ -91,9 +90,9 @@ void APlayableCharacter::UseBasicAttack()
 {
 	if (RuntimeSkills.IsValidIndex(0))
 	{
-		FVector v = FVector::ZeroVector;
-		float ZDirection = 60.0f;
-		RuntimeSkills[0]->UseSkill(v, ZDirection);
+		FVector v = this->GetTransform().GetLocation();
+		FRotator LookRotator = FRotator::ZeroRotator;
+		RuntimeSkills[0]->UseSkill(v, LookRotator);
 	}
 }
 
@@ -101,9 +100,9 @@ void APlayableCharacter::UseFirstAbility()
 {
 	if (RuntimeSkills.IsValidIndex(1))
 	{
-		FVector v = FVector::ZeroVector;
-		float ZDirection = 60.0f;
-		RuntimeSkills[1]->UseSkill(v, ZDirection);
+		FVector v = this->GetTransform().GetLocation();
+		FRotator LookRotator = FRotator::ZeroRotator;
+		RuntimeSkills[1]->UseSkill(v, LookRotator);
 	}
 }
 
@@ -111,9 +110,9 @@ void APlayableCharacter::UseSecondAbility()
 {
 	if (RuntimeSkills.IsValidIndex(2))
 	{
-		FVector v = FVector::ZeroVector;
-		float ZDirection = 60.0f;
-		RuntimeSkills[2]->UseSkill(v, ZDirection);
+		FVector v = this->GetTransform().GetLocation();
+		FRotator LookRotator = FRotator::ZeroRotator;
+		RuntimeSkills[2]->UseSkill(v, LookRotator);
 	}
 }
 
@@ -121,8 +120,8 @@ void APlayableCharacter::UseThirdAbility()
 {
 	if (RuntimeSkills.IsValidIndex(3))
 	{
-		FVector v = FVector::ZeroVector;
-		float ZDirection = 60.0f;
-		RuntimeSkills[3]->UseSkill(v, ZDirection);
+		FVector v = this->GetTransform().GetLocation();
+		FRotator LookRotator = FRotator::ZeroRotator;
+		RuntimeSkills[3]->UseSkill(v, LookRotator);
 	}
 }
