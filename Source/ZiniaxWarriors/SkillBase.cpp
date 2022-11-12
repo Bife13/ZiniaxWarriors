@@ -12,10 +12,30 @@ void USkillBase::InitializeSkill(APawn* Pawn, UWorld* World)
 
 void USkillBase::UseSkill(FVector& SkillInstanceLocation, FRotator& SkillInstanceRotation)
 {
-	AbilityPosition = SkillInstanceLocation;
-	AbilityRotation = SkillInstanceRotation;
-	SpawnSkillActor(*CachedWorld, AbilityPosition, AbilityRotation);
-	OnUse();
+	if (bCanUse)
+	{
+		AbilityPosition = SkillInstanceLocation;
+		AbilityRotation = SkillInstanceRotation;
+		bCanUse = false;
+		OnUse();
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "On Cooldown");
+	}
+}
+
+void USkillBase::CallCooldownTimer()
+{
+	FTimerHandle THandle;
+	const float Delay = Cooldown;
+	GetWorld()->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
+}
+
+void USkillBase::ResetCooldown()
+{
+	bCanUse = true;
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Green, "Reset");
 }
 
 void USkillBase::SetCooldown(float Amount)
@@ -23,9 +43,9 @@ void USkillBase::SetCooldown(float Amount)
 	Cooldown = Amount;
 }
 
-void USkillBase::SpawnSkillActor(UWorld& World, const FVector& SpawnPosition, const FRotator& SpawnRotation) const
+void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	World.SpawnActor(ActorToSpawn, &SpawnPosition, &SpawnRotation, SpawnParams);
+	CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 }
