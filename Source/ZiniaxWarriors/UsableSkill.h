@@ -23,7 +23,7 @@ class ZINIAXWARRIORS_API IUsableSkill
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	// TODO 
-	virtual void InitializeSkill(APawn* Pawn, UWorld* World) = 0;
+	virtual void InitializeSkill(ACharacter* Playable, UWorld* World) = 0;
 	virtual void UseSkill() = 0;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) =0;
 };

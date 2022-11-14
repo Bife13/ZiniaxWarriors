@@ -26,4 +26,10 @@ public:
 	virtual void UseFirstAbility() = 0;
 	virtual void UseSecondAbility() = 0;
 	virtual void UseThirdAbility() = 0;
+
+	bool GetIsCasting() const { return bIsCasting; }
+	void SetIsCasting(bool Setter) { bIsCasting = Setter; }
+	
+protected:
+	bool bIsCasting = false;
 };

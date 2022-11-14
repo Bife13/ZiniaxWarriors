@@ -28,13 +28,10 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
+	
 
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
-
-	UPROPERTY()
-	mutable bool bIsCasting = false;
-
 
 protected:
 	UFUNCTION()

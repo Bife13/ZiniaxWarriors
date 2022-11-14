@@ -5,22 +5,20 @@
 #include "PlayableCharacter.h"
 #include "Components/DecalComponent.h"
 
-void USkillBase::InitializeSkill(APawn* Pawn, UWorld* World)
+void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World)
 {
-	OwnerPawn = Pawn;
+	OwnerCharacter = Playable;
 	CachedWorld = World;
+	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(OwnerCharacter);
 	OnInitialize();
 }
 
 
 void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 {
-	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerPawn);
-
-
-	if (bCanUse && !PlayableCharacter->bIsCasting)
+	if (bCanUse && !CachedCharacterInterface->GetIsCasting())
 	{
-		PlayableCharacter->bIsCasting = true;
+		CachedCharacterInterface->SetIsCasting(true);
 		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
 		OnCast();
@@ -54,9 +52,9 @@ void USkillBase::ResetCooldown()
 
 void USkillBase::UseSkill()
 {
-	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerPawn);
+	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerCharacter);
 	AbilityRotation = PlayableCharacter->CalculateLookingDirection();
-	PlayableCharacter->bIsCasting = false;
+	CachedCharacterInterface->SetIsCasting(false);
 
 	OnUse();
 }

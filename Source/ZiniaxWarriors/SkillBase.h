@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UsableCharacterSkillSlot.h"
 #include "UsableSkill.h"
 #include "UObject/NoExportTypes.h"
 #include "SkillBase.generated.h"
@@ -16,7 +17,7 @@ class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 public:
 	GENERATED_BODY()
 
-	virtual void InitializeSkill(APawn* Pawn, UWorld* World) override;
+	virtual void InitializeSkill(ACharacter* Playable, UWorld* World) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
@@ -44,7 +45,7 @@ public:
 	bool bCanUse = true;
 
 	UPROPERTY(BlueprintReadWrite)
-	APawn* OwnerPawn;
+	ACharacter* OwnerCharacter;
 	UPROPERTY(BlueprintReadWrite)
 	UWorld* CachedWorld;
 
@@ -58,7 +59,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	UAnimMontage* AttackAnimation;
 
-
+	IUsableCharacterSkillSlot* CachedCharacterInterface;
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);

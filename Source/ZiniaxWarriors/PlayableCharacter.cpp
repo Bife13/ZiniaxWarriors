@@ -8,7 +8,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetNodeHelperLibrary.h"
 
 // Sets default values
 APlayableCharacter::APlayableCharacter()
@@ -158,7 +157,7 @@ void APlayableCharacter::MoveHorizontal(float Value)
 
 void APlayableCharacter::UseBasicAttack()
 {
-	if (RuntimeSkills.IsValidIndex(0) && !bIsCasting)
+	if (RuntimeSkills.IsValidIndex(0))
 	{
 		RuntimeSkills[0]->CastSkill(AttackAnimations[0]);
 	}
@@ -166,7 +165,7 @@ void APlayableCharacter::UseBasicAttack()
 
 void APlayableCharacter::UseFirstAbility()
 {
-	if (RuntimeSkills.IsValidIndex(1) && !bIsCasting)
+	if (RuntimeSkills.IsValidIndex(1))
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[0]);
 	}
@@ -174,7 +173,7 @@ void APlayableCharacter::UseFirstAbility()
 
 void APlayableCharacter::UseSecondAbility()
 {
-	if (RuntimeSkills.IsValidIndex(2) && !bIsCasting)
+	if (RuntimeSkills.IsValidIndex(2))
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[0]);
 	}
@@ -182,7 +181,7 @@ void APlayableCharacter::UseSecondAbility()
 
 void APlayableCharacter::UseThirdAbility()
 {
-	if (RuntimeSkills.IsValidIndex(3) && !bIsCasting)
+	if (RuntimeSkills.IsValidIndex(3))
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[0]);
 	}
