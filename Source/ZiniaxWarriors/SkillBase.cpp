@@ -17,6 +17,7 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 {
 	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerPawn);
 
+
 	if (bCanUse && !PlayableCharacter->bIsCasting)
 	{
 		PlayableCharacter->bIsCasting = true;

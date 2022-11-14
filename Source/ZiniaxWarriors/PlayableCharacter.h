@@ -29,10 +29,6 @@ public:
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
 
-	FORCEINLINE bool GetIsCasting() { return bIsCasting; }
-
-	FORCEINLINE bool SetIsCasting() { return bIsCasting = false; }
-
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
 
