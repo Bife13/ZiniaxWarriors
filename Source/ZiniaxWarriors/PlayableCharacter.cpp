@@ -17,7 +17,7 @@ APlayableCharacter::APlayableCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set size for player capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(60.f, 96.0f);
 
 	// Don't rotate character to camera direction
 	LockRotation();
@@ -160,7 +160,7 @@ void APlayableCharacter::UseBasicAttack()
 {
 	if (RuntimeSkills.IsValidIndex(0) && !bIsCasting)
 	{
-		RuntimeSkills[0]->CastSkill();
+		RuntimeSkills[0]->CastSkill(AttackAnimations[0]);
 	}
 }
 
@@ -168,7 +168,7 @@ void APlayableCharacter::UseFirstAbility()
 {
 	if (RuntimeSkills.IsValidIndex(1) && !bIsCasting)
 	{
-		RuntimeSkills[1]->CastSkill();
+		RuntimeSkills[1]->CastSkill(AttackAnimations[0]);
 	}
 }
 
@@ -176,8 +176,7 @@ void APlayableCharacter::UseSecondAbility()
 {
 	if (RuntimeSkills.IsValidIndex(2) && !bIsCasting)
 	{
-
-		RuntimeSkills[2]->CastSkill();
+		RuntimeSkills[2]->CastSkill(AttackAnimations[0]);
 	}
 }
 
@@ -185,6 +184,6 @@ void APlayableCharacter::UseThirdAbility()
 {
 	if (RuntimeSkills.IsValidIndex(3) && !bIsCasting)
 	{
-		RuntimeSkills[3]->CastSkill();
+		RuntimeSkills[3]->CastSkill(AttackAnimations[0]);
 	}
 }

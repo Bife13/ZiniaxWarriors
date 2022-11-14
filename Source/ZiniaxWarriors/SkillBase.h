@@ -19,7 +19,7 @@ public:
 	virtual void InitializeSkill(APawn* Pawn, UWorld* World) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
-	virtual void CastSkill() override;
+	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
 
 	UFUNCTION(BlueprintCallable, Category = Test)
 	void StartCooldownTimer();
@@ -55,8 +55,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FRotator AbilityRotation;
 
+	UPROPERTY(BlueprintReadWrite)
+	UAnimMontage* AttackAnimation;
+
+
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);
-
 };

@@ -68,6 +68,8 @@ protected:
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY()
 	TArray<USkillBase*> RuntimeSkills;
+	UPROPERTY(EditAnywhere)
+	TArray<UAnimMontage*> AttackAnimations;
 
 	UPROPERTY()
 	UWorld* CachedWorld;

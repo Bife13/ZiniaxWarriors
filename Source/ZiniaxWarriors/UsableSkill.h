@@ -25,5 +25,5 @@ public:
 	// TODO 
 	virtual void InitializeSkill(APawn* Pawn, UWorld* World) = 0;
 	virtual void UseSkill() = 0;
-	virtual void CastSkill() =0;
+	virtual void CastSkill(UAnimMontage* AnimationToPlay) =0;
 };

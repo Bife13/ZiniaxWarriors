@@ -13,13 +13,14 @@ void USkillBase::InitializeSkill(APawn* Pawn, UWorld* World)
 }
 
 
-void USkillBase::CastSkill()
+void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 {
 	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerPawn);
 
 	if (bCanUse && !PlayableCharacter->bIsCasting)
 	{
 		PlayableCharacter->bIsCasting = true;
+		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
 		OnCast();
 	}
