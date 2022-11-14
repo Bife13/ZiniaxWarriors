@@ -30,5 +30,5 @@ protected:
 	void SecondAbilityPressed();
 	void ThirdAbilityPressed();
 
-	IUsableCharacterSkillSlot* CachedPawnInterface;
+	IUsableCharacterSkillSlot* CachedCharacterInterface;
 };

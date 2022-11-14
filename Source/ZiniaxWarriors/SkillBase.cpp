@@ -16,7 +16,7 @@ void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World)
 
 void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 {
-	if (bCanUse && !CachedCharacterInterface->GetIsCasting())
+	if (bCanUse)
 	{
 		CachedCharacterInterface->SetIsCasting(true);
 		AttackAnimation = AnimationToPlay;
@@ -33,14 +33,14 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 void USkillBase::StartCooldownTimer()
 {
 	FTimerHandle THandle;
-	const float Delay = Cooldown;
+	const float Delay = AbilityCooldown;
 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
 }
 
 void USkillBase::StartCastTimer()
 {
 	FTimerHandle THandle;
-	const float Delay = 1;
+	const float Delay = AbilityCastTime;
 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
 }
 
@@ -59,10 +59,21 @@ void USkillBase::UseSkill()
 	OnUse();
 }
 
-void USkillBase::SetCooldown(float Amount)
+void USkillBase::SetCooldown(const float Cooldown)
 {
-	Cooldown = Amount;
+	AbilityCooldown = Cooldown;
 }
+
+void USkillBase::SetCastTime(const float CastTime)
+{
+	AbilityCastTime = CastTime;
+}
+
+void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
+{
+	AbilityDamage = Power * AbilityPower;
+}
+
 
 void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {

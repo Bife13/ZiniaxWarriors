@@ -19,7 +19,7 @@ void ABasePlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	CachedPawnInterface = Cast<IUsableCharacterSkillSlot>(InPawn);
+	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(InPawn);
 }
 
 void ABasePlayerController::SetupInputComponent()
@@ -34,32 +34,32 @@ void ABasePlayerController::SetupInputComponent()
 
 void ABasePlayerController::BasicAttackPressed()
 {
-	if (CachedPawnInterface)
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
 	{
-		CachedPawnInterface->UseBasicAttack();
+		CachedCharacterInterface->UseBasicAttack();
 	}
 }
 
 void ABasePlayerController::FirstAbilityPressed()
 {
-	if (CachedPawnInterface)
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
 	{
-		CachedPawnInterface->UseFirstAbility();
+		CachedCharacterInterface->UseFirstAbility();
 	}
 }
 
 void ABasePlayerController::SecondAbilityPressed()
 {
-	if (CachedPawnInterface)
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
 	{
-		CachedPawnInterface->UseSecondAbility();
+		CachedCharacterInterface->UseSecondAbility();
 	}
 }
 
 void ABasePlayerController::ThirdAbilityPressed()
 {
-	if (CachedPawnInterface)
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
 	{
-		CachedPawnInterface->UseThirdAbility();
+		CachedCharacterInterface->UseThirdAbility();
 	}
 }

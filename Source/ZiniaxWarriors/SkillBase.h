@@ -8,9 +8,7 @@
 #include "UObject/NoExportTypes.h"
 #include "SkillBase.generated.h"
 
-/**
- * 
- */
+
 UCLASS(Blueprintable)
 class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
@@ -37,9 +35,20 @@ public:
 	void OnInitialize();
 
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
-	float Cooldown;
+	float AbilityCooldown;
 	UFUNCTION(BlueprintCallable)
-	void SetCooldown(float Amount);
+	void SetCooldown(float Cooldown);
+
+	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	float AbilityCastTime;
+	UFUNCTION(BlueprintCallable)
+	void SetCastTime(float CastTime);
+
+	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	float AbilityDamage;
+	UFUNCTION(BlueprintCallable)
+	void SetAbilityDamage(float Power, float AbilityPower);
+
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bCanUse = true;
