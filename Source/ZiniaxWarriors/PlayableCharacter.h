@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HealthSystem.h"
 #include "SkillBase.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
@@ -34,6 +35,8 @@ public:
 	FRotator CalculateLookingDirection() const;
 
 protected:
+	UFUNCTION(BlueprintCallable)
+	void SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance);
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()
@@ -68,6 +71,8 @@ protected:
 	UWorld* CachedWorld;
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
+	UPROPERTY()
+	class UHealthSystem* HealthSystem;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 

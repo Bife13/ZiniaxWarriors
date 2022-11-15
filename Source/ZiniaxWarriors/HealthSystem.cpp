@@ -14,6 +14,7 @@ UHealthSystem::UHealthSystem()
 void UHealthSystem::BeginPlay()
 {
 	Super::BeginPlay();
+	Health = MaxHealth;
 }
 #pragma endregion
 #pragma region GeneralFunctions
@@ -21,7 +22,7 @@ void UHealthSystem::TakeDamage(const float Amount)
 {
 	if (Amount > 0)
 	{
-		Health -= Amount;
+		Health -= Amount * (100) / (100+ Resistance);
 
 		OnDamageTakenEvent.Broadcast(Amount);
 	}
@@ -63,4 +64,9 @@ void UHealthSystem::SetMaxHealth(float Amount)
 {
 	MaxHealth = Amount;
 }
+void UHealthSystem::SetResistance(float Amount)
+{
+	Resistance = Amount;
+}
+
 #pragma endregion
