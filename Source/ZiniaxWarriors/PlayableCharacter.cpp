@@ -89,7 +89,6 @@ void APlayableCharacter::SetupCameraBoom()
 	CameraBoom->TargetArmLength = 1000.f;
 	CameraBoom->SetRelativeRotation(FRotator(-65.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
-
 }
 
 void APlayableCharacter::SetupTopDownCamera()
