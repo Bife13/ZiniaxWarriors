@@ -28,7 +28,7 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-	
+
 
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
@@ -42,7 +42,7 @@ protected:
 	void SetupCameraBoom();
 	UFUNCTION()
 	void SetupTopDownCamera();
-	UFUNCTION()
+	UFUNCTION(Client, Unreliable)
 	void CalculateCursorPosition() const;
 	UFUNCTION()
 	void PopulateSkillArray();
@@ -68,6 +68,8 @@ protected:
 	UWorld* CachedWorld;
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
+	UPROPERTY(BlueprintReadWrite)
+	UArrowComponent* ShootingPoint;
 
 private:
 	/** Top down camera */

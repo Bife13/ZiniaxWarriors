@@ -47,6 +47,7 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
+	
 }
 
 void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -98,7 +99,9 @@ void APlayableCharacter::SetupTopDownCamera()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
 
-void APlayableCharacter::CalculateCursorPosition() const
+
+
+void APlayableCharacter::CalculateCursorPosition_Implementation() const
 {
 	// TODO Look at this for the cursor position, its not fully right 
 	if (CursorToWorld != nullptr)
