@@ -57,6 +57,14 @@ void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveHorizontal", this, &APlayableCharacter::MoveHorizontal);
 }
 
+void APlayableCharacter::SetupHealthSystem( float MaxHealth, float Resistance)
+{
+	
+	HealthSystem = CreateDefaultSubobject<UHealthSystem>(TEXT("HealhSystem"));
+	HealthSystem->SetResistance(Resistance);
+	HealthSystem->SetMaxHealth(MaxHealth);
+}
+
 // Called every frame
 void APlayableCharacter::Tick(const float DeltaTime)
 {
