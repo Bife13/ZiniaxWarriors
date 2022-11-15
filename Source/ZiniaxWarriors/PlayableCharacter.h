@@ -36,7 +36,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(float MaxHealth, float Resistance);
+	void SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance);
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()

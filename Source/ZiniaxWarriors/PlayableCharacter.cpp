@@ -47,7 +47,6 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
-	
 }
 
 void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -58,10 +57,9 @@ void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveHorizontal", this, &APlayableCharacter::MoveHorizontal);
 }
 
-void APlayableCharacter::SetupHealthSystem( float MaxHealth, float Resistance)
+void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem,float MaxHealth, float Resistance)
 {
-	
-	HealthSystem = CreateDefaultSubobject<UHealthSystem>(TEXT("HealhSystem"));
+	HealthSystem = NewHealthSystem;
 	HealthSystem->SetResistance(Resistance);
 	HealthSystem->SetMaxHealth(MaxHealth);
 }
@@ -106,7 +104,6 @@ void APlayableCharacter::SetupTopDownCamera()
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
-
 
 
 void APlayableCharacter::CalculateCursorPosition_Implementation() const
