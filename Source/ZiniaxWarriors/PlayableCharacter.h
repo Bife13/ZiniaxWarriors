@@ -45,7 +45,7 @@ protected:
 	void SetupCameraBoom();
 	UFUNCTION()
 	void SetupTopDownCamera();
-	UFUNCTION()
+	UFUNCTION(Client, Unreliable)
 	void CalculateCursorPosition() const;
 	UFUNCTION()
 	void PopulateSkillArray();
@@ -73,6 +73,9 @@ protected:
 	FRotator RuntimeLookRotator;
 	UPROPERTY()
 	class UHealthSystem* HealthSystem;
+	UPROPERTY(BlueprintReadWrite)
+	UArrowComponent* ShootingPoint;
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

@@ -47,6 +47,7 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
+	
 }
 
 void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -97,7 +98,6 @@ void APlayableCharacter::SetupCameraBoom()
 	CameraBoom->TargetArmLength = 1000.f;
 	CameraBoom->SetRelativeRotation(FRotator(-65.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
-
 }
 
 void APlayableCharacter::SetupTopDownCamera()
@@ -107,7 +107,9 @@ void APlayableCharacter::SetupTopDownCamera()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
 
-void APlayableCharacter::CalculateCursorPosition() const
+
+
+void APlayableCharacter::CalculateCursorPosition_Implementation() const
 {
 	// TODO Look at this for the cursor position, its not fully right 
 	if (CursorToWorld != nullptr)
@@ -176,7 +178,7 @@ void APlayableCharacter::UseFirstAbility()
 {
 	if (RuntimeSkills.IsValidIndex(1))
 	{
-		RuntimeSkills[1]->CastSkill(AttackAnimations[0]);
+		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
 	}
 }
 
