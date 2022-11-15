@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "Idamageable.generated.h"
+#include "Damageable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UIdamageable : public UInterface
+class UDamageable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,7 +16,7 @@ class UIdamageable : public UInterface
 /**
  * 
  */
-class ZINIAXWARRIORS_API IIdamageable
+class ZINIAXWARRIORS_API IDamageable
 {
 	GENERATED_BODY()
 

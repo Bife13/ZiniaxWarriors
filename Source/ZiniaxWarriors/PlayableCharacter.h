@@ -10,7 +10,7 @@
 #include "PlayableCharacter.generated.h"
 
 UCLASS()
-class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot 
+class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot
 {
 	GENERATED_BODY()
 
@@ -22,30 +22,21 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
+
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom SubObject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-<<<<<<< Updated upstream
-	
-=======
-   
 
-	
-	FORCEINLINE bool GetIsCasting() { return bIsCasting; }
-
-	FORCEINLINE bool SetIsCasting() { return bIsCasting = false; }
->>>>>>> Stashed changes
 
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(float MaxHealth,float Resistance);
+	void SetupHealthSystem(float MaxHealth, float Resistance);
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()
@@ -81,7 +72,7 @@ protected:
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
 	UPROPERTY()
-	class UHealthSystem* HealthSystem; 
+	class UHealthSystem* HealthSystem;
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

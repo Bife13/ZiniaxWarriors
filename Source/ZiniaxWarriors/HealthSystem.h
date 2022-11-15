@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Idamageable.h"
+#include "Damageable.h"
 #include "HealthSystem.generated.h"
 
 DECLARE_EVENT_OneParam(UCPP_HealthSystem, DamageTakenEvent, float)
 DECLARE_EVENT_OneParam(UCPP_HealthSystem, HealDamageEvent, float)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ZINIAXWARRIORS_API UHealthSystem : public UActorComponent , public IIdamageable
+class ZINIAXWARRIORS_API UHealthSystem : public UActorComponent , public IDamageable
 {
 	GENERATED_BODY()
 
