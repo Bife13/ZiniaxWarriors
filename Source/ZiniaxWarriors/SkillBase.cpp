@@ -75,9 +75,11 @@ void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
 }
 
 
-void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
+AActor* USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
+	// CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
+	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
+	return SpawnedAbility;
 }

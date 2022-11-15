@@ -183,7 +183,7 @@ void APlayableCharacter::UseSecondAbility()
 {
 	if (RuntimeSkills.IsValidIndex(2))
 	{
-		RuntimeSkills[2]->CastSkill(AttackAnimations[0]);
+		RuntimeSkills[2]->CastSkill(AttackAnimations[1]);
 	}
 }
 
@@ -191,6 +191,6 @@ void APlayableCharacter::UseThirdAbility()
 {
 	if (RuntimeSkills.IsValidIndex(3))
 	{
-		RuntimeSkills[3]->CastSkill(AttackAnimations[0]);
+		RuntimeSkills[3]->CastSkill(AttackAnimations[1]);
 	}
 }

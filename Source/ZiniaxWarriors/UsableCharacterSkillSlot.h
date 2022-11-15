@@ -29,7 +29,8 @@ public:
 
 	bool GetIsCasting() const { return bIsCasting; }
 	void SetIsCasting(bool Setter) { bIsCasting = Setter; }
-	
+
+
 protected:
 	bool bIsCasting = false;
 };
