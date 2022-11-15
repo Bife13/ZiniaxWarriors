@@ -170,7 +170,7 @@ void APlayableCharacter::UseFirstAbility()
 {
 	if (RuntimeSkills.IsValidIndex(1))
 	{
-		RuntimeSkills[1]->CastSkill(AttackAnimations[0]);
+		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
 	}
 }
 
