@@ -33,10 +33,6 @@ public:
 	
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
-	UFUNCTION()
-	void MoveVertical(float Value);
-	UFUNCTION()
-	void MoveHorizontal(float Value);
 
 	UFUNCTION(Server,Unreliable)
     virtual void MoveVertical(float Value) override;
