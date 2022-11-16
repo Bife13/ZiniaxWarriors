@@ -24,7 +24,8 @@ public:
 	void StartCooldownTimer();
 	UFUNCTION(BlueprintCallable, Category = Test)
 	void StartCastTimer();
-
+	
+	UFUNCTION(BlueprintCallable, Category = Test)
 	void ResetCooldown();
 
 	UFUNCTION(BlueprintImplementableEvent)
