@@ -30,19 +30,19 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 }
 
 
-void USkillBase::StartCooldownTimer()
-{
-	FTimerHandle THandle;
-	const float Delay = AbilityCooldown;
-	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
-}
-
-void USkillBase::StartCastTimer()
-{
-	FTimerHandle THandle;
-	const float Delay = AbilityCastTime;
-	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
-}
+// void USkillBase::StartCooldownTimer()
+// {
+// 	FTimerHandle THandle;
+// 	const float Delay = AbilityCooldown;
+// 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
+// }
+//
+// void USkillBase::StartCastTimer()
+// {
+// 	FTimerHandle THandle;
+// 	const float Delay = AbilityCastTime;
+// 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
+// }
 
 void USkillBase::ResetCooldown()
 {
