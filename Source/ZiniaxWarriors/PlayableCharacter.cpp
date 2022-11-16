@@ -56,6 +56,7 @@ void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float
 	HealthSystem = NewHealthSystem;
 	HealthSystem->SetResistance(Resistance);
 	HealthSystem->SetMaxHealth(MaxHealth);
+	HealthSystem->SetHealthToMaxHealth();
 	BaseSpeed = Speed;
 }
 
