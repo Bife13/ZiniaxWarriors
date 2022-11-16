@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "UsableSkill.generated.h"
+#include "MoveableCharacter.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UUsableSkill : public UInterface
+class UMoveableCharacter : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,14 +16,13 @@ class UUsableSkill : public UInterface
 /**
  * 
  */
-class ZINIAXWARRIORS_API IUsableSkill
+class ZINIAXWARRIORS_API IMoveableCharacter
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	// TODO 
-	virtual void InitializeSkill(ACharacter* Playable, UWorld* World,int Team) = 0;
-	virtual void UseSkill() = 0;
-	virtual void CastSkill(UAnimMontage* AnimationToPlay) =0;
+
+	virtual void MoveVertical(float Value) = 0;
+	virtual void MoveHorizontal(float Value) = 0;
 };

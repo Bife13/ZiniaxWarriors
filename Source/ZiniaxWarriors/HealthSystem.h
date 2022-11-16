@@ -27,7 +27,7 @@ public:
 	float GetHealthAsPercentage() const;
 	//General functions
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage(float Amount) override;
+	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
 	void RecoverHealth(float Amount);
 	//Sets
