@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayableCharacter.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/PlayerController.h"
 #include "BasePlayerController.generated.h"
@@ -30,5 +31,9 @@ protected:
 	void SecondAbilityPressed();
 	void ThirdAbilityPressed();
 
+	void MoveVertical(float Value);
+	void MoveHorizontal(float Value);
+
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
+	APlayableCharacter* Char;
 };

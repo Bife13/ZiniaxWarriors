@@ -19,11 +19,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
-
-	UFUNCTION(BlueprintCallable, Category = Test)
-	void StartCooldownTimer();
-	UFUNCTION(BlueprintCallable, Category = Test)
-	void StartCastTimer();
+	
+	// UFUNCTION(BlueprintCallable, Category = Test)
+	// void StartCooldownTimer();
+	// UFUNCTION(BlueprintCallable, Category = Test)
+	// void StartCastTimer();
 	
 	UFUNCTION(BlueprintCallable, Category = Test)
 	void ResetCooldown();

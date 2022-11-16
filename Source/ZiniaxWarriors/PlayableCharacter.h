@@ -29,14 +29,17 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-
-
+	
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
+	UFUNCTION()
+	void MoveVertical(float Value);
+	UFUNCTION()
+	void MoveHorizontal(float Value);
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance);
+	void SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance, float Speed);
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()
@@ -50,10 +53,6 @@ protected:
 	UFUNCTION()
 	void PopulateSkillArray();
 
-	UFUNCTION()
-	void MoveVertical(float Value);
-	UFUNCTION()
-	void MoveHorizontal(float Value);
 
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
@@ -75,6 +74,8 @@ protected:
 	class UHealthSystem* HealthSystem;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
+	UPROPERTY()
+	float BaseSpeed;
 
 private:
 	/** Top down camera */

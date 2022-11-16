@@ -53,15 +53,16 @@ void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveVertical", this, &APlayableCharacter::MoveVertical);
-	PlayerInputComponent->BindAxis("MoveHorizontal", this, &APlayableCharacter::MoveHorizontal);
+	// PlayerInputComponent->BindAxis("MoveVertical", this, &APlayableCharacter::MoveVertical);
+	// PlayerInputComponent->BindAxis("MoveHorizontal", this, &APlayableCharacter::MoveHorizontal);
 }
 
-void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem,float MaxHealth, float Resistance)
+void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance, float Speed)
 {
 	HealthSystem = NewHealthSystem;
 	HealthSystem->SetResistance(Resistance);
 	HealthSystem->SetMaxHealth(MaxHealth);
+	BaseSpeed = Speed;
 }
 
 // Called every frame
@@ -71,6 +72,15 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	CalculateLookingDirection();
 	CalculateCursorPosition();
+
+	if (bIsCasting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * .3f;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	}
 }
 
 void APlayableCharacter::LockRotation()
