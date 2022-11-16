@@ -4,24 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "HealthSystem.h"
+#include "MoveableCharacter.h"
 #include "SkillBase.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
 
 UCLASS()
-class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot
+class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot, public IMoveableCharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
+
 	APlayableCharacter();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -33,6 +34,11 @@ public:
 
 	UFUNCTION()
 	FRotator CalculateLookingDirection() const;
+
+	UFUNCTION(Server,Unreliable)
+    virtual void MoveVertical(float Value) override;
+	UFUNCTION(Server,Unreliable)
+	virtual void MoveHorizontal(float Value) override;
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -50,10 +56,6 @@ protected:
 	UFUNCTION()
 	void PopulateSkillArray();
 
-	UFUNCTION()
-	void MoveVertical(float Value);
-	UFUNCTION()
-	void MoveHorizontal(float Value);
 
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
@@ -75,7 +77,8 @@ protected:
 	class UHealthSystem* HealthSystem;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
-
+    UPROPERTY()
+	int TeamID;
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

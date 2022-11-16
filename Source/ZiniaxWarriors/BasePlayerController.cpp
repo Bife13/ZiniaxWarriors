@@ -20,6 +20,7 @@ void ABasePlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(InPawn);
+	CachedMoveableInterface = Cast<IMoveableCharacter>(InPawn);
 }
 
 void ABasePlayerController::SetupInputComponent()
@@ -30,6 +31,9 @@ void ABasePlayerController::SetupInputComponent()
 	InputComponent->BindAction("SpecialAbility1", IE_Pressed, this, &ABasePlayerController::FirstAbilityPressed);
 	InputComponent->BindAction("SpecialAbility2", IE_Pressed, this, &ABasePlayerController::SecondAbilityPressed);
 	InputComponent->BindAction("SpecialAbility3", IE_Pressed, this, &ABasePlayerController::ThirdAbilityPressed);
+	InputComponent->BindAxis("MoveVertical",this,&ABasePlayerController::MoveVertical);
+	InputComponent->BindAxis("MoveHorizontal",this,&ABasePlayerController::MoveHorizontal);
+	
 }
 
 void ABasePlayerController::BasicAttackPressed()
@@ -62,4 +66,14 @@ void ABasePlayerController::ThirdAbilityPressed()
 	{
 		CachedCharacterInterface->UseThirdAbility();
 	}
+}
+
+void ABasePlayerController::MoveVertical(float Value)
+{
+	CachedMoveableInterface->MoveVertical(Value);
+}
+
+void ABasePlayerController::MoveHorizontal(float Value)
+{
+	CachedMoveableInterface->MoveHorizontal(Value);
 }

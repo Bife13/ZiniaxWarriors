@@ -49,13 +49,7 @@ void APlayableCharacter::BeginPlay()
 	PopulateSkillArray();
 }
 
-void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveVertical", this, &APlayableCharacter::MoveVertical);
-	PlayerInputComponent->BindAxis("MoveHorizontal", this, &APlayableCharacter::MoveHorizontal);
-}
 
 void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem,float MaxHealth, float Resistance)
 {
@@ -145,19 +139,19 @@ void APlayableCharacter::PopulateSkillArray()
 	{
 		if (USkillBase* NewSkill = NewObject<USkillBase>(this, Skills[i]))
 		{
-			NewSkill->InitializeSkill(this, CachedWorld);
+			NewSkill->InitializeSkill(this, CachedWorld,TeamID);
 			RuntimeSkills.Add(NewSkill);
 		};
 	}
 }
 
-void APlayableCharacter::MoveVertical(float Value)
+void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
-void APlayableCharacter::MoveHorizontal(float Value)
+void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 {
 	const FVector MoveDirection = {0, 1, 0};
 	AddMovementInput(MoveDirection, Value);
@@ -194,3 +188,5 @@ void APlayableCharacter::UseThirdAbility()
 		RuntimeSkills[3]->CastSkill(AttackAnimations[1]);
 	}
 }
+
+

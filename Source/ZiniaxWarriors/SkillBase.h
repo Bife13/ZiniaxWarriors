@@ -15,7 +15,7 @@ class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 public:
 	GENERATED_BODY()
 
-	virtual void InitializeSkill(ACharacter* Playable, UWorld* World) override;
+	virtual void InitializeSkill(ACharacter* Playable, UWorld* World,int Team) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
@@ -67,9 +67,14 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	UAnimMontage* AttackAnimation;
-
+	
+	UFUNCTION(BlueprintCallable)
+	int GetTeamId() const{return TeamId;}
+	
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 protected:
 	UFUNCTION(BlueprintCallable)
 	AActor* SpawnSkillActor(const FVector& SpawnPosition);
+	UPROPERTY()
+	int TeamId;
 };
