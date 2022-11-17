@@ -52,5 +52,6 @@ private: // This can be protected if we want to subclass the Health Component
 	UPROPERTY(VisibleAnywhere)
 	float Health;	
 	float MaxHealth;
+	UPROPERTY(VisibleAnywhere)
 	float Resistance;
 };
