@@ -6,7 +6,7 @@
 #include "SkillActor.h"
 #include "Components/DecalComponent.h"
 
-void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World,int Team)
+void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {
 	OwnerCharacter = Playable;
 	CachedWorld = World;
@@ -76,6 +76,11 @@ void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
 	AbilityDamage = Power * AbilityPower;
 }
 
+void USkillBase::SetAbilityRange(const float Range)
+{
+	AbilityRange = Range;
+}
+
 
 void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {
@@ -83,6 +88,8 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
-	SkillActorInterface->Execute_SetDamage(SpawnedAbility,AbilityDamage);
-	SkillActorInterface->Execute_SetTeam(SpawnedAbility,TeamId);
+	SkillActorInterface->Execute_SetDamage(SpawnedAbility, AbilityDamage);
+	SkillActorInterface->Execute_SetTeam(SpawnedAbility, TeamId);
+	SkillActorInterface->Execute_SetRange(SpawnedAbility, AbilityRange);
+	SkillActorInterface->Execute_SetSpawnPosition(SpawnedAbility, SpawnPosition);
 }

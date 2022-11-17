@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetAbilityDamage(float Power, float AbilityPower);
 
+	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	float AbilityRange;
+	UFUNCTION(BlueprintCallable)
+	void SetAbilityRange(float Range);
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bCanUse = true;
@@ -61,8 +65,6 @@ public:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	TSubclassOf<AActor> ActorToSpawn;
-	UPROPERTY(BlueprintReadWrite)
-	FVector AbilityPosition;
 	UPROPERTY(BlueprintReadWrite)
 	FRotator AbilityRotation;
 

@@ -26,8 +26,17 @@ public:
 	int GetTeam();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	float GetDamage();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	float GetRange();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	FVector GetSpawnPosition();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetTeam(int Value);
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetDamage(float Value);
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetRange(float Value);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetSpawnPosition(FVector SpawnPosition);
 };
