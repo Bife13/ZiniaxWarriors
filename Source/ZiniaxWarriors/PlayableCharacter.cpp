@@ -50,8 +50,20 @@ void APlayableCharacter::BeginPlay()
 }
 
 
+void APlayableCharacter::MoveMouse_Implementation(FVector Value)
+{
+	const FVector PlayerPosition = this->GetTransform().GetLocation();
+	const FVector CursorPosition = Value;
+	FRotator ActualRotation = UKismetMathLibrary::FindLookAtRotation(PlayerPosition, CursorPosition);
+	ActualRotation.Roll = 0;
+	ActualRotation.Pitch = 0;
+	CachedMousePosition = CursorPosition;
+	CachedMouseRotator = ActualRotation;
+	GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+}
 
-void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance, float Speed)
+void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance,
+                                           float Speed)
 {
 	HealthSystem = NewHealthSystem;
 	HealthSystem->SetResistance(Resistance);
@@ -66,9 +78,6 @@ void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float
 void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	CalculateLookingDirection();
-	CalculateCursorPosition();
 
 	if (bIsCasting)
 	{
@@ -113,46 +122,13 @@ void APlayableCharacter::SetupTopDownCamera()
 }
 
 
-void APlayableCharacter::CalculateCursorPosition_Implementation() const
-{
-	// TODO Look at this for the cursor position, its not fully right 
-	if (CursorToWorld != nullptr)
-	{
-		if (const APlayerController* PC = Cast<APlayerController>(GetController()))
-		{
-			FHitResult TraceHitResult;
-			PC->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
-			const FVector CursorFv = TraceHitResult.ImpactNormal;
-			const FRotator CursorR = CursorFv.Rotation();
-			CursorToWorld->SetWorldLocation(TraceHitResult.Location);
-			CursorToWorld->SetWorldRotation(CursorR);
-		}
-	}
-}
-
-FRotator APlayableCharacter::CalculateLookingDirection() const
-{
-	if (CursorToWorld != nullptr)
-	{
-		const FVector PlayerPosition = this->GetTransform().GetLocation();
-		const FVector CursorPosition = CursorToWorld->GetComponentLocation();
-		FRotator ActualRotation = UKismetMathLibrary::FindLookAtRotation(PlayerPosition, CursorPosition);
-		ActualRotation.Roll = 0;
-		ActualRotation.Pitch = 0;
-		GetCapsuleComponent()->SetWorldRotation(ActualRotation);
-		return ActualRotation;
-	}
-	return FRotator::ZeroRotator;
-}
-
-
 void APlayableCharacter::PopulateSkillArray()
 {
 	for (int i = 0; i < Skills.Num(); ++i)
 	{
 		if (USkillBase* NewSkill = NewObject<USkillBase>(this, Skills[i]))
 		{
-			NewSkill->InitializeSkill(this, CachedWorld,TeamID);
+			NewSkill->InitializeSkill(this, CachedWorld, TeamID);
 			RuntimeSkills.Add(NewSkill);
 		};
 	}
@@ -201,5 +177,3 @@ void APlayableCharacter::UseThirdAbility()
 		RuntimeSkills[3]->CastSkill(AttackAnimations[1]);
 	}
 }
-
-

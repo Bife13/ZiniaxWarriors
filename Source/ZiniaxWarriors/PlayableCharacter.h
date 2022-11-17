@@ -11,7 +11,8 @@
 #include "PlayableCharacter.generated.h"
 
 UCLASS()
-class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot, public IMoveableCharacter
+class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
+                                              public IMoveableCharacter
 {
 	GENERATED_BODY()
 
@@ -30,14 +31,18 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-	
-	UFUNCTION()
-	FRotator CalculateLookingDirection() const;
 
-	UFUNCTION(Server,Unreliable)
-    virtual void MoveVertical(float Value) override;
-	UFUNCTION(Server,Unreliable)
+	UFUNCTION(Server, Unreliable)
+	virtual void MoveVertical(float Value) override;
+	UFUNCTION(Server, Unreliable)
 	virtual void MoveHorizontal(float Value) override;
+	UFUNCTION(Server, Unreliable)
+	virtual void MoveMouse(FVector Value) override;
+
+	UPROPERTY(BlueprintReadOnly)
+	FRotator CachedMouseRotator;
+	UPROPERTY(BlueprintReadOnly)
+	FVector CachedMousePosition;
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -50,8 +55,6 @@ protected:
 	void SetupCameraBoom();
 	UFUNCTION()
 	void SetupTopDownCamera();
-	UFUNCTION(Client, Unreliable)
-	void CalculateCursorPosition() const;
 	UFUNCTION()
 	void PopulateSkillArray();
 
@@ -79,8 +82,7 @@ protected:
 	UPROPERTY()
 	float BaseSpeed;
 
-
-    UPROPERTY()
+	UPROPERTY()
 	int TeamID;
 
 private:

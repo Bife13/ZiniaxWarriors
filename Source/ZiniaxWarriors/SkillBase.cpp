@@ -54,7 +54,7 @@ void USkillBase::ResetCooldown()
 void USkillBase::UseSkill()
 {
 	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerCharacter);
-	AbilityRotation = PlayableCharacter->CalculateLookingDirection();
+	AbilityRotation = PlayableCharacter->CachedMouseRotator;
 	CachedCharacterInterface->SetIsCasting(false);
 
 	OnUse();

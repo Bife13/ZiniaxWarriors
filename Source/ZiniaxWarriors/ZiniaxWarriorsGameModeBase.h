@@ -6,14 +6,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "ZiniaxWarriorsGameModeBase.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class ZINIAXWARRIORS_API AZiniaxWarriorsGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	//virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal) override;
 	
 };
