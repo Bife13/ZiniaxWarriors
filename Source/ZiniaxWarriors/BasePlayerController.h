@@ -30,8 +30,10 @@ protected:
 	void FirstAbilityPressed();
 	void SecondAbilityPressed();
 	void ThirdAbilityPressed();
-    void MoveVertical(float Value);
-	void MoveHorizontal(float Value);
+	void MoveVerticalInput(float Value);
+	void MoveHorizontalInput(float Value);
+	void MouseChanged(FVector Value);
+	void CalculateMousePosition();
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 	IMoveableCharacter* CachedMoveableInterface;
 };

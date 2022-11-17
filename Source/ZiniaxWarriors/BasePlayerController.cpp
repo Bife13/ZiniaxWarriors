@@ -16,6 +16,8 @@ ABasePlayerController::ABasePlayerController()
 void ABasePlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
+
+	CalculateMousePosition();
 }
 
 void ABasePlayerController::OnPossess(APawn* InPawn)
@@ -34,9 +36,8 @@ void ABasePlayerController::SetupInputComponent()
 	InputComponent->BindAction("SpecialAbility1", IE_Pressed, this, &ABasePlayerController::FirstAbilityPressed);
 	InputComponent->BindAction("SpecialAbility2", IE_Pressed, this, &ABasePlayerController::SecondAbilityPressed);
 	InputComponent->BindAction("SpecialAbility3", IE_Pressed, this, &ABasePlayerController::ThirdAbilityPressed);
-	InputComponent->BindAxis("MoveVertical",this,&ABasePlayerController::MoveVertical);
-	InputComponent->BindAxis("MoveHorizontal",this,&ABasePlayerController::MoveHorizontal);
-	
+	InputComponent->BindAxis("MoveVertical", this, &ABasePlayerController::MoveVerticalInput);
+	InputComponent->BindAxis("MoveHorizontal", this, &ABasePlayerController::MoveHorizontalInput);
 }
 
 void ABasePlayerController::BasicAttackPressed()
@@ -71,12 +72,35 @@ void ABasePlayerController::ThirdAbilityPressed()
 	}
 }
 
-void ABasePlayerController::MoveVertical(float Value)
+void ABasePlayerController::MoveVerticalInput(float Value)
 {
-	CachedMoveableInterface->MoveVertical(Value);
+	if (CachedCharacterInterface)
+	{
+		CachedMoveableInterface->MoveVertical(Value);
+	}
 }
 
-void ABasePlayerController::MoveHorizontal(float Value)
+void ABasePlayerController::MoveHorizontalInput(float Value)
 {
-	CachedMoveableInterface->MoveHorizontal(Value);
+	if (CachedCharacterInterface)
+	{
+		CachedMoveableInterface->MoveHorizontal(Value);
+	}
+}
+
+void ABasePlayerController::MouseChanged(FVector Value)
+{
+	if (CachedCharacterInterface)
+	{
+		CachedMoveableInterface->MoveMouse(Value);
+	}
+}
+
+void ABasePlayerController::CalculateMousePosition()
+{
+	FHitResult TraceHitResult;
+	this->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
+	const FVector CursorFv = TraceHitResult.ImpactNormal;
+	const FRotator CursorR = CursorFv.Rotation();
+	MouseChanged(TraceHitResult.Location);
 }
