@@ -5,10 +5,11 @@
 #include "PlayableCharacter.h"
 #include "Components/DecalComponent.h"
 
-void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World)
+void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World,int Team)
 {
 	OwnerCharacter = Playable;
 	CachedWorld = World;
+	TeamId = Team;
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(OwnerCharacter);
 	OnInitialize();
 }
@@ -30,19 +31,19 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 }
 
 
-void USkillBase::StartCooldownTimer()
-{
-	FTimerHandle THandle;
-	const float Delay = AbilityCooldown;
-	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
-}
-
-void USkillBase::StartCastTimer()
-{
-	FTimerHandle THandle;
-	const float Delay = AbilityCastTime;
-	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
-}
+// void USkillBase::StartCooldownTimer()
+// {
+// 	FTimerHandle THandle;
+// 	const float Delay = AbilityCooldown;
+// 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
+// }
+//
+// void USkillBase::StartCastTimer()
+// {
+// 	FTimerHandle THandle;
+// 	const float Delay = AbilityCastTime;
+// 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
+// }
 
 void USkillBase::ResetCooldown()
 {
@@ -79,7 +80,6 @@ AActor* USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	// CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	return SpawnedAbility;
 }
