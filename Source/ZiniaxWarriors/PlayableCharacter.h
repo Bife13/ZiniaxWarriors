@@ -76,6 +76,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 
+
+	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

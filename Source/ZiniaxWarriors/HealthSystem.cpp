@@ -61,12 +61,16 @@ void UHealthSystem::SetHealthToMaxHealth()
 }
 
 void UHealthSystem::SetMaxHealth(float Amount)
-{
+{  
 	MaxHealth = Amount;
 }
 void UHealthSystem::SetResistance(float Amount)
 {
-	Resistance = Amount;
+	if(Amount!=NULL)
+	{
+		Resistance = Amount;
+	}
+
 }
 
 #pragma endregion

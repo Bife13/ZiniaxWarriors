@@ -50,7 +50,7 @@ public: // Events
 private: // This can be protected if we want to subclass the Health Component
 
 	UPROPERTY(VisibleAnywhere)
-	float Health;
+	float Health;	
 	float MaxHealth;
 	float Resistance;
 };
