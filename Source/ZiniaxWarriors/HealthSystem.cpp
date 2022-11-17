@@ -22,8 +22,8 @@ void UHealthSystem::TakeDamage(const float Amount)
 {
 	if (Amount > 0)
 	{
-		Health -= Amount * (100) / (100+ Resistance);
-
+		Health -= Amount * (100) / (100 + Resistance);
+		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Blue, "FODASSE");
 		OnDamageTakenEvent.Broadcast(Amount);
 	}
 }
@@ -61,16 +61,16 @@ void UHealthSystem::SetHealthToMaxHealth()
 }
 
 void UHealthSystem::SetMaxHealth(float Amount)
-{  
+{
 	MaxHealth = Amount;
 }
+
 void UHealthSystem::SetResistance(float Amount)
 {
-	if(Amount!=NULL)
+	if (Amount != NULL)
 	{
 		Resistance = Amount;
 	}
-
 }
 
 #pragma endregion

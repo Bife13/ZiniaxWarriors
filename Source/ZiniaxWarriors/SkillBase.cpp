@@ -3,6 +3,7 @@
 
 #include "SkillBase.h"
 #include "PlayableCharacter.h"
+#include "SkillActor.h"
 #include "Components/DecalComponent.h"
 
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World,int Team)
@@ -76,10 +77,12 @@ void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
 }
 
 
-AActor* USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
+void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
-	return SpawnedAbility;
+	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
+	SkillActorInterface->Execute_SetDamage(SpawnedAbility,AbilityDamage);
+	SkillActorInterface->Execute_SetTeam(SpawnedAbility,TeamId);
 }
