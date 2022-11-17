@@ -8,10 +8,11 @@
 #include "HealthSystem.generated.h"
 
 DECLARE_EVENT_OneParam(UCPP_HealthSystem, DamageTakenEvent, float)
+
 DECLARE_EVENT_OneParam(UCPP_HealthSystem, HealDamageEvent, float)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ZINIAXWARRIORS_API UHealthSystem : public UActorComponent , public IDamageable
+class ZINIAXWARRIORS_API UHealthSystem : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -27,7 +28,7 @@ public:
 	float GetHealthAsPercentage() const;
 	//General functions
 	UFUNCTION(BlueprintCallable)
-	virtual void TakeDamage(float Amount) override;
+	void TakeDamage(float Amount);
 	UFUNCTION(BlueprintCallable)
 	void RecoverHealth(float Amount);
 	//Sets
@@ -37,7 +38,7 @@ public:
 	void SetMaxHealth(float Amount);
 	UFUNCTION(BlueprintCallable)
 	void SetResistance(float Amount);
-	
+
 protected: // Functions
 
 	virtual void BeginPlay() override;
@@ -50,7 +51,7 @@ public: // Events
 private: // This can be protected if we want to subclass the Health Component
 
 	UPROPERTY(VisibleAnywhere)
-	float Health;	
+	float Health;
 	float MaxHealth;
 	UPROPERTY(VisibleAnywhere)
 	float Resistance;

@@ -71,7 +71,6 @@ void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float
 	HealthSystem->SetHealthToMaxHealth();
 
 	BaseSpeed = Speed;
-
 }
 
 // Called every frame
@@ -176,4 +175,9 @@ void APlayableCharacter::UseThirdAbility()
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[1]);
 	}
+}
+
+void APlayableCharacter::TakeDamage(float Amount)
+{
+	HealthSystem->TakeDamage(Amount);
 }

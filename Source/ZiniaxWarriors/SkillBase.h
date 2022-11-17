@@ -75,7 +75,7 @@ public:
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 protected:
 	UFUNCTION(BlueprintCallable)
-	AActor* SpawnSkillActor(const FVector& SpawnPosition);
+	void SpawnSkillActor(const FVector& SpawnPosition);
 	UPROPERTY()
 	int TeamId;
 };

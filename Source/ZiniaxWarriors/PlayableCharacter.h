@@ -12,7 +12,7 @@
 
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
-                                              public IMoveableCharacter
+                                              public IMoveableCharacter, public IDamageable
 {
 	GENERATED_BODY()
 
@@ -31,6 +31,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
+	
+	UFUNCTION(BlueprintCallable)
+	int GetTeamIdCharacter() const { return TeamID; }
 
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveVertical(float Value) override;
@@ -64,6 +67,9 @@ protected:
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void TakeDamage(float Amount) override;
+
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY()
@@ -82,7 +88,7 @@ protected:
 	UPROPERTY()
 	float BaseSpeed;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	int TeamID;
 
 private:
