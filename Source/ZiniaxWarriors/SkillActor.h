@@ -22,21 +22,24 @@ class ZINIAXWARRIORS_API ISkillActor
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	// UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	// int GetTeam();
+	// UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	// float GetDamage();
+	// UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	// float GetRange();
+	// UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	// FVector GetS	pawnPosition();
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	int GetTeam();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	float GetDamage();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	float GetRange();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	FVector GetSpawnPosition();
+	void SetValues(int TeamValue,float DamageValue,float RangeValue, FVector SpawnPositionVector);
 	
-	UFUNCTION(BlueprintImplementableEvent)
-	void SetTeam(int Value);
-	UFUNCTION(BlueprintImplementableEvent)
-	void SetDamage(float Value);
-	UFUNCTION(BlueprintImplementableEvent)
-	void SetRange(float Value);
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void SetSpawnPosition(FVector SpawnPosition);
+	// UFUNCTION(BlueprintImplementableEvent)
+	// void SetTeam(int Value);
+	// UFUNCTION(BlueprintImplementableEvent)
+	// void SetDamage(float Value);
+	// UFUNCTION(BlueprintImplementableEvent)
+	// void SetRange(float Value);
+	// UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	// void SetSpawnPosition(FVector SpawnPosition);
 };
