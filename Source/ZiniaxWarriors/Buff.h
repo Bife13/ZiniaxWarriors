@@ -3,15 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "UObject/Interface.h"
 #include "Buff.generated.h"
+
+// This class does not need to be modified.
+UINTERFACE(MinimalAPI)
+class UBuff : public UInterface
+{
+	GENERATED_BODY()
+};
 
 /**
  * 
  */
-UCLASS()
-class ZINIAXWARRIORS_API UBuff : public UObject
+class ZINIAXWARRIORS_API IBuff
 {
 	GENERATED_BODY()
-	
+
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+public:
+	virtual void OnBuffBegin() = 0;
+	virtual void OnBuffTick() = 0;
+	virtual void OnBuffEnd() = 0;
 };

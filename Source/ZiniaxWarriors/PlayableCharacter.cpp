@@ -2,6 +2,9 @@
 
 
 #include "PlayableCharacter.h"
+
+#include "Buff.h"
+#include "BuffFactory.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/DecalComponent.h"
@@ -47,6 +50,11 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
+
+	// TODO BUFF TESTING
+	BuffFactory* BuffFactory = new class BuffFactory();
+	IBuff* Buff1 = BuffFactory->GetBuff("PowerBuff");
+	Buff1->OnBuffBegin();
 }
 
 

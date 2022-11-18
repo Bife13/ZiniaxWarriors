@@ -3,3 +3,4 @@
 
 #include "Buff.h"
 
+// Add default functionality here for any IBuff functions that are not pure virtual.
