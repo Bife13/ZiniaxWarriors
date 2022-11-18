@@ -95,3 +95,15 @@ void USkillBase::ChangeRotator(const float ZOffsetAngle)
 {
 	AbilityRotation.Yaw += ZOffsetAngle;
 }
+
+FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition,const FVector& PlayerPosition)
+{
+	FVector Direction = MousePosition - PlayerPosition;
+	Direction.Normalize();
+	const FVector MaxRangePosition = Direction * AbilityRange;
+	if((MousePosition - PlayerPosition).Size() >= AbilityRange)
+	{
+		return MaxRangePosition;
+	}
+	return  MousePosition;
+}
