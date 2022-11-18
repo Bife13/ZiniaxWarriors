@@ -3,9 +3,10 @@
 
 #include "SkillBase.h"
 #include "PlayableCharacter.h"
+#include "SkillActor.h"
 #include "Components/DecalComponent.h"
 
-void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World,int Team)
+void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {
 	OwnerCharacter = Playable;
 	CachedWorld = World;
@@ -75,11 +76,22 @@ void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
 	AbilityDamage = Power * AbilityPower;
 }
 
+void USkillBase::SetAbilityRange(const float Range)
+{
+	AbilityRange = Range;
+}
 
-AActor* USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
+
+void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
-	return SpawnedAbility;
+	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
+	SkillActorInterface->Execute_SetValues(SpawnedAbility, AbilityDamage, TeamId, AbilityRange, SpawnPosition);
+}
+
+void USkillBase::ChangeRotator(const float ZOffsetAngle)
+{
+	AbilityRotation.Yaw += ZOffsetAngle;
 }
