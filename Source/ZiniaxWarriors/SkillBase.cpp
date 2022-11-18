@@ -90,3 +90,8 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
 	SkillActorInterface->Execute_SetValues(SpawnedAbility, AbilityDamage, TeamId, AbilityRange, SpawnPosition);
 }
+
+void USkillBase::ChangeRotator(const float ZOffsetAngle)
+{
+	AbilityRotation.Yaw += ZOffsetAngle;
+}
