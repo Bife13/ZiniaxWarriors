@@ -88,8 +88,5 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
-	SkillActorInterface->Execute_SetDamage(SpawnedAbility, AbilityDamage);
-	SkillActorInterface->Execute_SetTeam(SpawnedAbility, TeamId);
-	SkillActorInterface->Execute_SetRange(SpawnedAbility, AbilityRange);
-	SkillActorInterface->Execute_SetSpawnPosition(SpawnedAbility, SpawnPosition);
+	SkillActorInterface->Execute_SetValues(SpawnedAbility, AbilityDamage, TeamId, AbilityRange, SpawnPosition);
 }
