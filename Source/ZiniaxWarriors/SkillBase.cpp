@@ -100,8 +100,8 @@ FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition,const FV
 {
 	FVector Direction = MousePosition - PlayerPosition;
 	Direction.Normalize();
-	const FVector MaxRangePosition = Direction * AbilityRange;
-	if((MousePosition - PlayerPosition).Size() >= AbilityRange)
+	const FVector MaxRangePosition = FVector (Direction.X * AbilityRange + PlayerPosition.X, Direction.Y * AbilityRange + PlayerPosition.Y, MousePosition.Z);
+	if(FVector::Distance(MousePosition,PlayerPosition) > AbilityRange)
 	{
 		return MaxRangePosition;
 	}
