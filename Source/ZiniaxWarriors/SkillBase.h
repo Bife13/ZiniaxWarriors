@@ -80,6 +80,8 @@ protected:
 	void SpawnSkillActor(const FVector& SpawnPosition);
 	UFUNCTION(BlueprintCallable)
 	void ChangeRotator(const float ZOffsetAngle);
+	UFUNCTION(BlueprintCallable)
+	FVector CalculateMaxRangeSpawn(const FVector& MousePosition,const FVector& PlayerPosition);
 	UPROPERTY()
 	int TeamId;
 };

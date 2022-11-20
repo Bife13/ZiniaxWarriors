@@ -88,10 +88,23 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
-	SkillActorInterface->Execute_SetValues(SpawnedAbility, AbilityDamage, TeamId, AbilityRange, SpawnPosition);
+	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition);
 }
 
 void USkillBase::ChangeRotator(const float ZOffsetAngle)
 {
 	AbilityRotation.Yaw += ZOffsetAngle;
+}
+
+FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition, const FVector& PlayerPosition)
+{
+	FVector Direction = MousePosition - PlayerPosition;
+	Direction.Normalize();
+	const FVector MaxRangePosition = FVector(Direction.X * AbilityRange + PlayerPosition.X,
+	                                         Direction.Y * AbilityRange + PlayerPosition.Y, MousePosition.Z);
+	if (FVector::Distance(MousePosition, PlayerPosition) > AbilityRange)
+	{
+		return MaxRangePosition;
+	}
+	return MousePosition;
 }
