@@ -8,11 +8,12 @@
 /**
  * 
  */
-class ZINIAXWARRIORS_API BuffFactory
+class ZINIAXWARRIORS_API FBuffFactory
 {
 public:
-	BuffFactory();
-	~BuffFactory();
+	FBuffFactory();
+	~FBuffFactory();
 
-	IBuff* GetBuff(FString BuffType);
+	template <typename T>
+	static IBuff* CreateBuff();
 };
