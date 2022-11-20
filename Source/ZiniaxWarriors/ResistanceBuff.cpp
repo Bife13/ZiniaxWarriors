@@ -1,21 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PowerBuff.h"
+#include "ResistanceBuff.h"
 
-
-void UPowerBuff::OnBuffBegin()
+void UResistanceBuff::OnBuffBegin()
 {
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, FString::Printf(TEXT("%f"), Time));
 	Activated = true;
 	Timer = Time;
 }
 
-void UPowerBuff::OnBuffTick()
+void UResistanceBuff::OnBuffTick()
 {
 }
 
-void UPowerBuff::OnBuffEnd()
+void UResistanceBuff::OnBuffEnd()
 {
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, "FODASSE");
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, "CARALHO");
 }

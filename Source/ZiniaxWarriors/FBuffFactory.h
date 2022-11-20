@@ -14,6 +14,12 @@ public:
 	FBuffFactory();
 	~FBuffFactory();
 
+	static IBuff* GetBuff(FString BuffName);
+
 	template <typename T>
-	static IBuff* CreateBuff();
+	static IBuff* CreateBuff()
+	{
+		T* NewBuff = NewObject<T>();
+		return Cast<IBuff>(NewBuff);
+	}
 };

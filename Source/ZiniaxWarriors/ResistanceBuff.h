@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 #include "Buff.h"
 #include "UObject/NoExportTypes.h"
-#include "PowerBuff.generated.h"
+#include "ResistanceBuff.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZINIAXWARRIORS_API UPowerBuff : public UObject, public IBuff
+class ZINIAXWARRIORS_API UResistanceBuff : public UObject, public IBuff
 {
+	
 	GENERATED_BODY()
 
 	virtual void OnBuffBegin() override;
@@ -27,8 +28,9 @@ class ZINIAXWARRIORS_API UPowerBuff : public UObject, public IBuff
 
 
 protected:
-	float Time = 3;
-	float Amount = .5f;
+	float Time = 5;
+	float Amount = .2f;
 	bool Activated = false;
 	float Timer = 0;
+	
 };

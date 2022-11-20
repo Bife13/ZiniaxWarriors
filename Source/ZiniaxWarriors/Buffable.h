@@ -20,7 +20,7 @@ class ZINIAXWARRIORS_API IBuffable
 {
 	GENERATED_BODY()
 
-
 public:
-	virtual void DefenseUp(float percentage, float Time) = 0;
+	virtual void AddPowerBuff() = 0;
+	virtual void AddResistanceBuff() = 0;
 };

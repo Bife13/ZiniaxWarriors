@@ -25,4 +25,10 @@ public:
 	virtual void OnBuffBegin() = 0;
 	virtual void OnBuffTick() = 0;
 	virtual void OnBuffEnd() = 0;
+
+	virtual bool GetActivated() = 0;
+	virtual float GetTime() = 0;
+	virtual float GetAmount() = 0;
+	virtual float GetTimer() = 0;
+	virtual void SetTimer(float Value) = 0;
 };

@@ -52,10 +52,7 @@ void APlayableCharacter::BeginPlay()
 
 	PopulateSkillArray();
 
-	// TODO BUFF TESTING FIX THIS
-	FBuffFactory* BuffFactory = new FBuffFactory();
-	// IBuff* Buff1 = BuffFactory->CreateBuff<UPowerBuff>();
-	// Buff1->OnBuffBegin();
+
 }
 
 
