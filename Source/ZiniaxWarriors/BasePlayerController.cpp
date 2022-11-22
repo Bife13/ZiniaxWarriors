@@ -23,7 +23,7 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 void ABasePlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(InPawn);
 	CachedMoveableInterface = Cast<IMoveableCharacter>(InPawn);
 }

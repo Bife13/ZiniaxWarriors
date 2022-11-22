@@ -17,9 +17,12 @@ public:
 	static IBuff* GetBuff(FString BuffName);
 
 	template <typename T>
-	static IBuff* CreateBuff()
+	static IBuff* CreateBuff(float TimeAmount,float BuffAmount)
 	{
 		T* NewBuff = NewObject<T>();
-		return Cast<IBuff>(NewBuff);
+		IBuff* Buff = Cast<IBuff>(NewBuff);
+		Buff->SetTime(TimeAmount);
+		Buff->SetAmount(BuffAmount);
+		return Buff;
 	}
 };

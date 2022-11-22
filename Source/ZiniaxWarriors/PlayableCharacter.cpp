@@ -52,7 +52,7 @@ void APlayableCharacter::BeginPlay()
 
 	PopulateSkillArray();
 
-
+	BaseSpeed = StatsComponent->GetSpeed();
 }
 
 
@@ -68,16 +68,7 @@ void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 	GetCapsuleComponent()->SetWorldRotation(ActualRotation);
 }
 
-void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance,
-                                           float Speed)
-{
-	HealthSystem = NewHealthSystem;
-	HealthSystem->SetResistance(Resistance);
-	HealthSystem->SetMaxHealth(MaxHealth);
-	HealthSystem->SetHealthToMaxHealth();
 
-	BaseSpeed = Speed;
-}
 
 // Called every frame
 void APlayableCharacter::Tick(const float DeltaTime)

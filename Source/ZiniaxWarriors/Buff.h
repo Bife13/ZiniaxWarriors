@@ -31,4 +31,9 @@ public:
 	virtual float GetAmount() = 0;
 	virtual float GetTimer() = 0;
 	virtual void SetTimer(float Value) = 0;
+
+	virtual void SetTime(float Value) = 0;
+	virtual void SetAmount(float Value) = 0;
+
+
 };

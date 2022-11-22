@@ -6,6 +6,7 @@
 #include "HealthSystem.h"
 #include "MoveableCharacter.h"
 #include "SkillBase.h"
+#include "StatsComponent.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
@@ -41,6 +42,9 @@ public:
 	virtual void MoveHorizontal(float Value) override;
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;
+	
+	UFUNCTION(BlueprintCallable)
+	void SetStatComponent(UStatsComponent* StatsComponentToSet) {StatsComponent = StatsComponentToSet;}
 
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
@@ -48,8 +52,7 @@ public:
 	FVector CachedMousePosition;
 
 protected:
-	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance, float Speed);
+
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()
@@ -90,6 +93,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	int TeamID;
+
+	UPROPERTY()
+	UStatsComponent* StatsComponent;
 
 private:
 	/** Top down camera */

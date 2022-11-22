@@ -31,6 +31,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void AddPowerBuff() override;
-	virtual void AddResistanceBuff() override;
+	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) override;
+	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
 };

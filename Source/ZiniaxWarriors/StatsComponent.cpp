@@ -14,13 +14,37 @@ UStatsComponent::UStatsComponent()
 }
 
 
+void UStatsComponent::SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue,
+                                      float ResistanceValue,
+                                      float ViewRangeValue)
+{
+	BaseSpeed = SpeedValue;
+	BasePower = PowerValue;
+	BaseMaximumHealth=MaximumHealthValue;
+	BaseResistance=ResistanceValue;
+	BaseViewRange=ViewRangeValue;
+
+	CurrentSpeed = BaseSpeed;
+	CurrentPower = BasePower;
+	CurrentMaximumHealth = BaseMaximumHealth;
+	CurrentResitance = BaseResistance;
+	CurrentViewRange = BaseViewRange;
+}
+
+void UStatsComponent::SetupHealthSystem(UHealthSystem* NewHealthSystem)
+{
+	HealthSystem = NewHealthSystem;
+	HealthSystem->SetResistance(GetResistance());
+	HealthSystem->SetMaxHealth(GetMaximumHealth());
+	HealthSystem->SetHealthToMaxHealth();
+}
+
 // Called when the game starts
 void UStatsComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
 
@@ -32,3 +56,8 @@ void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+void UStatsComponent::ChangePower(float Amount)
+{
+	CurrentPower += (BasePower * Amount);
+	OnPowerChangedEvent.Broadcast(CurrentPower);
+}

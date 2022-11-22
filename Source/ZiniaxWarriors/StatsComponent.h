@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HealthSystem.h"
 #include "Components/ActorComponent.h"
 #include "StatsComponent.generated.h"
 
+DECLARE_EVENT_OneParam(UStatsComponent, PowerChangedEvent, float)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
@@ -19,21 +21,42 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	float GetSpeed() const { return Speed; }
-	float GetMaximumHealth() const { return MaximumHealth; }
-	float GetResistance() const { return Resistance; }
-	float GetViewRange() const { return ViewRange; }
+	float GetSpeed() const { return CurrentSpeed; }
+	float GetPower() const { return CurrentPower; }
+	float GetMaximumHealth() const { return CurrentMaximumHealth; }
+	float GetResistance() const { return CurrentResitance; }
+	float GetViewRange() const { return CurrentViewRange; }
 
-	FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
-	FORCEINLINE void SetMaximumHealth(float Value) { MaximumHealth = Value; }
-	FORCEINLINE void SetResistance(float Value) { Resistance = Value; }
-	FORCEINLINE void SetViewRange(float Value) { ViewRange = Value; }
+	
+	void ChangePower(float Amount);
+	PowerChangedEvent OnPowerChangedEvent;
+
+
+	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
+	// FORCEINLINE void SetPower(float Value) { Power = Value; }
+	// FORCEINLINE void SetMaximumHealth(float Value) { MaximumHealth = Value; }
+	// FORCEINLINE void SetResistance(float Value) { Resistance = Value; }
+	// FORCEINLINE void SetViewRange(float Value) { ViewRange = Value; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
+	                     float ViewRangeValue);
+	UFUNCTION(BlueprintCallable)
+	void SetupHealthSystem(UHealthSystem* NewHealthSystem);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	float Speed;
-	float MaximumHealth;
-	float Resistance;
-	float ViewRange;
+	float BasePower;
+	float BaseSpeed;
+	float BaseMaximumHealth;
+	float BaseResistance;
+	float BaseViewRange;
+
+	float CurrentPower;
+	float CurrentSpeed;
+	float CurrentMaximumHealth;
+	float CurrentResitance;
+	float CurrentViewRange;
+	UHealthSystem* HealthSystem;
 };

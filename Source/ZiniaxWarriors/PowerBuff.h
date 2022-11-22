@@ -23,12 +23,15 @@ class ZINIAXWARRIORS_API UPowerBuff : public UObject, public IBuff
 	virtual float GetTime() override { return Time; }
 	virtual float GetAmount() override { return Amount; }
 	virtual float GetTimer() override { return Timer; }
+	
 	virtual void SetTimer(float Value) override { Timer = Value; }
+	virtual void SetTime(float Value) override { Time = Value; }
+	virtual void SetAmount(float Value) override { Amount = Value; }
 
 
 protected:
-	float Time = 3;
-	float Amount = .5f;
+	float Time = 0;
+	float Amount = 0;
 	bool Activated = false;
 	float Timer = 0;
 };

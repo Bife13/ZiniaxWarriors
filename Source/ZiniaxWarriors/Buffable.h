@@ -21,6 +21,6 @@ class ZINIAXWARRIORS_API IBuffable
 	GENERATED_BODY()
 
 public:
-	virtual void AddPowerBuff() = 0;
-	virtual void AddResistanceBuff() = 0;
+	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) = 0;
+	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) = 0;
 };
