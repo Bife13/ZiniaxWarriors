@@ -4,18 +4,20 @@
 #include "PowerBuff.h"
 
 
-void UPowerBuff::OnBuffBegin()
+void UPowerBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, FString::Printf(TEXT("%f"), Time));
 	Activated = true;
 	Timer = Time;
+	StatsComponent->ChangePower(Amount);
 }
 
 void UPowerBuff::OnBuffTick()
 {
 }
 
-void UPowerBuff::OnBuffEnd()
+void UPowerBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, "FODASSE");
+	StatsComponent->ChangePower(-Amount);
 }

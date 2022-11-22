@@ -18,7 +18,6 @@ void UStatusEffectsComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	BuffFactory = new FBuffFactory();
-	AddPowerBuff(2,.2);
 }
 
 void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -33,7 +32,7 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			{
 				if (!CurrentBuffArray[i]->GetActivated())
 				{
-					CurrentBuffArray[i]->OnBuffBegin();
+					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
 				}
 
 				float Timer = CurrentBuffArray[i]->GetTimer();
@@ -41,8 +40,8 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 				CurrentBuffArray[i]->SetTimer(Timer);
 				if (CurrentBuffArray[i]->GetTimer() <= 0)
 				{
-					CurrentBuffArray[i]->OnBuffEnd();
-					CurrentBuffArray.RemoveAt(i);
+					CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
+					CurrentBuffArray.RemoveAt(i,1,true);
 				}
 			}
 		}

@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Buffable.h"
+#include "StatsComponent.h"
 #include "UObject/Interface.h"
 #include "Buff.generated.h"
 
@@ -22,9 +24,9 @@ class ZINIAXWARRIORS_API IBuff
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void OnBuffBegin() = 0;
+	virtual void OnBuffBegin(UStatsComponent* StatsComponent) = 0;
 	virtual void OnBuffTick() = 0;
-	virtual void OnBuffEnd() = 0;
+	virtual void OnBuffEnd(UStatsComponent* StatsComponent) = 0;
 
 	virtual bool GetActivated() = 0;
 	virtual float GetTime() = 0;

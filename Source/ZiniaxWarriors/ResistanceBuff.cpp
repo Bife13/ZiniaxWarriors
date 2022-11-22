@@ -3,7 +3,7 @@
 
 #include "ResistanceBuff.h"
 
-void UResistanceBuff::OnBuffBegin()
+void UResistanceBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, FString::Printf(TEXT("%f"), Time));
 	Activated = true;
@@ -14,7 +14,7 @@ void UResistanceBuff::OnBuffTick()
 {
 }
 
-void UResistanceBuff::OnBuffEnd()
+void UResistanceBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, "CARALHO");
 }

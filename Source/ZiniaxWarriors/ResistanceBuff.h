@@ -16,9 +16,9 @@ class ZINIAXWARRIORS_API UResistanceBuff : public UObject, public IBuff
 	
 	GENERATED_BODY()
 
-	virtual void OnBuffBegin() override;
+	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
 	virtual void OnBuffTick() override;
-	virtual void OnBuffEnd() override;
+	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }
 	virtual float GetTime() override { return Time; }

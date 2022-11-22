@@ -7,6 +7,7 @@
 #include "MoveableCharacter.h"
 #include "SkillBase.h"
 #include "StatsComponent.h"
+#include "StatusEffectsComponent.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
@@ -36,6 +37,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetTeamIdCharacter() const { return TeamID; }
 
+
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(Server, Unreliable)
@@ -46,10 +48,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetStatComponent(UStatsComponent* StatsComponentToSet) {StatsComponent = StatsComponentToSet;}
 
+	UFUNCTION(BlueprintCallable)
+	void SetStatusEffectComponent(UStatusEffectsComponent* StatusEffectComponentToSet) {StatusEffectsComponent = StatusEffectComponentToSet;}
+
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
 	UPROPERTY(BlueprintReadOnly)
 	FVector CachedMousePosition;
+	
 
 protected:
 
@@ -96,7 +102,12 @@ protected:
 
 	UPROPERTY()
 	UStatsComponent* StatsComponent;
+	UPROPERTY(BlueprintReadWrite)
+	UStatusEffectsComponent* StatusEffectsComponent;
 
+	UFUNCTION(BlueprintCallable)
+	void SetupHealthSystem(UHealthSystem* NewHealthSystem){HealthSystem = NewHealthSystem;}
+	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

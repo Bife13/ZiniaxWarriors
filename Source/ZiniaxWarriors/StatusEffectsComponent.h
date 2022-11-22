@@ -19,6 +19,9 @@ public:
 	// Sets default values for this component's properties
 	UStatusEffectsComponent();
 
+	UFUNCTION(BlueprintCallable)
+	void SetStatsComponent(UStatsComponent* StatsComponentToSet) {StatsComponent = StatsComponentToSet;}
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -27,10 +30,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
 
+	UStatsComponent* StatsComponent;
+
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintCallable)
 	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable)
 	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
 };
