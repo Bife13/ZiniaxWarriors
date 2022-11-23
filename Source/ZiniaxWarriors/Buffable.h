@@ -6,8 +6,7 @@
 #include "UObject/Interface.h"
 #include "Buffable.generated.h"
 
-// This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UBuffable : public UInterface
 {
 	GENERATED_BODY()
@@ -20,7 +19,9 @@ class ZINIAXWARRIORS_API IBuffable
 {
 	GENERATED_BODY()
 
-
 public:
-	virtual void DefenseUp(float percentage, float Time) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) = 0;
 };
