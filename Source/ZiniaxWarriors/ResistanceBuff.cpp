@@ -9,8 +9,15 @@ void UResistanceBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 	Timer = Time;
 }
 
-void UResistanceBuff::OnBuffTick()
+void UResistanceBuff::OnBuffTick(float DeltaTime)
 {
+	if(Timer > 0)
+	{
+		Timer -= DeltaTime;
+	}else
+	{
+		Timer = 0;
+	}
 }
 
 void UResistanceBuff::OnBuffEnd(UStatsComponent* StatsComponent)

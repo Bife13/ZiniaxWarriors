@@ -16,15 +16,12 @@ class ZINIAXWARRIORS_API UPowerBuff : public UObject, public IBuff
 	GENERATED_BODY()
 
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
-	virtual void OnBuffTick() override;
+	virtual void OnBuffTick(float DeltaTime) override;
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }
-	virtual float GetTime() override { return Time; }
-	virtual float GetAmount() override { return Amount; }
 	virtual float GetTimer() override { return Timer; }
 	
-	virtual void SetTimer(float Value) override { Timer = Value; }
 	virtual void SetTime(float Value) override { Time = Value; }
 	virtual void SetAmount(float Value) override { Amount = Value; }
 

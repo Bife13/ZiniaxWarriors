@@ -34,10 +34,8 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 				{
 					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
 				}
-
-				float Timer = CurrentBuffArray[i]->GetTimer();
-				Timer -= DeltaTime;
-				CurrentBuffArray[i]->SetTimer(Timer);
+				
+				CurrentBuffArray[i]->OnBuffTick(DeltaTime);
 
 				if (CurrentBuffArray[i]->GetTimer() <= 0)
 				{

@@ -25,17 +25,14 @@ class ZINIAXWARRIORS_API IBuff
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) = 0;
-	virtual void OnBuffTick() = 0;
+	virtual void OnBuffTick(float DeltaTime) = 0;
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) = 0;
 
 	virtual bool GetActivated() = 0;
-	virtual float GetTime() = 0;
-	virtual float GetAmount() = 0;
 	virtual float GetTimer() = 0;
-	virtual void SetTimer(float Value) = 0;
 
 	virtual void SetTime(float Value) = 0;
 	virtual void SetAmount(float Value) = 0;
-
+	
 
 };
