@@ -216,10 +216,10 @@ void APlayableCharacter::TakeDamage(float Amount)
 
 void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
 {
-	// StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
+	StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::AddResistanceBuff(float TimeAmount, float BuffAmount)
 {
-	// StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
+	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
 }

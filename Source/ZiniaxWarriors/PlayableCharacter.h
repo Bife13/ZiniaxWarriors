@@ -37,8 +37,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetTeamIdCharacter() const { return TeamID; }
-
-
+	
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(Server, Unreliable)
@@ -51,6 +50,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FVector CachedMousePosition;
 
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
