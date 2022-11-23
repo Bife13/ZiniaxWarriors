@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystem.h"
 
 // Sets default values
 APlayableCharacter::APlayableCharacter()
@@ -37,6 +38,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupStatsComponent();
 	SetupHealthComponent();
 	SetupStatusEffectComponent();
+	SetupCastParticleSystem();
 
 	// Create a decal in the world to show the cursor's location
 	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
@@ -118,6 +120,11 @@ void APlayableCharacter::SetupCameraBoom()
 void APlayableCharacter::SetupStatsComponent()
 {
 	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("Stats Component"));
+}
+
+void APlayableCharacter::SetupCastParticleSystem()
+{
+	CastParticleSystem = CreateDefaultSubobject<UParticleSystem>(TEXT("Cast Particle"));
 }
 
 void APlayableCharacter::SetupHealthComponent()

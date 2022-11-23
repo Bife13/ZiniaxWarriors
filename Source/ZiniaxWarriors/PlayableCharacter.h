@@ -15,7 +15,7 @@
 
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
-                                              public IMoveableCharacter, public IDamageable, public IBuffable
+												public IMoveableCharacter, public IDamageable, public IBuffable
 {
 	GENERATED_BODY()
 
@@ -78,6 +78,8 @@ protected:
 	UFUNCTION()
 	void SetupStatusEffectComponent();
 	UFUNCTION()
+	void SetupCastParticleSystem();
+	UFUNCTION()
 	void SetupTopDownCamera();
 	UFUNCTION()
 	void PopulateSkillArray();
@@ -118,6 +120,8 @@ protected:
 	UPROPERTY(EditAnywhere,Category = Status)
 	UStatusEffectsComponent* StatusEffectsComponent;
 
+	UPROPERTY(EditAnywhere,Category = Status)
+	UParticleSystem* CastParticleSystem;
 
 private:
 	/** Top down camera */
