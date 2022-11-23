@@ -31,13 +31,6 @@ void UStatsComponent::SetupStatSystem(float PowerValue, float SpeedValue, float 
 	CurrentViewRange = BaseViewRange;
 }
 
-void UStatsComponent::SetupHealthSystem(UHealthSystem* NewHealthSystem)
-{
-	HealthSystem = NewHealthSystem;
-	HealthSystem->SetResistance(GetResistance());
-	HealthSystem->SetMaxHealth(GetMaximumHealth());
-	HealthSystem->SetHealthToMaxHealth();
-}
 
 // Called when the game starts
 void UStatsComponent::BeginPlay()

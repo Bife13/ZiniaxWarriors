@@ -14,6 +14,12 @@ UStatusEffectsComponent::UStatusEffectsComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+
+void UStatusEffectsComponent::SetStatsComponent(UStatsComponent* StatsComponentToSet)
+{
+	StatsComponent = StatsComponentToSet;
+}
+
 void UStatusEffectsComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -59,3 +65,4 @@ void UStatusEffectsComponent::AddResistanceBuff(float TimeAmount, float BuffAmou
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UResistanceBuff>(TimeAmount, BuffAmount));
 }
+

@@ -38,11 +38,9 @@ public:
 	// FORCEINLINE void SetResistance(float Value) { Resistance = Value; }
 	// FORCEINLINE void SetViewRange(float Value) { ViewRange = Value; }
 
-	UFUNCTION(BlueprintCallable)
 	void SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
 	                     float ViewRangeValue);
-	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(UHealthSystem* NewHealthSystem);
+
 
 protected:
 	// Called when the game starts

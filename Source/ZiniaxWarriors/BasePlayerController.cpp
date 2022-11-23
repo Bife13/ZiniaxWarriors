@@ -74,6 +74,7 @@ void ABasePlayerController::MoveVerticalInput(float Value)
 {
 	if (CachedMoveableInterface)
 	{
+		GEngine->AddOnScreenDebugMessage(1,2,FColor::Black, "Moving");
 		CachedMoveableInterface->MoveVertical(Value);
 	}
 }

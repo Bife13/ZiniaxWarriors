@@ -34,7 +34,7 @@ public:
 	//Sets
 	UFUNCTION(BlueprintCallable)
 	void SetHealthToMaxHealth();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void SetMaxHealth(float Amount);
 	UFUNCTION(BlueprintCallable)
 	void SetResistance(float Amount);

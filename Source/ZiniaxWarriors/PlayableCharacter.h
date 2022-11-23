@@ -12,6 +12,7 @@
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
 
+
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
                                               public IMoveableCharacter, public IDamageable, public IBuffable
@@ -45,15 +46,6 @@ public:
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetStatComponent(UStatsComponent* StatsComponentToSet) { StatsComponent = StatsComponentToSet; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetStatusEffectComponent(UStatusEffectsComponent* StatusEffectComponentToSet)
-	{
-		StatusEffectsComponent = StatusEffectComponentToSet;
-	}
-
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
 	UPROPERTY(BlueprintReadOnly)
@@ -74,6 +66,17 @@ protected:
 	void ConfigureCharacterMovement() const;
 	UFUNCTION()
 	void SetupCameraBoom();
+	UFUNCTION()
+	void SetupStatsComponent();
+	UFUNCTION(BlueprintCallable)
+	void SetupStatValues(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
+	                     float ViewRangeValue);
+	UFUNCTION(BlueprintCallable)
+	void SetupComponentValues();
+	UFUNCTION()
+	void SetupHealthComponent();
+	UFUNCTION()
+	void SetupStatusEffectComponent();
 	UFUNCTION()
 	void SetupTopDownCamera();
 	UFUNCTION()
@@ -97,34 +100,35 @@ protected:
 	UWorld* CachedWorld;
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
-	UPROPERTY()
-	class UHealthSystem* HealthSystem;
-	UPROPERTY(BlueprintReadWrite)
-	UArrowComponent* ShootingPoint;
+
+
 	UPROPERTY()
 	float BaseSpeed;
-
 	UPROPERTY(EditAnywhere)
 	int TeamID;
-
-	UPROPERTY()
-	UStatsComponent* StatsComponent;
 	UPROPERTY(BlueprintReadWrite)
+	UArrowComponent* ShootingPoint;
+
+	UPROPERTY(EditAnywhere,Category = Stats)
+	UStatsComponent* StatsComponent;
+
+	UPROPERTY(EditAnywhere,Category = Health)
+	UHealthSystem* HealthComponent;
+
+	UPROPERTY(EditAnywhere,Category = Status)
 	UStatusEffectsComponent* StatusEffectsComponent;
 
-	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(UHealthSystem* NewHealthSystem) { HealthSystem = NewHealthSystem; }
 
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* TopDownCameraComponent;
+	UCameraComponent* TopDownCameraComponent;
 
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraBoom;
 
 	/** A decal that projects to the cursor location. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UDecalComponent* CursorToWorld;
+	UDecalComponent* CursorToWorld;
 };

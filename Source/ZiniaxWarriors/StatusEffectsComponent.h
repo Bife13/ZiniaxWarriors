@@ -18,9 +18,12 @@ class ZINIAXWARRIORS_API UStatusEffectsComponent : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UStatusEffectsComponent();
-
-	UFUNCTION(BlueprintCallable)
-	void SetStatsComponent(UStatsComponent* StatsComponentToSet) {StatsComponent = StatsComponentToSet;}
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+							   FActorComponentTickFunction* ThisTickFunction) override;
+	void AddPowerBuff(float TimeAmount, float BuffAmount);
+	void AddResistanceBuff(float TimeAmount, float BuffAmount);
+	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
 
 protected:
 	// Called when the game starts
@@ -31,11 +34,6 @@ protected:
 	float ArrayLength;
 
 	UStatsComponent* StatsComponent;
-
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
-	void AddPowerBuff(float TimeAmount, float BuffAmount);
-	void AddResistanceBuff(float TimeAmount, float BuffAmount);
+	
+	
 };
