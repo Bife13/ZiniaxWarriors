@@ -14,7 +14,7 @@
 
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
-                                              public IMoveableCharacter, public IDamageable
+                                              public IMoveableCharacter, public IDamageable, public IBuffable
 {
 	GENERATED_BODY()
 
@@ -33,7 +33,7 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-	
+
 	UFUNCTION(BlueprintCallable)
 	int GetTeamIdCharacter() const { return TeamID; }
 
@@ -44,21 +44,30 @@ public:
 	virtual void MoveHorizontal(float Value) override;
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;
-	
-	UFUNCTION(BlueprintCallable)
-	void SetStatComponent(UStatsComponent* StatsComponentToSet) {StatsComponent = StatsComponentToSet;}
 
 	UFUNCTION(BlueprintCallable)
-	void SetStatusEffectComponent(UStatusEffectsComponent* StatusEffectComponentToSet) {StatusEffectsComponent = StatusEffectComponentToSet;}
+	void SetStatComponent(UStatsComponent* StatsComponentToSet) { StatsComponent = StatsComponentToSet; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetStatusEffectComponent(UStatusEffectsComponent* StatusEffectComponentToSet)
+	{
+		StatusEffectsComponent = StatusEffectComponentToSet;
+	}
 
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
 	UPROPERTY(BlueprintReadOnly)
 	FVector CachedMousePosition;
-	
+
+	UFUNCTION(BlueprintCallable)
+	virtual void TakeDamage(float Amount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
+
 
 protected:
-
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()
@@ -76,8 +85,6 @@ protected:
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void TakeDamage(float Amount) override;
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
@@ -106,8 +113,8 @@ protected:
 	UStatusEffectsComponent* StatusEffectsComponent;
 
 	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(UHealthSystem* NewHealthSystem){HealthSystem = NewHealthSystem;}
-	
+	void SetupHealthSystem(UHealthSystem* NewHealthSystem) { HealthSystem = NewHealthSystem; }
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

@@ -85,6 +85,8 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	}
 }
 
+
+
 void APlayableCharacter::LockRotation()
 {
 	bUseControllerRotationPitch = false;
@@ -177,4 +179,14 @@ void APlayableCharacter::UseThirdAbility()
 void APlayableCharacter::TakeDamage(float Amount)
 {
 	HealthSystem->TakeDamage(Amount);
+}
+
+void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::AddResistanceBuff(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
 }
