@@ -49,7 +49,6 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 void USkillBase::ResetCooldown()
 {
 	bCanUse = true;
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Green, "Reset");
 }
 
 void USkillBase::UseSkill()

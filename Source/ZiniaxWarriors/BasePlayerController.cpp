@@ -20,12 +20,10 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 	CalculateMousePosition();
 }
 
-void ABasePlayerController::OnPossess(APawn* InPawn)
+void ABasePlayerController::OnCharacterPossess(ACharacter* InCharacter)
 {
-	Super::OnPossess(InPawn);
-	
-	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(InPawn);
-	CachedMoveableInterface = Cast<IMoveableCharacter>(InPawn);
+	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(InCharacter);
+	CachedMoveableInterface = Cast<IMoveableCharacter>(InCharacter);
 }
 
 void ABasePlayerController::SetupInputComponent()
@@ -74,7 +72,7 @@ void ABasePlayerController::ThirdAbilityPressed()
 
 void ABasePlayerController::MoveVerticalInput(float Value)
 {
-	if (CachedCharacterInterface)
+	if (CachedMoveableInterface)
 	{
 		CachedMoveableInterface->MoveVertical(Value);
 	}
@@ -82,7 +80,7 @@ void ABasePlayerController::MoveVerticalInput(float Value)
 
 void ABasePlayerController::MoveHorizontalInput(float Value)
 {
-	if (CachedCharacterInterface)
+	if (CachedMoveableInterface)
 	{
 		CachedMoveableInterface->MoveHorizontal(Value);
 	}
@@ -90,7 +88,7 @@ void ABasePlayerController::MoveHorizontalInput(float Value)
 
 void ABasePlayerController::MouseChanged(FVector Value)
 {
-	if (CachedCharacterInterface)
+	if (CachedMoveableInterface)
 	{
 		CachedMoveableInterface->MoveMouse(Value);
 	}
