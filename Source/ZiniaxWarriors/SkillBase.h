@@ -65,6 +65,8 @@ public:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	TSubclassOf<AActor> CastEffectToSpawn;
 	UPROPERTY(BlueprintReadWrite)
 	FRotator AbilityRotation;
 
@@ -78,6 +80,8 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);
+	UFUNCTION(BlueprintCallable)
+	void SpawnCastingEffectActor(const FVector& SpawnPosition);
 	UFUNCTION(BlueprintCallable)
 	void ChangeRotator(const float ZOffsetAngle);
 	UFUNCTION(BlueprintCallable)

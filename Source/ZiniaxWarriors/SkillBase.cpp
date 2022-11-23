@@ -91,6 +91,13 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition);
 }
 
+void USkillBase::SpawnCastingEffectActor(const FVector& SpawnPosition)
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	AActor* SpawnedEffect = CachedWorld->SpawnActor(CastEffectToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
+}
+
 void USkillBase::ChangeRotator(const float ZOffsetAngle)
 {
 	AbilityRotation.Yaw += ZOffsetAngle;
