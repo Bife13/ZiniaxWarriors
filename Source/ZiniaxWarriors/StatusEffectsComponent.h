@@ -32,9 +32,8 @@ protected:
 	TArray<IBuff*> CurrentBuffArray;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
-
-	UPROPERTY()
 	UStatsComponent* StatsComponent;
 	
 	
 };
+	

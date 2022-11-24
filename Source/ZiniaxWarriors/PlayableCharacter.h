@@ -119,7 +119,7 @@ protected:
 	UPROPERTY(EditAnywhere,Category = Health)
 	UHealthSystem* HealthComponent;
 
-	UPROPERTY(EditAnywhere,  Category = Status)
+	UPROPERTY(EditAnywhere, Category = Status)
 	UStatusEffectsComponent* StatusEffectsComponent;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)

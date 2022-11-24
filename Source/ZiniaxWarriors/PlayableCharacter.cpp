@@ -30,13 +30,14 @@ APlayableCharacter::APlayableCharacter()
 
 	ConfigureCharacterMovement();
 
+	SetupStatsComponent();
+	
 	// Create a camera boom...
 	SetupCameraBoom();
-	
+
 	// Create a camera...
 	SetupTopDownCamera();
 
-	SetupStatsComponent();
 	SetupHealthComponent();
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
@@ -59,8 +60,6 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
-
-
 }
 
 
@@ -140,9 +139,9 @@ void APlayableCharacter::SetupStatusEffectComponent()
 }
 
 void APlayableCharacter::SetupStatValues(float PowerValue, float SpeedValue, float MaximumHealthValue,
-	float ResistanceValue, float ViewRangeValue)
+                                         float ResistanceValue, float ViewRangeValue)
 {
-	StatsComponent->SetupStatSystem(PowerValue,SpeedValue,MaximumHealthValue,ResistanceValue,ViewRangeValue);
+	StatsComponent->SetupStatSystem(PowerValue, SpeedValue, MaximumHealthValue, ResistanceValue, ViewRangeValue);
 	BaseSpeed = StatsComponent->GetSpeed();
 }
 
