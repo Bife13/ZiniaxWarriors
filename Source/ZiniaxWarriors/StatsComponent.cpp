@@ -27,7 +27,7 @@ void UStatsComponent::SetupStatSystem(float PowerValue, float SpeedValue, float 
 	CurrentSpeed = BaseSpeed;
 	CurrentPower = BasePower;
 	CurrentMaximumHealth = BaseMaximumHealth;
-	CurrentResitance = BaseResistance;
+	CurrentResistance = BaseResistance;
 	CurrentViewRange = BaseViewRange;
 }
 
@@ -54,3 +54,17 @@ void UStatsComponent::ChangePower(float Amount)
 	CurrentPower += (BasePower * Amount);
 	OnPowerChangedEvent.Broadcast(CurrentPower);
 }
+
+void UStatsComponent::ChangeResistance(float Amount)
+{
+	CurrentResistance += (BaseResistance * Amount);
+	OnResistanceChangedEvent.Broadcast(CurrentResistance);
+}
+
+void UStatsComponent::ChangeSpeed(float Amount)
+{
+	CurrentSpeed += (BaseSpeed * Amount);
+	OnSpeedChangedEvent.Broadcast(CurrentSpeed);
+}
+
+

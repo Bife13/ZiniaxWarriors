@@ -31,8 +31,8 @@ public:
 	virtual bool GetActivated() = 0;
 	virtual float GetTimer() = 0;
 
-	virtual void SetTime(float Value) = 0;
-	virtual void SetAmount(float Value) = 0;
+	virtual void SetTime(const float Value) = 0;
+	virtual void SetAmount(const float Value) = 0;
 	
 
 };

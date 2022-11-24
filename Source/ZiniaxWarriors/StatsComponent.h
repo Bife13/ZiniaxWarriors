@@ -8,6 +8,8 @@
 #include "StatsComponent.generated.h"
 
 DECLARE_EVENT_OneParam(UStatsComponent, PowerChangedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, ResistanceChangedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, SpeedChangedEvent, float)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
@@ -24,13 +26,18 @@ public:
 	float GetSpeed() const { return CurrentSpeed; }
 	float GetPower() const { return CurrentPower; }
 	float GetMaximumHealth() const { return CurrentMaximumHealth; }
-	float GetResistance() const { return CurrentResitance; }
+	float GetResistance() const { return CurrentResistance; }
 	float GetViewRange() const { return CurrentViewRange; }
 
 	
 	void ChangePower(float Amount);
 	PowerChangedEvent OnPowerChangedEvent;
 
+	void ChangeResistance(float Amount);
+	ResistanceChangedEvent OnResistanceChangedEvent;
+
+	void ChangeSpeed(float Amount);
+	SpeedChangedEvent OnSpeedChangedEvent;
 
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }
@@ -41,7 +48,7 @@ public:
 	void SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
 	                     float ViewRangeValue);
 
-
+    
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -54,7 +61,8 @@ protected:
 	float CurrentPower;
 	float CurrentSpeed;
 	float CurrentMaximumHealth;
-	float CurrentResitance;
+	float CurrentResistance;
 	float CurrentViewRange;
+	UPROPERTY()
 	UHealthSystem* HealthSystem;
 };

@@ -9,7 +9,6 @@ void UPowerBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 	Activated = true;
 	Timer = Time;
 	StatsComponent->ChangePower(Amount);
-	GEngine->AddOnScreenDebugMessage(1,1,FColor::Black,"BuffGained");
 }
 
 void UPowerBuff::OnBuffTick(float DeltaTime)
@@ -26,6 +25,4 @@ void UPowerBuff::OnBuffTick(float DeltaTime)
 void UPowerBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->ChangePower(-Amount);
-	GEngine->AddOnScreenDebugMessage(1,1,FColor::Black,"BuffLost");
-
 }

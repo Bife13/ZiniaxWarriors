@@ -5,23 +5,22 @@
 #include "CoreMinimal.h"
 #include "Buff.h"
 #include "UObject/NoExportTypes.h"
-#include "ResistanceBuff.generated.h"
+#include "SpeedBuff.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZINIAXWARRIORS_API UResistanceBuff : public UObject, public IBuff
+class ZINIAXWARRIORS_API USpeedBuff : public UObject , public IBuff
 {
-	
 	GENERATED_BODY()
-
+	
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
 	virtual void OnBuffTick(float DeltaTime) override;
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }
-	virtual float GetTimer() override { return Timer;}
+	virtual float GetTimer() override { return Timer; }
 	
 	virtual void SetTime(const float Value) override { Time = Value; }
 	virtual void SetAmount(const float Value) override { Amount = Value; }
@@ -32,5 +31,4 @@ protected:
 	float Amount = 0;
 	bool Activated = false;
 	float Timer = 0;
-	
 };
