@@ -14,6 +14,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 APlayableCharacter::APlayableCharacter()
@@ -124,7 +125,8 @@ void APlayableCharacter::SetupStatsComponent()
 
 void APlayableCharacter::SetupCastParticleSystem()
 {
-	CastParticleSystem = CreateDefaultSubobject<UParticleSystem>(TEXT("Cast Particle"));
+	CastParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Cast Particle"));
+	CastParticleSystem->SetupAttachment(RootComponent);
 }
 
 void APlayableCharacter::SetupHealthComponent()
@@ -229,4 +231,10 @@ void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
 void APlayableCharacter::AddResistanceBuff(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
+{
+	CastParticleSystem->Template = NewParticle;
+	CastParticleSystem->Activate(true);
 }

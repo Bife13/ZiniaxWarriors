@@ -58,6 +58,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetCastEffect(UParticleSystem* NewParticle);
 
 protected:
 	UFUNCTION()
@@ -117,11 +119,11 @@ protected:
 	UPROPERTY(EditAnywhere,Category = Health)
 	UHealthSystem* HealthComponent;
 
-	UPROPERTY(EditAnywhere,Category = Status)
+	UPROPERTY(EditAnywhere,  Category = Status)
 	UStatusEffectsComponent* StatusEffectsComponent;
 
-	UPROPERTY(EditAnywhere,Category = Status)
-	UParticleSystem* CastParticleSystem;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* CastParticleSystem;
 
 private:
 	/** Top down camera */
