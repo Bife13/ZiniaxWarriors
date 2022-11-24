@@ -33,6 +33,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
 
+	UPROPERTY()
 	UStatsComponent* StatsComponent;
 	
 	
