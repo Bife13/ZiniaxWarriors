@@ -11,19 +11,19 @@ struct FCharacterStats : public FTableRowBase
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float Power;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float Speed;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float MaximumHealth;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float Resistance;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float ViewRange;
 	
 };
