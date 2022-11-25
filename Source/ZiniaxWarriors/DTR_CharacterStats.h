@@ -13,16 +13,12 @@ struct FCharacterStats : public FTableRowBase
 	
 	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float Power;
-
 	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float Speed;
-	
 	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float MaximumHealth;
-	
 	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float Resistance;
-	
 	UPROPERTY(EditInstanceOnly,BlueprintReadWrite)
 	float ViewRange;
 	
