@@ -8,7 +8,9 @@
 #include "SkillBase.h"
 #include "StatsComponent.h"
 #include "StatusEffectsComponent.h"
+#include "UI_Observer.h"
 #include "UsableCharacterSkillSlot.h"
+#include "WorldWidget.h"
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
 
@@ -78,6 +80,8 @@ protected:
 	UFUNCTION()
 	void SetupHealthComponent();
 	UFUNCTION()
+	void SetupUIObserverComponent();
+	UFUNCTION()
 	void SetupStatusEffectComponent();
 	UFUNCTION()
 	void SetupCastParticleSystem();
@@ -110,6 +114,8 @@ protected:
 	float BaseSpeed;
 	UPROPERTY(EditAnywhere)
 	int TeamID;
+	
+	
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 
@@ -124,6 +130,9 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* CastParticleSystem;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = UIObserver)
+	UUI_Observer* UIObserver;
 
 private:
 	/** Top down camera */

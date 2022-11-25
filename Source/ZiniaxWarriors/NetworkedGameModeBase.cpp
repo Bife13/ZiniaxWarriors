@@ -21,11 +21,11 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	UE_LOG(LogTemp, Warning, TEXT("Picked StartPointNamed: %s"), *PlayerStart->GetName());
 
-	// Spawn An Actor
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Drex", "")->PlayableCharacter;
+	// Spawn An Actor -- Nyax , Drex, Zeher
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Nyax", "")->PlayableCharacter;
 	if(SpawnedTeam1)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Drex", "")->PlayableCharacter;
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Nyax", "")->PlayableCharacter;
 	}
 
 	FVector Location = PlayerStart->GetActorLocation();

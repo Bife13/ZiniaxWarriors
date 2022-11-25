@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "HealthSystem.h"
 #include "WorldWidget.generated.h"
 
 /**
@@ -14,11 +15,14 @@ class ZINIAXWARRIORS_API UWorldWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	
 	// ReSharper disable once UnrealHeaderToolError
-	public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
-	class UHealthSystem* HealthSystemOfCharacter;
+	protected:
 
-	UFUNCTION(BlueprintCallable)
-	void SetHealthSystemOnWidget(UHealthSystem* Hp);
+
+	
+
+
+	
 };

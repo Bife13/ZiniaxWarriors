@@ -39,9 +39,13 @@ APlayableCharacter::APlayableCharacter()
 	SetupTopDownCamera();
 
 	SetupHealthComponent();
+	
+
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
 
+	SetupUIObserverComponent();
+	
 	// Create a decal in the world to show the cursor's location
 	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
 	CursorToWorld->SetupAttachment(RootComponent);
@@ -133,6 +137,13 @@ void APlayableCharacter::SetupHealthComponent()
 	HealthComponent = CreateDefaultSubobject<UHealthSystem>(TEXT("Health Component"));
 }
 
+void APlayableCharacter::SetupUIObserverComponent()
+{
+	UIObserver = CreateDefaultSubobject<UUI_Observer>(TEXT("UI Observer Component"));
+	UIObserver->SetHealthSystem(HealthComponent);
+	UIObserver->SetStatsSystem(StatsComponent);
+}
+
 void APlayableCharacter::SetupStatusEffectComponent()
 {
 	StatusEffectsComponent = CreateDefaultSubobject<UStatusEffectsComponent>(TEXT("Status Effect Component"));
@@ -147,10 +158,14 @@ void APlayableCharacter::SetupStatValues(float PowerValue, float SpeedValue, flo
 
 void APlayableCharacter::SetupComponentValues()
 {
-	HealthComponent->SetMaxHealth(StatsComponent->GetMaximumHealth());
-	HealthComponent->SetResistance(StatsComponent->GetResistance());
-	HealthComponent->SetHealthToMaxHealth();
-	StatusEffectsComponent->SetStatsComponent(StatsComponent);
+	if(StatsComponent!=NULL)
+	{
+		HealthComponent->SetMaxHealth(StatsComponent->GetMaximumHealth());
+		HealthComponent->SetResistance(StatsComponent->GetResistance());
+		HealthComponent->SetHealthToMaxHealth();
+		StatusEffectsComponent->SetStatsComponent(StatsComponent);
+	}
+	
 }
 
 void APlayableCharacter::SetupTopDownCamera()
