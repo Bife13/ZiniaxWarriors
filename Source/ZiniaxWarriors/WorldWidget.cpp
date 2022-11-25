@@ -3,3 +3,11 @@
 
 #include "WorldWidget.h"
 
+#include "HealthSystem.h"
+
+void UWorldWidget::SetHealthSystemOnWidget(UHealthSystem *Hp)
+{
+
+HealthSystem = Hp;
+	
+}
