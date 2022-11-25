@@ -42,10 +42,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
 
-	// Create a decal in the world to show the cursor's location
-	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
-	CursorToWorld->SetupAttachment(RootComponent);
-
+	
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
