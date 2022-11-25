@@ -4,14 +4,17 @@
 #include "PlayableCharacter.h"
 
 #include "Buff.h"
-#include "FBuffFactory.h"
+#include "DTR_CharacterStats.h"
 #include "PowerBuff.h"
 #include "Camera/CameraComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/DecalComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 APlayableCharacter::APlayableCharacter()
@@ -27,11 +30,17 @@ APlayableCharacter::APlayableCharacter()
 
 	ConfigureCharacterMovement();
 
+	SetupStatsComponent();
+	
 	// Create a camera boom...
 	SetupCameraBoom();
 
 	// Create a camera...
 	SetupTopDownCamera();
+
+	SetupHealthComponent();
+	SetupStatusEffectComponent();
+	SetupCastParticleSystem();
 
 	// Create a decal in the world to show the cursor's location
 	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
@@ -51,8 +60,6 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
-
-
 }
 
 
@@ -68,16 +75,6 @@ void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 	GetCapsuleComponent()->SetWorldRotation(ActualRotation);
 }
 
-void APlayableCharacter::SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance,
-                                           float Speed)
-{
-	HealthSystem = NewHealthSystem;
-	HealthSystem->SetResistance(Resistance);
-	HealthSystem->SetMaxHealth(MaxHealth);
-	HealthSystem->SetHealthToMaxHealth();
-
-	BaseSpeed = Speed;
-}
 
 // Called every frame
 void APlayableCharacter::Tick(const float DeltaTime)
@@ -93,6 +90,7 @@ void APlayableCharacter::Tick(const float DeltaTime)
 		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
 }
+
 
 void APlayableCharacter::LockRotation()
 {
@@ -117,6 +115,42 @@ void APlayableCharacter::SetupCameraBoom()
 	CameraBoom->TargetArmLength = 1000.f;
 	CameraBoom->SetRelativeRotation(FRotator(-65.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+}
+
+void APlayableCharacter::SetupStatsComponent()
+{
+	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("Stats Component"));
+}
+
+void APlayableCharacter::SetupCastParticleSystem()
+{
+	CastParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Cast Particle"));
+	CastParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupHealthComponent()
+{
+	HealthComponent = CreateDefaultSubobject<UHealthSystem>(TEXT("Health Component"));
+}
+
+void APlayableCharacter::SetupStatusEffectComponent()
+{
+	StatusEffectsComponent = CreateDefaultSubobject<UStatusEffectsComponent>(TEXT("Status Effect Component"));
+}
+
+void APlayableCharacter::SetupStatValues(float PowerValue, float SpeedValue, float MaximumHealthValue,
+                                         float ResistanceValue, float ViewRangeValue)
+{
+	StatsComponent->SetupStatSystem(PowerValue, SpeedValue, MaximumHealthValue, ResistanceValue, ViewRangeValue);
+	BaseSpeed = StatsComponent->GetSpeed();
+}
+
+void APlayableCharacter::SetupComponentValues()
+{
+	HealthComponent->SetMaxHealth(StatsComponent->GetMaximumHealth());
+	HealthComponent->SetResistance(StatsComponent->GetResistance());
+	HealthComponent->SetHealthToMaxHealth();
+	StatusEffectsComponent->SetStatsComponent(StatsComponent);
 }
 
 void APlayableCharacter::SetupTopDownCamera()
@@ -185,5 +219,21 @@ void APlayableCharacter::UseThirdAbility()
 
 void APlayableCharacter::TakeDamage(float Amount)
 {
-	HealthSystem->TakeDamage(Amount);
+	HealthComponent->TakeDamage(Amount);
+}
+
+void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::AddResistanceBuff(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
+{
+	CastParticleSystem->Template = NewParticle;
+	CastParticleSystem->Activate(true);
 }

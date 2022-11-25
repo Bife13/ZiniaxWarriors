@@ -19,13 +19,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
-
-	// UFUNCTION(BlueprintCallable, Category = Test)
-	// void StartCooldownTimer();
-	// UFUNCTION(BlueprintCallable, Category = Test)
-	// void StartCastTimer();
-
-	UFUNCTION(BlueprintCallable, Category = Test)
+	
+	UFUNCTION()
 	void ResetCooldown();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -65,6 +60,8 @@ public:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	TSubclassOf<AActor> CastEffectToSpawn;
 	UPROPERTY(BlueprintReadWrite)
 	FRotator AbilityRotation;
 
@@ -78,6 +75,8 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);
+	UFUNCTION(BlueprintCallable)
+	void SpawnCastingEffectActor(const FVector& SpawnPosition);
 	UFUNCTION(BlueprintCallable)
 	void ChangeRotator(const float ZOffsetAngle);
 	UFUNCTION(BlueprintCallable)

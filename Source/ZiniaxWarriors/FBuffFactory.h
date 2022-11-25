@@ -13,13 +13,15 @@ class ZINIAXWARRIORS_API FBuffFactory
 public:
 	FBuffFactory();
 	~FBuffFactory();
-
-	static IBuff* GetBuff(FString BuffName);
+	
 
 	template <typename T>
-	static IBuff* CreateBuff()
+	static IBuff* CreateBuff(const float TimeAmount,const float BuffAmount)
 	{
 		T* NewBuff = NewObject<T>();
-		return Cast<IBuff>(NewBuff);
+		IBuff* Buff = Cast<IBuff>(NewBuff);
+		Buff->SetTime(TimeAmount);
+		Buff->SetAmount(BuffAmount);
+		return Buff;
 	}
 };

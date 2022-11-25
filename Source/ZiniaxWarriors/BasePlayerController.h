@@ -17,13 +17,14 @@ class ZINIAXWARRIORS_API ABasePlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	ABasePlayerController();
+	ABasePlayerController();	
+	void OnCharacterPossess(ACharacter* InCharacter) ;
+
 
 protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
-	virtual void OnPossess(APawn* InPawn) override;
 
 
 	void BasicAttackPressed();

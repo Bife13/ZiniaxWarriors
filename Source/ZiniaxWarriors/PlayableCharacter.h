@@ -6,13 +6,16 @@
 #include "HealthSystem.h"
 #include "MoveableCharacter.h"
 #include "SkillBase.h"
+#include "StatsComponent.h"
+#include "StatusEffectsComponent.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
 #include "PlayableCharacter.generated.h"
 
+
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
-                                              public IMoveableCharacter, public IDamageable
+												public IMoveableCharacter, public IDamageable, public IBuffable
 {
 	GENERATED_BODY()
 
@@ -31,10 +34,10 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-	
+
 	UFUNCTION(BlueprintCallable)
 	int GetTeamIdCharacter() const { return TeamID; }
-
+	
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(Server, Unreliable)
@@ -47,15 +50,37 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FVector CachedMousePosition;
 
-protected:
+	
 	UFUNCTION(BlueprintCallable)
-	void SetupHealthSystem(UHealthSystem* NewHealthSystem, float MaxHealth, float Resistance, float Speed);
+	virtual void TakeDamage(float Amount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetCastEffect(UParticleSystem* NewParticle);
+
+protected:
 	UFUNCTION()
 	void LockRotation();
 	UFUNCTION()
 	void ConfigureCharacterMovement() const;
 	UFUNCTION()
 	void SetupCameraBoom();
+	UFUNCTION()
+	void SetupStatsComponent();
+	UFUNCTION(BlueprintCallable)
+	void SetupStatValues(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
+	                     float ViewRangeValue);
+	UFUNCTION(BlueprintCallable)
+	void SetupComponentValues();
+	UFUNCTION()
+	void SetupHealthComponent();
+	UFUNCTION()
+	void SetupStatusEffectComponent();
+	UFUNCTION()
+	void SetupCastParticleSystem();
 	UFUNCTION()
 	void SetupTopDownCamera();
 	UFUNCTION()
@@ -67,8 +92,6 @@ protected:
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void TakeDamage(float Amount) override;
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
@@ -81,26 +104,37 @@ protected:
 	UWorld* CachedWorld;
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
-	UPROPERTY()
-	class UHealthSystem* HealthSystem;
-	UPROPERTY(BlueprintReadWrite)
-	UArrowComponent* ShootingPoint;
+
+
 	UPROPERTY()
 	float BaseSpeed;
-
 	UPROPERTY(EditAnywhere)
 	int TeamID;
+	UPROPERTY(BlueprintReadWrite)
+	UArrowComponent* ShootingPoint;
+
+	UPROPERTY(EditAnywhere,Category = Stats)
+	UStatsComponent* StatsComponent;
+
+	UPROPERTY(EditAnywhere,Category = Health)
+	UHealthSystem* HealthComponent;
+
+	UPROPERTY(EditAnywhere, Category = Status)
+	UStatusEffectsComponent* StatusEffectsComponent;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* CastParticleSystem;
 
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* TopDownCameraComponent;
+	UCameraComponent* TopDownCameraComponent;
 
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraBoom;
 
 	/** A decal that projects to the cursor location. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UDecalComponent* CursorToWorld;
+	UDecalComponent* CursorToWorld;
 };

@@ -14,12 +14,16 @@ UStatusEffectsComponent::UStatusEffectsComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+
+void UStatusEffectsComponent::SetStatsComponent(UStatsComponent* StatsComponentToSet)
+{
+	StatsComponent = StatsComponentToSet;
+}
+
 void UStatusEffectsComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	BuffFactory = new FBuffFactory();
-	AddResistanceBuff();
-	AddPowerBuff();
 }
 
 void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -34,16 +38,15 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			{
 				if (!CurrentBuffArray[i]->GetActivated())
 				{
-					CurrentBuffArray[i]->OnBuffBegin();
+					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
 				}
+				
+				CurrentBuffArray[i]->OnBuffTick(DeltaTime);
 
-				float Timer = CurrentBuffArray[i]->GetTimer();
-				Timer -= DeltaTime;
-				CurrentBuffArray[i]->SetTimer(Timer);
 				if (CurrentBuffArray[i]->GetTimer() <= 0)
 				{
-					CurrentBuffArray[i]->OnBuffEnd();
-					CurrentBuffArray.RemoveAt(i);
+					CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
+					CurrentBuffArray.RemoveAt(i,1,true);
 				}
 			}
 		}
@@ -52,12 +55,14 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	ArrayLength = CurrentBuffArray.Num();
 }
 
-void UStatusEffectsComponent::AddPowerBuff()
+void UStatusEffectsComponent::AddPowerBuff(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UPowerBuff>());
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UPowerBuff>(TimeAmount, BuffAmount));
+	
 }
 
-void UStatusEffectsComponent::AddResistanceBuff()
+void UStatusEffectsComponent::AddResistanceBuff(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UResistanceBuff>());
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UResistanceBuff>(TimeAmount, BuffAmount));
 }
+

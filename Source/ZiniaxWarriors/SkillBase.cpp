@@ -49,7 +49,6 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 void USkillBase::ResetCooldown()
 {
 	bCanUse = true;
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Green, "Reset");
 }
 
 void USkillBase::UseSkill()
@@ -89,6 +88,13 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
 	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition);
+}
+
+void USkillBase::SpawnCastingEffectActor(const FVector& SpawnPosition)
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	AActor* SpawnedEffect = CachedWorld->SpawnActor(CastEffectToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 }
 
 void USkillBase::ChangeRotator(const float ZOffsetAngle)

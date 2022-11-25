@@ -23,7 +23,6 @@ void UHealthSystem::TakeDamage(const float Amount)
 	if (Amount > 0)
 	{
 		Health -= Amount * (100) / (100 + Resistance);
-		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Blue, "FODASSE");
 		OnDamageTakenEvent.Broadcast(Amount);
 	}
 }

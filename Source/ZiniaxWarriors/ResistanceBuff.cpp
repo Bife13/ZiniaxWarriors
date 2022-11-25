@@ -3,18 +3,25 @@
 
 #include "ResistanceBuff.h"
 
-void UResistanceBuff::OnBuffBegin()
+void UResistanceBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 {
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, FString::Printf(TEXT("%f"), Time));
 	Activated = true;
 	Timer = Time;
+	StatsComponent->ChangeResistance(Amount);
 }
 
-void UResistanceBuff::OnBuffTick()
+void UResistanceBuff::OnBuffTick(float DeltaTime)
 {
+	if(Timer > 0)
+	{
+		Timer -= DeltaTime;
+	}else
+	{
+		Timer = 0;
+	}
 }
 
-void UResistanceBuff::OnBuffEnd()
+void UResistanceBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::White, "CARALHO");
+	StatsComponent->ChangeResistance(-Amount);
 }

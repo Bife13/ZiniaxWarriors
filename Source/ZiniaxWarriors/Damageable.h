@@ -6,8 +6,7 @@
 #include "UObject/Interface.h"
 #include "Damageable.generated.h"
 
-// This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UDamageable : public UInterface
 {
 	GENERATED_BODY()
@@ -22,5 +21,6 @@ class ZINIAXWARRIORS_API IDamageable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) = 0;
 };

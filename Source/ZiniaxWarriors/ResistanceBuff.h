@@ -16,20 +16,20 @@ class ZINIAXWARRIORS_API UResistanceBuff : public UObject, public IBuff
 	
 	GENERATED_BODY()
 
-	virtual void OnBuffBegin() override;
-	virtual void OnBuffTick() override;
-	virtual void OnBuffEnd() override;
+	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
+	virtual void OnBuffTick(float DeltaTime) override;
+	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }
-	virtual float GetTime() override { return Time; }
-	virtual float GetAmount() override { return Amount; }
-	virtual float GetTimer() override { return Timer; }
-	virtual void SetTimer(float Value) override { Timer = Value; }
+	virtual float GetTimer() override { return Timer;}
+	
+	virtual void SetTime(const float Value) override { Time = Value; }
+	virtual void SetAmount(const float Value) override { Amount = Value; }
 
 
 protected:
-	float Time = 5;
-	float Amount = .2f;
+	float Time = 0;
+	float Amount = 0;
 	bool Activated = false;
 	float Timer = 0;
 	

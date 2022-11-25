@@ -11,13 +11,19 @@
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ZINIAXWARRIORS_API UStatusEffectsComponent : public UActorComponent, public IBuffable
+class ZINIAXWARRIORS_API UStatusEffectsComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
 	UStatusEffectsComponent();
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+							   FActorComponentTickFunction* ThisTickFunction) override;
+	void AddPowerBuff(float TimeAmount, float BuffAmount);
+	void AddResistanceBuff(float TimeAmount, float BuffAmount);
+	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
 
 protected:
 	// Called when the game starts
@@ -26,11 +32,8 @@ protected:
 	TArray<IBuff*> CurrentBuffArray;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
-
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void AddPowerBuff() override;
-	virtual void AddResistanceBuff() override;
+	UStatsComponent* StatsComponent;
+	
+	
 };
+	
