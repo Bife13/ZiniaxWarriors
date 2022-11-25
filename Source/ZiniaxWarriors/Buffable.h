@@ -22,11 +22,11 @@ class ZINIAXWARRIORS_API IBuffable
 
 public:
 	UFUNCTION(BlueprintCallable)
-<<<<<<< HEAD
+
 	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) = 0;
-=======
+
 	virtual void AddEnrage(float TimeAmount, float BuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddBulk(float TimeAmount, float BuffAmount) = 0;
@@ -38,5 +38,5 @@ public:
 	virtual void AddWeaken(float TimeAmount, float DebuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddSlow(float TimeAmount, float DebuffAmount) = 0;
->>>>>>> master-bife
+
 };

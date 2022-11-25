@@ -49,7 +49,7 @@ void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
-<<<<<<< HEAD
+
 void UStatsComponent::ChangePower(float Amount)
 {
 	CurrentPower += (BasePower * Amount);
@@ -69,7 +69,6 @@ void UStatsComponent::ChangeSpeed(float Amount)
 }
 
 
-=======
 void UStatsComponent::Enrage(float Amount)
 {
 	CurrentPower += (BasePower * Amount);
@@ -151,4 +150,4 @@ void UStatsComponent::Slow(float Amount)
 
 
 
->>>>>>> master-bife
+

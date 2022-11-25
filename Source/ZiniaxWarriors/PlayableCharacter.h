@@ -8,10 +8,9 @@
 #include "SkillBase.h"
 #include "StatsComponent.h"
 #include "StatusEffectsComponent.h"
-<<<<<<< HEAD
+
 #include "UI_Observer.h"
-=======
->>>>>>> master-bife
+
 #include "UsableCharacterSkillSlot.h"
 #include "WorldWidget.h"
 #include "GameFramework/Character.h"
@@ -38,10 +37,9 @@ public:
 	/** Returns CameraBoom SubObject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns CursorToWorld SubObject **/
-<<<<<<< HEAD
+
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() const { return CursorToWorld; }
-=======
->>>>>>> master-bife
+
 
 	UFUNCTION(BlueprintCallable)
 	int GetTeamIdCharacter() const { return TeamID; }
@@ -62,12 +60,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
-<<<<<<< HEAD
+
 	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
 
-=======
+
 	virtual void AddEnrage(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddBulk(float TimeAmount, float BuffAmount) override;
@@ -80,7 +78,7 @@ public:
 	UFUNCTION(BlueprintCallable)
     virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
 	
->>>>>>> master-bife
+
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
@@ -101,11 +99,9 @@ protected:
 	UFUNCTION()
 	void SetupHealthComponent();
 	UFUNCTION()
-<<<<<<< HEAD
 	void SetupUIObserverComponent();
+	
 	UFUNCTION()
-=======
->>>>>>> master-bife
 	void SetupStatusEffectComponent();
 	UFUNCTION()
 	void SetupCastParticleSystem();
@@ -138,19 +134,16 @@ protected:
 	float BaseSpeed;
 	UPROPERTY(EditAnywhere)
 	int TeamID;
-<<<<<<< HEAD
-	
-	
-	UPROPERTY(BlueprintReadWrite)
-	UArrowComponent* ShootingPoint;
 
-	UPROPERTY(EditAnywhere,Category = Stats)
-=======
+	
+	
+
+
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
->>>>>>> master-bife
+
 	UStatsComponent* StatsComponent;
 
 	UPROPERTY(EditAnywhere,Category = Health)
@@ -161,12 +154,11 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* CastParticleSystem;
-<<<<<<< HEAD
+
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = UIObserver)
 	UUI_Observer* UIObserver;
-=======
->>>>>>> master-bife
+
 
 private:
 	/** Top down camera */
@@ -177,10 +169,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
-<<<<<<< HEAD
+
 	/** A decal that projects to the cursor location. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UDecalComponent* CursorToWorld;
-=======
->>>>>>> master-bife
+
 };

@@ -4,14 +4,14 @@
 #include "PlayableCharacter.h"
 
 #include "Buff.h"
-<<<<<<< HEAD
+
 #include "DTR_CharacterStats.h"
 #include "PowerBuff.h"
-=======
->>>>>>> master-bife
+
 #include "Camera/CameraComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/DecalComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -41,7 +41,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupTopDownCamera();
 
 	SetupHealthComponent();
-<<<<<<< HEAD
+
 	
 
 	SetupStatusEffectComponent();
@@ -52,10 +52,9 @@ APlayableCharacter::APlayableCharacter()
 	// Create a decal in the world to show the cursor's location
 	CursorToWorld = CreateDefaultSubobject<UDecalComponent>("CursorToWorld");
 	CursorToWorld->SetupAttachment(RootComponent);
-=======
-	SetupStatusEffectComponent();
-	SetupCastParticleSystem();
->>>>>>> master-bife
+
+
+
 
 	
 	PrimaryActorTick.bCanEverTick = true;
@@ -145,7 +144,7 @@ void APlayableCharacter::SetupHealthComponent()
 	HealthComponent = CreateDefaultSubobject<UHealthSystem>(TEXT("Health Component"));
 }
 
-<<<<<<< HEAD
+
 void APlayableCharacter::SetupUIObserverComponent()
 {
 	UIObserver = CreateDefaultSubobject<UUI_Observer>(TEXT("UI Observer Component"));
@@ -153,8 +152,7 @@ void APlayableCharacter::SetupUIObserverComponent()
 	UIObserver->SetStatsSystem(StatsComponent);
 }
 
-=======
->>>>>>> master-bife
+
 void APlayableCharacter::SetupStatusEffectComponent()
 {
 	StatusEffectsComponent = CreateDefaultSubobject<UStatusEffectsComponent>(TEXT("Status Effect Component"));
@@ -169,21 +167,11 @@ void APlayableCharacter::SetupStatValues(float PowerValue, float SpeedValue, flo
 
 void APlayableCharacter::SetupComponentValues()
 {
-<<<<<<< HEAD
-	if(StatsComponent!=NULL)
-	{
-		HealthComponent->SetMaxHealth(StatsComponent->GetMaximumHealth());
-		HealthComponent->SetResistance(StatsComponent->GetResistance());
-		HealthComponent->SetHealthToMaxHealth();
-		StatusEffectsComponent->SetStatsComponent(StatsComponent);
-	}
-	
-=======
 	HealthComponent->SetMaxHealth(StatsComponent->GetMaximumHealth());
 	HealthComponent->SetResistance(StatsComponent->GetResistance());
 	HealthComponent->SetHealthToMaxHealth();
 	StatusEffectsComponent->SetStatsComponent(StatsComponent);
->>>>>>> master-bife
+
 }
 
 void APlayableCharacter::SetupTopDownCamera()
@@ -255,7 +243,7 @@ void APlayableCharacter::TakeDamage(float Amount)
 	HealthComponent->TakeDamage(Amount);
 }
 
-<<<<<<< HEAD
+
 void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
@@ -264,7 +252,8 @@ void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
 void APlayableCharacter::AddResistanceBuff(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
-=======
+}
+	
 void APlayableCharacter::AddEnrage(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddEnrage(TimeAmount, BuffAmount);
@@ -293,7 +282,6 @@ void APlayableCharacter::AddSlow(float TimeAmount, float DebuffAmount)
 void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
->>>>>>> master-bife
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)

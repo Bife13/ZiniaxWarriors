@@ -6,13 +6,13 @@
 #include "HealthSystem.h"
 #include "Components/ActorComponent.h"
 #include "StatsComponent.generated.h"
-<<<<<<< HEAD
+
 
 DECLARE_EVENT_OneParam(UStatsComponent, PowerChangedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, ResistanceChangedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, SpeedChangedEvent, float)
 
-=======
+
 //AttackPower Buff/Debuff events
 DECLARE_EVENT_OneParam(UStatsComponent, EnrageAppliedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, EnrageRemovedEvent, float)
@@ -28,7 +28,7 @@ DECLARE_EVENT_OneParam(UStatsComponent, SlowAppliedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, HasteAppliedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, SlowRemovedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
->>>>>>> master-bife
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
 {
@@ -42,16 +42,14 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	float GetSpeed() const { return CurrentSpeed; }
-<<<<<<< HEAD
-=======
+
 	UFUNCTION(BlueprintCallable)
->>>>>>> master-bife
+
 	float GetPower() const { return CurrentPower; }
 	float GetMaximumHealth() const { return CurrentMaximumHealth; }
 	float GetResistance() const { return CurrentResistance; }
 	float GetViewRange() const { return CurrentViewRange; }
 
-<<<<<<< HEAD
 	
 	void ChangePower(float Amount);
 	PowerChangedEvent OnPowerChangedEvent;
@@ -61,7 +59,6 @@ public:
 
 	void ChangeSpeed(float Amount);
 	SpeedChangedEvent OnSpeedChangedEvent;
-=======
 
     void Enrage(float Amount);
 	EnrageAppliedEvent OnEnrageAppliedEvent;
@@ -86,7 +83,7 @@ public:
 	void Slow(float Amount);
 	SlowAppliedEvent OnSlowAppliedEvent;
 	SlowRemovedEvent OnSlowRemovedEvent;
->>>>>>> master-bife
+
 
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }

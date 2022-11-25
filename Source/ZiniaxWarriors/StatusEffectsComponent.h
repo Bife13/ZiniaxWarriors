@@ -21,17 +21,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							   FActorComponentTickFunction* ThisTickFunction) override;
-<<<<<<< HEAD
+
 	void AddPowerBuff(float TimeAmount, float BuffAmount);
 	void AddResistanceBuff(float TimeAmount, float BuffAmount);
-=======
+
 	void AddEnrage(float TimeAmount, float BuffAmount);
 	void AddBulk(float TimeAmount, float BuffAmount);
 	void AddHaste(float TimeAmount, float BuffAmount);
 	void AddSlow(float TimeAmount, float DebuffAmount);
 	void AddWeaken(float TimeAmount, float DebuffAmount);
 	void AddVulnerable(float TimeAmount, float DebuffAmount);
->>>>>>> master-bife
+
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
 
 protected:

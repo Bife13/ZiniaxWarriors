@@ -12,6 +12,9 @@
 #include "Weaken.h"
 
 
+class UResistanceBuff;
+class UPowerBuff;
+
 UStatusEffectsComponent::UStatusEffectsComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -60,7 +63,7 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	ArrayLength = CurrentBuffArray.Num();
 }
 
-<<<<<<< HEAD
+
 void UStatusEffectsComponent::AddPowerBuff(float TimeAmount, float BuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UPowerBuff>(TimeAmount, BuffAmount));
@@ -72,7 +75,7 @@ void UStatusEffectsComponent::AddResistanceBuff(float TimeAmount, float BuffAmou
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UResistanceBuff>(TimeAmount, BuffAmount));
 }
 
-=======
+
 void UStatusEffectsComponent::AddEnrage(float TimeAmount, float BuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UEnrage>(TimeAmount, BuffAmount));
@@ -106,4 +109,4 @@ void UStatusEffectsComponent::AddVulnerable(float TimeAmount, float DebuffAmount
 
 
 
->>>>>>> master-bife
+
