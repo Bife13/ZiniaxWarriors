@@ -2,7 +2,6 @@
 
 
 #include "FBuffFactory.h"
-#include "PowerBuff.h"
 
 FBuffFactory::FBuffFactory()
 {

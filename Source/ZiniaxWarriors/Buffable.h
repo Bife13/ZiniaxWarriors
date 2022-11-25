@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FunctionalTestUtilityLibrary.h"
 #include "UObject/Interface.h"
 #include "Buffable.generated.h"
 
@@ -21,7 +22,21 @@ class ZINIAXWARRIORS_API IBuffable
 
 public:
 	UFUNCTION(BlueprintCallable)
+<<<<<<< HEAD
 	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) = 0;
+=======
+	virtual void AddEnrage(float TimeAmount, float BuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddBulk(float TimeAmount, float BuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddHaste(float TimeAmount, float BuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddWeaken(float TimeAmount, float DebuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddSlow(float TimeAmount, float DebuffAmount) = 0;
+>>>>>>> master-bife
 };

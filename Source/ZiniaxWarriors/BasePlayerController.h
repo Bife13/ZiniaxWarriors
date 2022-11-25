@@ -20,7 +20,10 @@ public:
 	ABasePlayerController();	
 	void OnCharacterPossess(ACharacter* InCharacter) ;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master-bife
 
 protected:
 	// Begin PlayerController interface
