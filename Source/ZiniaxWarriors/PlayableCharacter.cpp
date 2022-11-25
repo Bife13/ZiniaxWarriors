@@ -23,7 +23,7 @@ APlayableCharacter::APlayableCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set size for player capsule
-	GetCapsuleComponent()->InitCapsuleSize(60.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(50.f, 96.0f);
 
 	// Don't rotate character to camera direction
 	LockRotation();
