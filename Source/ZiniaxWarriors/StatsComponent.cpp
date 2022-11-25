@@ -103,29 +103,42 @@ void UStatsComponent::Vulnerable(float Amount)
 
 void UStatsComponent::Haste(float Amount)
 {
-	CurrentSpeed += (BaseSpeed * Amount);
-	if(Amount > 0)
-	{
-		OnHasteAppliedEvent.Broadcast(CurrentSpeed);		
-	}
-	else
-	{
-		OnHasteRemovedEvent.Broadcast(CurrentSpeed);
-	}
+	CurrentSpeed += (CurrentSpeed * Amount);
+	OnHasteAppliedEvent.Broadcast(CurrentSpeed);		
+
+}
+
+void UStatsComponent::HasteRemove(float Amount)
+{
+	CurrentSpeed -= Amount;
+	OnHasteRemovedEvent.Broadcast(CurrentSpeed);
 }
 
 void UStatsComponent::Slow(float Amount)
 {
-	CurrentSpeed -= (BaseSpeed * Amount);
-	if(Amount > 0)
-	{
-		OnSlowAppliedEvent.Broadcast(CurrentSpeed);		
-	}
-	else
-	{
-		OnSlowRemovedEvent.Broadcast(CurrentSpeed);
-	}
+	CurrentSpeed -= (CurrentSpeed * Amount);
+	OnSlowAppliedEvent.Broadcast(CurrentSpeed);
 }
+
+void UStatsComponent::SlowRemove(float Amount)
+{
+	CurrentSpeed += Amount;
+	OnSlowRemovedEvent.Broadcast(CurrentSpeed);
+}
+
+void UStatsComponent::Root()
+{
+	CurrentSpeed -= CurrentSpeed + 0;
+	OnRootApplied.Broadcast();
+}
+
+void UStatsComponent::EndRoot(float Amount)
+{
+	CurrentSpeed = Amount;
+	OnRootRemoved.Broadcast();
+}
+
+
 
 
 

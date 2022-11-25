@@ -33,4 +33,6 @@ public:
 	virtual void AddWeaken(float TimeAmount, float DebuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddSlow(float TimeAmount, float DebuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddRoot(float TimeAmount) = 0;
 };

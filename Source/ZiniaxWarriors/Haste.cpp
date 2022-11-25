@@ -23,5 +23,5 @@ void UHaste::OnBuffTick(float DeltaTime)
 
 void UHaste::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->Haste(-Amount);
+	StatsComponent->HasteRemove(TemporarySpeed);
 }

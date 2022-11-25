@@ -7,6 +7,7 @@
 #include "Enrage.h"
 #include "Bulk.h"
 #include "Haste.h"
+#include "Root.h"
 #include "Slow.h"
 #include "Vulnerable.h"
 #include "Weaken.h"
@@ -89,6 +90,11 @@ void UStatusEffectsComponent::AddWeaken(float TimeAmount, float DebuffAmount)
 void UStatusEffectsComponent::AddVulnerable(float TimeAmount, float DebuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UVulnerable>(TimeAmount,DebuffAmount));
+}
+
+void UStatusEffectsComponent::AddRoot(float TimeAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<URoot>(TimeAmount, 0));
 }
 
 

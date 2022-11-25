@@ -8,6 +8,7 @@ void USlow::OnBuffBegin(UStatsComponent* StatsComponent)
 	Activated = true;
 	Timer = Time;
 	StatsComponent->Slow(Amount);
+	TemporarySpeed = StatsComponent->GetSpeed();
 }
 
 void USlow::OnBuffTick(float DeltaTime)
@@ -23,5 +24,5 @@ void USlow::OnBuffTick(float DeltaTime)
 
 void USlow::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->Slow(-Amount);
+	StatsComponent->SlowRemove(TemporarySpeed);
 }
