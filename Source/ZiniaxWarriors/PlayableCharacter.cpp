@@ -4,12 +4,8 @@
 #include "PlayableCharacter.h"
 
 #include "Buff.h"
-#include "DTR_CharacterStats.h"
-#include "PowerBuff.h"
 #include "Camera/CameraComponent.h"
-#include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/DecalComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -221,32 +217,32 @@ void APlayableCharacter::TakeDamage(float Amount)
 
 void APlayableCharacter::AddEnrage(float TimeAmount, float BuffAmount)
 {
-	StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
+	StatusEffectsComponent->AddEnrage(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::AddBulk(float TimeAmount, float BuffAmount)
 {
-	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
+	StatusEffectsComponent->AddBulk(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::AddHaste(float TimeAmount, float BuffAmount)
 {
-	StatusEffectsComponent->AddSpeedBuff(TimeAmount, BuffAmount);
+	StatusEffectsComponent->AddHaste(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::AddVulnerable(float TimeAmount, float DebuffAmount)
 {
-	StatusEffectsComponent->AddResistanceDebuff(TimeAmount, DebuffAmount);
+	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
 }
 
 void APlayableCharacter::AddSlow(float TimeAmount, float DebuffAmount)
 {
-	StatusEffectsComponent->AddSpeedDebuff(TimeAmount, DebuffAmount);
+	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
 }
 
 void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
 {
-	StatusEffectsComponent->AddPowerDebuff(TimeAmount, DebuffAmount);
+	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)

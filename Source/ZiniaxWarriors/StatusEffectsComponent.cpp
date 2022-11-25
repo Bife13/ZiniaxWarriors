@@ -4,9 +4,9 @@
 #include "StatusEffectsComponent.h"
 
 #include "FBuffFactory.h"
-#include "PowerBuff.h"
-#include "ResistanceBuff.h"
-#include "SpeedBuff.h"
+#include "Enrage.h"
+#include "Bulk.h"
+#include "Haste.h"
 #include "Slow.h"
 #include "Vulnerable.h"
 #include "Weaken.h"
@@ -60,33 +60,33 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	ArrayLength = CurrentBuffArray.Num();
 }
 
-void UStatusEffectsComponent::AddPowerBuff(float TimeAmount, float BuffAmount)
+void UStatusEffectsComponent::AddEnrage(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UPowerBuff>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UEnrage>(TimeAmount, BuffAmount));
 	
 }
 
-void UStatusEffectsComponent::AddResistanceBuff(float TimeAmount, float BuffAmount)
+void UStatusEffectsComponent::AddBulk(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UResistanceBuff>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UBulk>(TimeAmount, BuffAmount));
 }
 
-void UStatusEffectsComponent::AddSpeedBuff(float TimeAmount, float BuffAmount)
+void UStatusEffectsComponent::AddHaste(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<USpeedBuff>(TimeAmount,BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UHaste>(TimeAmount,BuffAmount));
 }
 
-void UStatusEffectsComponent::AddSpeedDebuff(float TimeAmount, float DebuffAmount)
+void UStatusEffectsComponent::AddSlow(float TimeAmount, float DebuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<USlow>(TimeAmount,DebuffAmount));
 }
 
-void UStatusEffectsComponent::AddPowerDebuff(float TimeAmount, float DebuffAmount)
+void UStatusEffectsComponent::AddWeaken(float TimeAmount, float DebuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UWeaken>(TimeAmount,DebuffAmount));
 }
 
-void UStatusEffectsComponent::AddResistanceDebuff(float TimeAmount, float DebuffAmount)
+void UStatusEffectsComponent::AddVulnerable(float TimeAmount, float DebuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UVulnerable>(TimeAmount,DebuffAmount));
 }

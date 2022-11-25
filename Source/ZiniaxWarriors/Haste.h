@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Buff.h"
 #include "UObject/NoExportTypes.h"
-#include "SpeedBuff.generated.h"
+#include "Haste.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZINIAXWARRIORS_API USpeedBuff : public UObject , public IBuff
+class ZINIAXWARRIORS_API UHaste : public UObject , public IBuff
 {
 	GENERATED_BODY()
 	
