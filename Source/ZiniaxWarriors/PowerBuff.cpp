@@ -8,7 +8,7 @@ void UPowerBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
-	StatsComponent->ChangePower(Amount);
+	StatsComponent->Enrage(Amount);
 }
 
 void UPowerBuff::OnBuffTick(float DeltaTime)
@@ -24,5 +24,5 @@ void UPowerBuff::OnBuffTick(float DeltaTime)
 
 void UPowerBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->ChangePower(-Amount);
+	StatsComponent->Enrage(-Amount);
 }

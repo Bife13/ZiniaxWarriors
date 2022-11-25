@@ -49,22 +49,84 @@ void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
-void UStatsComponent::ChangePower(float Amount)
+void UStatsComponent::Enrage(float Amount)
 {
 	CurrentPower += (BasePower * Amount);
-	OnPowerChangedEvent.Broadcast(CurrentPower);
+	if(Amount > 0)
+	{
+		OnEnrageAppliedEvent.Broadcast(CurrentPower);		
+	}
+	else
+	{
+		OnEnrageRemovedEvent.Broadcast(CurrentPower);
+	}
 }
 
-void UStatsComponent::ChangeResistance(float Amount)
+void UStatsComponent::Weaken(float Amount)
+{
+	CurrentPower -= (BasePower * Amount);
+	if(Amount > 0)
+	{
+		OnWeakenAppliedEvent.Broadcast(CurrentPower);		
+	}
+	else
+	{
+		OnWeakenRemovedEvent.Broadcast(CurrentPower);
+	}
+}
+
+void UStatsComponent::Bulk(float Amount)
 {
 	CurrentResistance += (BaseResistance * Amount);
-	OnResistanceChangedEvent.Broadcast(CurrentResistance);
+	if(Amount > 0)
+	{
+		OnBulkAppliedEvent.Broadcast(CurrentResistance);		
+	}
+	else
+	{
+		OnBulkRemovedEvent.Broadcast(CurrentResistance);
+	}
 }
 
-void UStatsComponent::ChangeSpeed(float Amount)
+void UStatsComponent::Vulnerable(float Amount)
+{
+	CurrentResistance -= (BaseResistance * Amount);
+	if(Amount > 0)
+	{
+		OnVulnerableAppliedEvent.Broadcast(CurrentResistance);		
+	}
+	else
+	{
+		OnVulnerableRemovedEvent.Broadcast(CurrentResistance);
+	}
+}
+
+void UStatsComponent::Haste(float Amount)
 {
 	CurrentSpeed += (BaseSpeed * Amount);
-	OnSpeedChangedEvent.Broadcast(CurrentSpeed);
+	if(Amount > 0)
+	{
+		OnHasteAppliedEvent.Broadcast(CurrentSpeed);		
+	}
+	else
+	{
+		OnHasteRemovedEvent.Broadcast(CurrentSpeed);
+	}
 }
+
+void UStatsComponent::Slow(float Amount)
+{
+	CurrentSpeed -= (BaseSpeed * Amount);
+	if(Amount > 0)
+	{
+		OnSlowAppliedEvent.Broadcast(CurrentSpeed);		
+	}
+	else
+	{
+		OnSlowRemovedEvent.Broadcast(CurrentSpeed);
+	}
+}
+
+
 
 

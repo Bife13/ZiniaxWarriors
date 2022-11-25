@@ -7,7 +7,7 @@ void USpeedBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
-	StatsComponent->ChangeSpeed(Amount);
+	StatsComponent->Haste(Amount);
 }
 
 void USpeedBuff::OnBuffTick(float DeltaTime)
@@ -23,5 +23,5 @@ void USpeedBuff::OnBuffTick(float DeltaTime)
 
 void USpeedBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->ChangeSpeed(-Amount);
+	StatsComponent->Haste(-Amount);
 }

@@ -222,14 +222,34 @@ void APlayableCharacter::TakeDamage(float Amount)
 	HealthComponent->TakeDamage(Amount);
 }
 
-void APlayableCharacter::AddPowerBuff(float TimeAmount, float BuffAmount)
+void APlayableCharacter::AddEnrage(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddPowerBuff(TimeAmount, BuffAmount);
 }
 
-void APlayableCharacter::AddResistanceBuff(float TimeAmount, float BuffAmount)
+void APlayableCharacter::AddBulk(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddResistanceBuff(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::AddHaste(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddSpeedBuff(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::AddVulnerable(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddResistanceDebuff(TimeAmount, DebuffAmount);
+}
+
+void APlayableCharacter::AddSlow(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddSpeedDebuff(TimeAmount, DebuffAmount);
+}
+
+void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddPowerDebuff(TimeAmount, DebuffAmount);
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)

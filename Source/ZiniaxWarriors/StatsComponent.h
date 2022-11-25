@@ -6,11 +6,21 @@
 #include "HealthSystem.h"
 #include "Components/ActorComponent.h"
 #include "StatsComponent.generated.h"
-
-DECLARE_EVENT_OneParam(UStatsComponent, PowerChangedEvent, float)
-DECLARE_EVENT_OneParam(UStatsComponent, ResistanceChangedEvent, float)
-DECLARE_EVENT_OneParam(UStatsComponent, SpeedChangedEvent, float)
-
+//AttackPower Buff/Debuff events
+DECLARE_EVENT_OneParam(UStatsComponent, EnrageAppliedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, EnrageRemovedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, WeakenAppliedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, WeakenRemovedEvent, float)
+//Defense Buff/Debuff events
+DECLARE_EVENT_OneParam(UStatsComponent, BulkAppliedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, BulkRemovedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, VulnerableAppliedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, VulnerableRemovedEvent, float)
+//Speed Buff/Debuff events
+DECLARE_EVENT_OneParam(UStatsComponent, SlowAppliedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, HasteAppliedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, SlowRemovedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
 {
@@ -24,20 +34,36 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	float GetSpeed() const { return CurrentSpeed; }
+	UFUNCTION(BlueprintCallable)
 	float GetPower() const { return CurrentPower; }
 	float GetMaximumHealth() const { return CurrentMaximumHealth; }
 	float GetResistance() const { return CurrentResistance; }
 	float GetViewRange() const { return CurrentViewRange; }
 
+
+    void Enrage(float Amount);
+	EnrageAppliedEvent OnEnrageAppliedEvent;
+	EnrageRemovedEvent OnEnrageRemovedEvent;
 	
-	void ChangePower(float Amount);
-	PowerChangedEvent OnPowerChangedEvent;
+	void Weaken(float Amount);
+    WeakenAppliedEvent OnWeakenAppliedEvent;
+	WeakenRemovedEvent OnWeakenRemovedEvent;
 
-	void ChangeResistance(float Amount);
-	ResistanceChangedEvent OnResistanceChangedEvent;
+	void Bulk(float Amount);
+	BulkAppliedEvent OnBulkAppliedEvent;
+	BulkRemovedEvent OnBulkRemovedEvent;
 
-	void ChangeSpeed(float Amount);
-	SpeedChangedEvent OnSpeedChangedEvent;
+	void Vulnerable(float Amount);
+	VulnerableAppliedEvent OnVulnerableAppliedEvent;
+	VulnerableRemovedEvent OnVulnerableRemovedEvent;
+	
+	void Haste(float Amount);
+	HasteAppliedEvent OnHasteAppliedEvent;
+    HasteRemovedEvent OnHasteRemovedEvent;
+	
+	void Slow(float Amount);
+	SlowAppliedEvent OnSlowAppliedEvent;
+	SlowRemovedEvent OnSlowRemovedEvent;
 
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }

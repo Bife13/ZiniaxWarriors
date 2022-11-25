@@ -54,10 +54,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
-	virtual void AddPowerBuff(float TimeAmount, float BuffAmount) override;
+	virtual void AddEnrage(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
-	virtual void AddResistanceBuff(float TimeAmount, float BuffAmount) override;
-
+	virtual void AddBulk(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddHaste(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+    virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+    virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
+	
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
@@ -113,7 +121,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 
-	UPROPERTY(EditAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
 	UStatsComponent* StatsComponent;
 
 	UPROPERTY(EditAnywhere,Category = Health)

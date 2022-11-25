@@ -7,7 +7,7 @@ void UResistanceBuff::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
-	StatsComponent->ChangeResistance(Amount);
+	StatsComponent->Bulk(Amount);
 }
 
 void UResistanceBuff::OnBuffTick(float DeltaTime)
@@ -23,5 +23,5 @@ void UResistanceBuff::OnBuffTick(float DeltaTime)
 
 void UResistanceBuff::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->ChangeResistance(-Amount);
+	StatsComponent->Bulk(-Amount);
 }

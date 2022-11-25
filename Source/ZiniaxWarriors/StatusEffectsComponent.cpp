@@ -6,6 +6,11 @@
 #include "FBuffFactory.h"
 #include "PowerBuff.h"
 #include "ResistanceBuff.h"
+#include "SpeedBuff.h"
+#include "Slow.h"
+#include "Vulnerable.h"
+#include "Weaken.h"
+
 
 UStatusEffectsComponent::UStatusEffectsComponent()
 {
@@ -65,4 +70,26 @@ void UStatusEffectsComponent::AddResistanceBuff(float TimeAmount, float BuffAmou
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UResistanceBuff>(TimeAmount, BuffAmount));
 }
+
+void UStatusEffectsComponent::AddSpeedBuff(float TimeAmount, float BuffAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<USpeedBuff>(TimeAmount,BuffAmount));
+}
+
+void UStatusEffectsComponent::AddSpeedDebuff(float TimeAmount, float DebuffAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<USlow>(TimeAmount,DebuffAmount));
+}
+
+void UStatusEffectsComponent::AddPowerDebuff(float TimeAmount, float DebuffAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UWeaken>(TimeAmount,DebuffAmount));
+}
+
+void UStatusEffectsComponent::AddResistanceDebuff(float TimeAmount, float DebuffAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UVulnerable>(TimeAmount,DebuffAmount));
+}
+
+
 
