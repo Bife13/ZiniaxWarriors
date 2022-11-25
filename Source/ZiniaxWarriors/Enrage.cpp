@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PowerBuff.h"
+#include "Enrage.h"
 
 
-void UPowerBuff::OnBuffBegin(UStatsComponent* StatsComponent)
+void UEnrage::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
 	StatsComponent->Enrage(Amount);
 }
 
-void UPowerBuff::OnBuffTick(float DeltaTime)
+void UEnrage::OnBuffTick(float DeltaTime)
 {
 	if(Timer > 0)
 	{
@@ -22,7 +22,7 @@ void UPowerBuff::OnBuffTick(float DeltaTime)
 	}
 }
 
-void UPowerBuff::OnBuffEnd(UStatsComponent* StatsComponent)
+void UEnrage::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->Enrage(-Amount);
 }

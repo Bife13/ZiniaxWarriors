@@ -1,16 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ResistanceBuff.h"
+#include "Bulk.h"
 
-void UResistanceBuff::OnBuffBegin(UStatsComponent* StatsComponent)
+void UBulk::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
 	StatsComponent->Bulk(Amount);
 }
 
-void UResistanceBuff::OnBuffTick(float DeltaTime)
+void UBulk::OnBuffTick(float DeltaTime)
 {
 	if(Timer > 0)
 	{
@@ -21,7 +21,7 @@ void UResistanceBuff::OnBuffTick(float DeltaTime)
 	}
 }
 
-void UResistanceBuff::OnBuffEnd(UStatsComponent* StatsComponent)
+void UBulk::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->Bulk(-Amount);
 }
