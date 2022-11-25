@@ -23,6 +23,10 @@ public:
 							   FActorComponentTickFunction* ThisTickFunction) override;
 	void AddPowerBuff(float TimeAmount, float BuffAmount);
 	void AddResistanceBuff(float TimeAmount, float BuffAmount);
+	void AddSpeedBuff(float TimeAmount, float BuffAmount);
+	void AddSpeedDebuff(float TimeAmount, float DebuffAmount);
+	void AddPowerDebuff(float TimeAmount, float DebuffAmount);
+	void AddResistanceDebuff(float TimeAmount, float DebuffAmount);
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
 
 protected:
