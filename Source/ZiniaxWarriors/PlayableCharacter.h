@@ -64,10 +64,16 @@ public:
     virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
     virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddRoot(float TimeAmount) override;
+	
 	
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
+	UFUNCTION()
+	void StartRootEffect() const;
+	
 protected:
 	UFUNCTION()
 	void LockRotation();
@@ -89,17 +95,19 @@ protected:
 	UFUNCTION()
 	void SetupCastParticleSystem();
 	UFUNCTION()
+	void SetupRootParticleSystem();
+	UFUNCTION()
 	void SetupTopDownCamera();
 	UFUNCTION()
 	void PopulateSkillArray();
-
-
+    UFUNCTION()
+	void ObserveSpeedBuffs();
+	
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
 	virtual void UseSecondAbility() override;
 	virtual void UseThirdAbility() override;
-
-
+	
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY()
@@ -131,6 +139,9 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* CastParticleSystem;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* RootParticleSystem;
 
 private:
 	/** Top down camera */

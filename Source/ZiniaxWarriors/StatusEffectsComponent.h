@@ -27,7 +27,9 @@ public:
 	void AddSlow(float TimeAmount, float DebuffAmount);
 	void AddWeaken(float TimeAmount, float DebuffAmount);
 	void AddVulnerable(float TimeAmount, float DebuffAmount);
+	void AddRoot(float TimeAmount);
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
+	
 
 protected:
 	// Called when the game starts
@@ -36,7 +38,8 @@ protected:
 	TArray<IBuff*> CurrentBuffArray;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
-	UStatsComponent* StatsComponent;
+    UPROPERTY()
+ 	UStatsComponent* StatsComponent;
 	
 	
 };

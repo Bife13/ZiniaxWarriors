@@ -31,5 +31,6 @@ protected:
 	float Amount = 0;
 	bool Activated = false;
 	float Timer = 0;
+	float TemporarySpeed;
 	
 };

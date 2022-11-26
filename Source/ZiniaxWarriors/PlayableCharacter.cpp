@@ -37,6 +37,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupHealthComponent();
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
+	SetupRootParticleSystem();
 
 	
 	PrimaryActorTick.bCanEverTick = true;
@@ -82,6 +83,14 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
+
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
+	StatsComponent->OnRootRemoved.AddUFunction(this,"ObserveSpeedBuffs");
 }
 
 
@@ -119,6 +128,12 @@ void APlayableCharacter::SetupCastParticleSystem()
 {
 	CastParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Cast Particle"));
 	CastParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupRootParticleSystem()
+{
+	RootParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Root Particle"));
+	RootParticleSystem->SetupAttachment(RootComponent);
 }
 
 void APlayableCharacter::SetupHealthComponent()
@@ -164,6 +179,11 @@ void APlayableCharacter::PopulateSkillArray()
 			RuntimeSkills.Add(NewSkill);
 		};
 	}
+}
+
+void APlayableCharacter::ObserveSpeedBuffs()
+{
+	BaseSpeed = StatsComponent->GetSpeed();
 }
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
@@ -245,8 +265,19 @@ void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
 	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
 }
 
+void APlayableCharacter::AddRoot(float TimeAmount)
+{
+    StatusEffectsComponent->AddRoot(TimeAmount);
+}
+
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 {
 	CastParticleSystem->Template = NewParticle;
 	CastParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::StartRootEffect() const
+{
+	if(RootParticleSystem)
+	RootParticleSystem->Activate(true);
 }

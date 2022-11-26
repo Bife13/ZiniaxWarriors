@@ -21,6 +21,9 @@ DECLARE_EVENT_OneParam(UStatsComponent, SlowAppliedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, HasteAppliedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, SlowRemovedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
+//Root Debuff events
+DECLARE_EVENT(UStatsComponent, RootAppliedEvent)
+DECLARE_EVENT(UStatsComponent, RootRemoveEvent)
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
 {
@@ -58,12 +61,19 @@ public:
 	VulnerableRemovedEvent OnVulnerableRemovedEvent;
 	
 	void Haste(float Amount);
+	void HasteRemove(float Amount);
 	HasteAppliedEvent OnHasteAppliedEvent;
     HasteRemovedEvent OnHasteRemovedEvent;
 	
 	void Slow(float Amount);
+	void SlowRemove(float Amount);
 	SlowAppliedEvent OnSlowAppliedEvent;
 	SlowRemovedEvent OnSlowRemovedEvent;
+
+	void Root();
+	void EndRoot(float Amount);
+	RootAppliedEvent OnRootApplied;
+	RootRemoveEvent OnRootRemoved;
 
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }
