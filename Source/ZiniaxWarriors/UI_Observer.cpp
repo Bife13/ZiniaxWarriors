@@ -22,6 +22,7 @@ void UUI_Observer::BeginPlay()
 
 	// ...
 	
+	
 }
 
 void UUI_Observer::SetHealthSystem(UHealthSystem* HPComponent)
@@ -29,19 +30,32 @@ void UUI_Observer::SetHealthSystem(UHealthSystem* HPComponent)
 	HealthSystemOfCharacter = HPComponent;
 }
 
+UHealthSystem* UUI_Observer::GetHealthSystem() const
+{
+	return HealthSystemOfCharacter;
+}
+
 void UUI_Observer::SetStatsSystem(UStatsComponent* Stats)
 {
 	StatsSystemOfCharacter = Stats;
 }
 
-void UUI_Observer::SetWorldHPBar(UWorldWidget* HPBAr)
+
+
+UStatsComponent* UUI_Observer::GetStatsComponent()
 {
-	WorldCharacterHPBar = HPBAr;
+	return StatsSystemOfCharacter;
 }
+
 
 UWorldWidget* UUI_Observer::GetWorldCharacterHPBar()
 {
-	return WorldCharacterHPBar;
+	return WorldWidget;
+}
+
+void UUI_Observer::SetWorldWidget(UWorldWidget* WW)
+{
+	WorldWidget =WW;
 }
 
 

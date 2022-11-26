@@ -6,6 +6,18 @@
 
 
 
+void UWorldWidget::WorldWigetSetUp(UProgressBar* Bar, UUI_Observer* Obs){
+	Observer= Obs;
+	HPBAr= Bar;
 
+	
 
+	HealthSystem=Observer->GetHealthSystem();
+	
+}
 
+void UWorldWidget::UpdateHPBar()
+{
+	HPBAr->Percent = HealthSystem->GetHealthAsPercentage();
+	
+}

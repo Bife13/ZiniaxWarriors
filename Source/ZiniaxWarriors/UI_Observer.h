@@ -10,8 +10,6 @@
 #include "UI_Observer.generated.h"
 
 
-class UDataTable;
-class UHealthSystem;
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ZINIAXWARRIORS_API UUI_Observer : public UActorComponent
 {
@@ -26,7 +24,7 @@ protected:
 	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
-	UWorldWidget* WorldCharacterHPBar;
+	UWorldWidget* WorldWidget;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
 	UHealthSystem* HealthSystemOfCharacter;
@@ -39,12 +37,18 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void SetHealthSystem(UHealthSystem* HPComponent);
+	UFUNCTION(BlueprintCallable)
+	UHealthSystem* GetHealthSystem() const;
+	UFUNCTION(BlueprintCallable)
 	void SetStatsSystem(UStatsComponent* HPComponent);
+	UFUNCTION(BlueprintCallable)
+	UStatsComponent* GetStatsComponent();
+
+	
+	
 
 	UFUNCTION(BlueprintCallable)
-	void SetWorldHPBar(UWorldWidget* HPBAr);
-	UFUNCTION(BlueprintCallable)
 	UWorldWidget* GetWorldCharacterHPBar();
-	
-	
+	void SetWorldWidget(UWorldWidget* WW);
+
 };
