@@ -17,9 +17,14 @@ class ZINIAXWARRIORS_API UWorldWidget : public UUserWidget
 
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	UHealthSystem* HPSystem;
+	UHealthSystem* WW_HPSystem;
 
 	UFUNCTION(BlueprintCallable)
-	void SetHPSystem(UHealthSystem* Hp);
-	
+	void WW_SetHPSystem(UHealthSystem* Hp);
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	float GetDamageNumber(float damage);
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void OnDamage();
+
 };

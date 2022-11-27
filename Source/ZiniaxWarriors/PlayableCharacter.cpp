@@ -186,11 +186,6 @@ void APlayableCharacter::ObserveSpeedBuffs()
 	BaseSpeed = StatsComponent->GetSpeed();
 }
 
-void APlayableCharacter::Widgetsetup()
-{
-	CharacterHPBar->SetHPSystem(HealthComponent);
-	
-}
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {

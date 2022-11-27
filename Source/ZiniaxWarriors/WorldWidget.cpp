@@ -3,8 +3,22 @@
 
 #include "WorldWidget.h"
 
-void UWorldWidget::SetHPSystem(UHealthSystem* Hp)
+void UWorldWidget::WW_SetHPSystem(UHealthSystem* Hp)
 {
 	
-	HPSystem=Hp;
+	WW_HPSystem=Hp;
+	WW_HPSystem->OnDamageTakenEvent.AddUFunction(this,"GetDamageNumber");
+	WW_HPSystem->OnDamageTakenEvent.AddUFunction(this,"OnDamage");
 }
+
+void UWorldWidget::OnDamage_Implementation()
+{
+	
+}
+
+float UWorldWidget::GetDamageNumber_Implementation(float damage)
+{
+	return  damage;
+}
+
+

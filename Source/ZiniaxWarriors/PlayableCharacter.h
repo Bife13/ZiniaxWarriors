@@ -104,9 +104,6 @@ protected:
 	void PopulateSkillArray();
     UFUNCTION()
 	void ObserveSpeedBuffs();
-
-	UFUNCTION()
-	 void Widgetsetup();
 	
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;

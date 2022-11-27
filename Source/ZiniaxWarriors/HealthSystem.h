@@ -45,6 +45,7 @@ protected: // Functions
 
 public: // Events
 
+
 	DamageTakenEvent OnDamageTakenEvent;
 	HealDamageEvent OnDamageHealedEvent;
 
