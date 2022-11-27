@@ -10,7 +10,9 @@
 #include "StatusEffectsComponent.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
+#include "WorldWidget.h"
 #include "PlayableCharacter.generated.h"
+
 
 
 UCLASS()
@@ -102,6 +104,9 @@ protected:
 	void PopulateSkillArray();
     UFUNCTION()
 	void ObserveSpeedBuffs();
+
+	UFUNCTION()
+	 void Widgetsetup();
 	
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
@@ -131,7 +136,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
 	UStatsComponent* StatsComponent;
 
-	UPROPERTY(EditAnywhere,Category = Health)
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Health)
 	UHealthSystem* HealthComponent;
 
 	UPROPERTY(EditAnywhere, Category = Status)
@@ -143,6 +148,11 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* RootParticleSystem;
 
+
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = HealthBar)
+	UWorldWidget* CharacterHPBar;
+	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

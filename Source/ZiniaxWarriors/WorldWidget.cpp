@@ -3,3 +3,8 @@
 
 #include "WorldWidget.h"
 
+void UWorldWidget::SetHPSystem(UHealthSystem* Hp)
+{
+	
+	HPSystem=Hp;
+}
