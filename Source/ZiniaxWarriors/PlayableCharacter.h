@@ -133,7 +133,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
 	UStatsComponent* StatsComponent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Health)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Health)
 	UHealthSystem* HealthComponent;
 
 	UPROPERTY(EditAnywhere, Category = Status)

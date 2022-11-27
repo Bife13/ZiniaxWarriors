@@ -7,8 +7,7 @@ void UWorldWidget::WW_SetHPSystem(UHealthSystem* Hp)
 {
 	
 	WW_HPSystem=Hp;
-	WW_HPSystem->OnDamageTakenEvent.AddUFunction(this,"GetDamageNumber");
-	WW_HPSystem->OnDamageTakenEvent.AddUFunction(this,"OnDamage");
+
 }
 
 void UWorldWidget::OnDamage_Implementation()

@@ -5,12 +5,16 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Damageable.h"
+#include "Microsoft/AllowMicrosoftPlatformTypes.h"
 #include "HealthSystem.generated.h"
 
-DECLARE_EVENT_OneParam(UCPP_HealthSystem, DamageTakenEvent, float)
 
+//DECLARE_EVENT_OneParam(UCPP_HealthSystem, DamageTakenEvent, float)
 DECLARE_EVENT_OneParam(UCPP_HealthSystem, HealDamageEvent, float)
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamageTakenEvent,float,Cpp_Damage);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(DamageTakenEvent,)
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UHealthSystem : public UActorComponent
 {
@@ -45,8 +49,9 @@ protected: // Functions
 
 public: // Events
 
-
-	DamageTakenEvent OnDamageTakenEvent;
+	UPROPERTY(BlueprintAssignable)
+	FDamageTakenEvent MyOnDamageTakenEvent;
+	//UPROPERTY(BlueprintAssignable)
 	HealDamageEvent OnDamageHealedEvent;
 
 private: // This can be protected if we want to subclass the Health Component
