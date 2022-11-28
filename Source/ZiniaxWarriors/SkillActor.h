@@ -24,6 +24,6 @@ class ZINIAXWARRIORS_API ISkillActor
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void SetValues(int TeamValue,float DamageValue,float RangeValue, FVector SpawnPositionVector);
+	void SetValues(int TeamValue,float DamageValue,float RangeValue, FVector SpawnPositionVector , APawn* OwnerCharacter);
 
 };
