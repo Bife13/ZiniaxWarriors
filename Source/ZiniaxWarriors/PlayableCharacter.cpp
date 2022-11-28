@@ -186,7 +186,6 @@ void APlayableCharacter::ObserveSpeedBuffs()
 	BaseSpeed = StatsComponent->GetSpeed();
 }
 
-
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
 	const FVector MoveDirection = {1, 0, 0};
