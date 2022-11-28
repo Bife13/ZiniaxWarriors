@@ -127,6 +127,8 @@ protected:
 	int TeamID;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
+		UPROPERTY(BlueprintReadWrite)
+    	UArrowComponent* FeetPoint;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
 	UStatsComponent* StatsComponent;
