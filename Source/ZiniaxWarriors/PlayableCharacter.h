@@ -12,6 +12,7 @@
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
 #include "WorldWidget.h"
+#include "Components/WidgetComponent.h"
 #include "PlayableCharacter.generated.h"
 
 
@@ -162,11 +163,6 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* RootParticleSystem;
 
-
-
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = HealthBar)
-	UWorldWidget* CharacterHPBar;
-	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
