@@ -38,7 +38,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
 	SetupRootParticleSystem();
-
+   
 	
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
@@ -54,6 +54,7 @@ void APlayableCharacter::BeginPlay()
 	}
 
 	PopulateSkillArray();
+	PassiveInitializeFunction();
 }
 
 
@@ -84,13 +85,17 @@ void APlayableCharacter::Tick(const float DeltaTime)
 		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
 
+	//Haste observe
 	StatsComponent->OnHasteAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
 	StatsComponent->OnHasteRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	//Slow observe
 	StatsComponent->OnSlowAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
 	StatsComponent->OnSlowRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	//Root observe
 	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
 	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
 	StatsComponent->OnRootRemoved.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnRootRemoved.AddUFunction(this,"EndRootEffect");	
 }
 
 
@@ -186,6 +191,7 @@ void APlayableCharacter::ObserveSpeedBuffs()
 	BaseSpeed = StatsComponent->GetSpeed();
 }
 
+
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
 	const FVector MoveDirection = {1, 0, 0};
@@ -230,6 +236,22 @@ void APlayableCharacter::UseThirdAbility()
 	}
 }
 
+void APlayableCharacter::PassiveInitializeFunction()
+{
+	if(Passive)
+	{
+		UPassiveBase* NewPassive = NewObject<UPassiveBase>(this, Passive);
+		NewPassive ->InitializePassive(this);
+		RunTimePassive = NewPassive;
+		CachedPassiveInterface = Cast<IPassive>(RunTimePassive);
+	}
+}
+
+void APlayableCharacter::OnHit()
+{
+	CachedPassiveInterface->OnHit();
+}
+
 void APlayableCharacter::TakeDamage(float Amount)
 {
 	HealthComponent->TakeDamage(Amount);
@@ -272,12 +294,23 @@ void APlayableCharacter::AddRoot(float TimeAmount)
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 {
-	CastParticleSystem->Template = NewParticle;
-	CastParticleSystem->Activate(true);
+    if(CastParticleSystem)
+    {
+    CastParticleSystem->Template = NewParticle;
+    CastParticleSystem->Activate(true);
+    }
 }
 
 void APlayableCharacter::StartRootEffect() const
 {
 	if(RootParticleSystem)
 	RootParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndRootEffect() const
+{
+	if(RootParticleSystem)
+	{
+		RootParticleSystem->Deactivate();
+	}
 }

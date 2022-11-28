@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "SkillActor.generated.h"
+#include "PassiveOwner.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class USkillActor : public UInterface
+class UPassiveOwner : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,14 +16,10 @@ class USkillActor : public UInterface
 /**
  * 
  */
-class ZINIAXWARRIORS_API ISkillActor
+class ZINIAXWARRIORS_API IPassiveOwner
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void SetValues(int TeamValue,float DamageValue,float RangeValue, FVector SpawnPositionVector , APawn* OwnerCharacter);
-
 };
