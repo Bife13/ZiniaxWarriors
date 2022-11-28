@@ -24,6 +24,11 @@ DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
 //Root Debuff events
 DECLARE_EVENT(UStatsComponent, RootAppliedEvent)
 DECLARE_EVENT(UStatsComponent, RootRemoveEvent)
+
+//UI Stuff
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRemoveBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
 {
@@ -88,6 +93,12 @@ public:
 	void SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
 	                     float ViewRangeValue);
 
+
+	UPROPERTY(BlueprintAssignable)
+	FApllyBuffEvent BuffApllied;
+
+	UPROPERTY(BlueprintAssignable)
+	FRemoveBuffEvent BuffRemove;
     
 protected:
 	// Called when the game starts
