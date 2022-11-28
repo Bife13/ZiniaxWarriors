@@ -31,8 +31,15 @@ void UHealthSystem::RecoverHealth(const float Amount)
 {
 	if (Amount > 0)
 	{
-		Health += Amount;
-
+		if(Health+ Amount>MaxHealth)
+		{
+			Health = MaxHealth;
+		}
+		else
+		{
+			Health += Amount;
+		}
+		
 		OnDamageHealedEvent.Broadcast(Amount);
 	}
 }

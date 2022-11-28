@@ -10,7 +10,7 @@
 
 
 //DECLARE_EVENT_OneParam(UCPP_HealthSystem, DamageTakenEvent, float)
-DECLARE_EVENT_OneParam(UCPP_HealthSystem, HealDamageEvent, float)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealDamageEvent,float,Cpp_HealingValue);
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamageTakenEvent,float,Cpp_Damage);
@@ -51,8 +51,8 @@ public: // Events
 
 	UPROPERTY(BlueprintAssignable)
 	FDamageTakenEvent MyOnDamageTakenEvent;
-	//UPROPERTY(BlueprintAssignable)
-	HealDamageEvent OnDamageHealedEvent;
+	UPROPERTY(BlueprintAssignable)
+	FHealDamageEvent OnDamageHealedEvent;
 
 private: // This can be protected if we want to subclass the Health Component
 

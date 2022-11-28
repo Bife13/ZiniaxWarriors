@@ -36,11 +36,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
 	float GetSpeed() const { return CurrentSpeed; }
 	UFUNCTION(BlueprintCallable)
 	float GetPower() const { return CurrentPower; }
+	UFUNCTION(BlueprintCallable)
 	float GetMaximumHealth() const { return CurrentMaximumHealth; }
+	UFUNCTION(BlueprintCallable)
 	float GetResistance() const { return CurrentResistance; }
+	UFUNCTION(BlueprintCallable)
 	float GetViewRange() const { return CurrentViewRange; }
 
 

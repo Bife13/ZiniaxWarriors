@@ -112,7 +112,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TArray<USkillBase*> RuntimeSkills;
 	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;
