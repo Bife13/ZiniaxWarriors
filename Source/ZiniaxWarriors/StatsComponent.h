@@ -24,6 +24,11 @@ DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
 //Root Debuff events
 DECLARE_EVENT(UStatsComponent, RootAppliedEvent)
 DECLARE_EVENT(UStatsComponent, RootRemoveEvent)
+
+//UI Stuff
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRemoveBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
 {
@@ -36,11 +41,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
 	float GetSpeed() const { return CurrentSpeed; }
 	UFUNCTION(BlueprintCallable)
 	float GetPower() const { return CurrentPower; }
+	UFUNCTION(BlueprintCallable)
 	float GetMaximumHealth() const { return CurrentMaximumHealth; }
+	UFUNCTION(BlueprintCallable)
 	float GetResistance() const { return CurrentResistance; }
+	UFUNCTION(BlueprintCallable)
 	float GetViewRange() const { return CurrentViewRange; }
 
 
@@ -84,6 +93,12 @@ public:
 	void SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
 	                     float ViewRangeValue);
 
+
+	UPROPERTY(BlueprintAssignable)
+	FApllyBuffEvent BuffApllied;
+
+	UPROPERTY(BlueprintAssignable)
+	FRemoveBuffEvent BuffRemove;
     
 protected:
 	// Called when the game starts

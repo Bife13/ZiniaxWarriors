@@ -54,11 +54,13 @@ void UStatsComponent::Enrage(float Amount)
 	CurrentPower += (BasePower * Amount);
 	if(Amount > 0)
 	{
-		OnEnrageAppliedEvent.Broadcast(CurrentPower);		
+		OnEnrageAppliedEvent.Broadcast(CurrentPower);
+		BuffApllied.Broadcast("ENRAGE",true,1);
 	}
 	else
 	{
 		OnEnrageRemovedEvent.Broadcast(CurrentPower);
+		BuffRemove.Broadcast("ENRAGE",true,1);
 	}
 }
 
@@ -67,11 +69,13 @@ void UStatsComponent::Weaken(float Amount)
 	CurrentPower -= (BasePower * Amount);
 	if(Amount > 0)
 	{
-		OnWeakenAppliedEvent.Broadcast(CurrentPower);		
+		OnWeakenAppliedEvent.Broadcast(CurrentPower);
+		BuffApllied.Broadcast("WEAKEN",false,1);
 	}
 	else
 	{
 		OnWeakenRemovedEvent.Broadcast(CurrentPower);
+		BuffRemove.Broadcast("WEAKEN",false,1);
 	}
 }
 
@@ -80,11 +84,13 @@ void UStatsComponent::Bulk(float Amount)
 	CurrentResistance += (BaseResistance * Amount);
 	if(Amount > 0)
 	{
-		OnBulkAppliedEvent.Broadcast(CurrentResistance);		
+		OnBulkAppliedEvent.Broadcast(CurrentResistance);
+		BuffApllied.Broadcast("BULK",true,2);
 	}
 	else
 	{
 		OnBulkRemovedEvent.Broadcast(CurrentResistance);
+		BuffRemove.Broadcast("BULK",true,2);
 	}
 }
 
@@ -93,11 +99,13 @@ void UStatsComponent::Vulnerable(float Amount)
 	CurrentResistance -= (BaseResistance * Amount);
 	if(Amount > 0)
 	{
-		OnVulnerableAppliedEvent.Broadcast(CurrentResistance);		
+		OnVulnerableAppliedEvent.Broadcast(CurrentResistance);
+		BuffApllied.Broadcast("VULNERABLE",false,2);
 	}
 	else
 	{
 		OnVulnerableRemovedEvent.Broadcast(CurrentResistance);
+		BuffRemove.Broadcast("VULNERABLE",false,2);
 	}
 }
 
@@ -105,37 +113,42 @@ void UStatsComponent::Haste(float Amount)
 {
 	CurrentSpeed += (CurrentSpeed * Amount);
 	OnHasteAppliedEvent.Broadcast(CurrentSpeed);		
-
+	BuffApllied.Broadcast("HASTE",true,3);
 }
 
 void UStatsComponent::HasteRemove(float Amount)
 {
 	CurrentSpeed -= Amount;
 	OnHasteRemovedEvent.Broadcast(CurrentSpeed);
+	BuffRemove.Broadcast("HASTE",true,3);
 }
 
 void UStatsComponent::Slow(float Amount)
 {
 	CurrentSpeed -= (CurrentSpeed * Amount);
 	OnSlowAppliedEvent.Broadcast(CurrentSpeed);
+	BuffApllied.Broadcast("SLOW",false,3);
 }
 
 void UStatsComponent::SlowRemove(float Amount)
 {
 	CurrentSpeed += Amount;
 	OnSlowRemovedEvent.Broadcast(CurrentSpeed);
+	BuffRemove.Broadcast("SLOW",false,3);
 }
 
 void UStatsComponent::Root()
 {
 	CurrentSpeed -= CurrentSpeed + 0;
 	OnRootApplied.Broadcast();
+	BuffApllied.Broadcast("ROOT",false,4);
 }
 
 void UStatsComponent::EndRoot(float Amount)
 {
 	CurrentSpeed = Amount;
 	OnRootRemoved.Broadcast();
+	BuffRemove.Broadcast("ROOT",false,4);
 }
 
 
