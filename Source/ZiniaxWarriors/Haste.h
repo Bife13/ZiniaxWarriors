@@ -32,4 +32,5 @@ protected:
 	bool Activated = false;
 	float Timer = 0;
 	float TemporarySpeed;
+	float TemporarySpeedToSend;
 };

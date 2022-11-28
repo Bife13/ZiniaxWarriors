@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "HealthSystem.h"
 #include "MoveableCharacter.h"
+#include "PassiveBase.h"
 #include "SkillBase.h"
 #include "StatsComponent.h"
 #include "StatusEffectsComponent.h"
@@ -15,7 +16,7 @@
 
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
-												public IMoveableCharacter, public IDamageable, public IBuffable
+												public IMoveableCharacter, public IDamageable, public IBuffable 
 {
 	GENERATED_BODY()
 
@@ -73,6 +74,8 @@ public:
 
 	UFUNCTION()
 	void StartRootEffect() const;
+	UFUNCTION()
+	void EndRootEffect() const;
 	
 protected:
 	UFUNCTION()
@@ -115,6 +118,18 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UPassiveBase> Passive;
+	UPROPERTY()
+	UPassiveBase* RunTimePassive;
+	IPassive* CachedPassiveInterface;
+
+    UFUNCTION()
+    void PassiveInitializeFunction();
+    
+	UFUNCTION(BlueprintCallable)
+	void OnHit();
+	
 	UPROPERTY()
 	UWorld* CachedWorld;
 	UPROPERTY()

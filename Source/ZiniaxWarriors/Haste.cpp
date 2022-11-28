@@ -7,7 +7,9 @@ void UHaste::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
+	TemporarySpeed = StatsComponent->GetSpeed();
 	StatsComponent->Haste(Amount);
+	TemporarySpeedToSend = StatsComponent->GetSpeed() - TemporarySpeed;
 }
 
 void UHaste::OnBuffTick(float DeltaTime)
@@ -23,5 +25,5 @@ void UHaste::OnBuffTick(float DeltaTime)
 
 void UHaste::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->HasteRemove(TemporarySpeed);
+	StatsComponent->HasteRemove(TemporarySpeedToSend);
 }
