@@ -256,6 +256,11 @@ void APlayableCharacter::TakeDamage(float Amount)
 	HealthComponent->TakeDamage(Amount);
 }
 
+void APlayableCharacter::RecoverHealth(float Amount)
+{
+	HealthComponent->RecoverHealth(Amount);
+}
+
 void APlayableCharacter::AddEnrage(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddEnrage(TimeAmount, BuffAmount);

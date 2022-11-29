@@ -23,4 +23,6 @@ class ZINIAXWARRIORS_API IDamageable
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void RecoverHealth(float Amount) = 0;
 };

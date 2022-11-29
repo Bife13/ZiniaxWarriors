@@ -57,6 +57,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
+virtual void RecoverHealth(float Amount) override;
+	UFUNCTION(BlueprintCallable)
 	virtual void AddEnrage(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddBulk(float TimeAmount, float BuffAmount) override;
