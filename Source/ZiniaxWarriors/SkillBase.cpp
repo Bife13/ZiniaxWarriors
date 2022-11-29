@@ -90,6 +90,7 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition, OwnerCharacter);
 }
 
+
 void USkillBase::SpawnCastingEffectActor(const FVector& SpawnPosition)
 {
 	FActorSpawnParameters SpawnParams;
