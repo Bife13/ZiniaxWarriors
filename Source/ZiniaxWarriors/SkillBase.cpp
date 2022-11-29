@@ -39,12 +39,19 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 // 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::ResetCooldown, Delay, false);
 // }
 //
-// void USkillBase::StartCastTimer()
-// {
-// 	FTimerHandle THandle;
-// 	const float Delay = AbilityCastTime;
-// 	CachedWorld->GetTimerManager().SetTimer(THandle, this, &USkillBase::UseSkill, Delay, false);
-// }
+void USkillBase::DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfProjectile)
+{
+	FTimerHandle THandle;
+	const float Delay = AbilitySpawnTime * NumberOfProjectile;
+	FTimerDelegate DelaySpawnDelegate;
+	DelaySpawnDelegate.BindUFunction(this,FName("DelayedSpawn"),OwnerCharacter->GetActorLocation());
+	CachedWorld->GetTimerManager().SetTimer(THandle, DelaySpawnDelegate, Delay, false);
+}
+
+void USkillBase::DelayedSpawn(const FVector& SpawnPosition)
+{
+	SpawnSkillActor(SpawnPosition);
+}
 
 void USkillBase::ResetCooldown()
 {
@@ -68,6 +75,11 @@ void USkillBase::SetCooldown(const float Cooldown)
 void USkillBase::SetCastTime(const float CastTime)
 {
 	AbilityCastTime = CastTime;
+}
+
+void USkillBase::SetSpawnTime(float SpawnTime)
+{
+	AbilitySpawnTime = SpawnTime;
 }
 
 void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
