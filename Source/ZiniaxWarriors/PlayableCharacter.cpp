@@ -233,7 +233,7 @@ void APlayableCharacter::UseThirdAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(3))
 	{
-		RuntimeSkills[3]->CastSkill(AttackAnimations[1]);
+		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 	}
 }
 
