@@ -31,6 +31,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+	
 
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -50,6 +51,8 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
+	UFUNCTION(BlueprintCallable)
+	FVector GetMousePos();
 	UPROPERTY(BlueprintReadOnly)
 	FVector CachedMousePosition;
 

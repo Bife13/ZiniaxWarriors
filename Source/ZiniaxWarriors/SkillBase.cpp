@@ -50,7 +50,11 @@ void USkillBase::DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfP
 
 void USkillBase::DelayedSpawn(const FVector& SpawnPosition)
 {
-	SpawnSkillActor(SpawnPosition);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
+	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
+	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition, OwnerCharacter);
 }
 
 void USkillBase::ResetCooldown()

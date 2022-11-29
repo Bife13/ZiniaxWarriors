@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Net/UnrealNetwork.h"
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -27,7 +28,7 @@ APlayableCharacter::APlayableCharacter()
 	ConfigureCharacterMovement();
 
 	SetupStatsComponent();
-	
+
 	// Create a camera boom...
 	SetupCameraBoom();
 
@@ -38,7 +39,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
 	SetupRootParticleSystem();
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
@@ -56,6 +57,13 @@ void APlayableCharacter::BeginPlay()
 	PassiveInitializeFunction();
 }
 
+// void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+// {
+	// Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	// DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
+
+// }
+
 
 void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 {
@@ -67,6 +75,11 @@ void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 	CachedMousePosition = CursorPosition;
 	CachedMouseRotator = ActualRotation;
 	GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+}
+
+FVector APlayableCharacter::GetMousePos()
+{
+	return CachedMousePosition;
 }
 
 
@@ -85,16 +98,16 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	}
 
 	//Haste observe
-	StatsComponent->OnHasteAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnHasteRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	//Slow observe
-	StatsComponent->OnSlowAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnSlowRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	//Root observe
-	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"EndRootEffect");	
+	StatsComponent->OnRootApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootApplied.AddUFunction(this, "StartRootEffect");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "EndRootEffect");
 }
 
 
@@ -193,14 +206,14 @@ void APlayableCharacter::ObserveSpeedBuffs()
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
-	GEngine->AddOnScreenDebugMessage(1,2,FColor::Red,"Vertical");
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "Vertical");
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
 void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 {
-	GEngine->AddOnScreenDebugMessage(1,2,FColor::Red,"Horizontal");
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "Horizontal");
 	const FVector MoveDirection = {0, 1, 0};
 	AddMovementInput(MoveDirection, Value);
 }
@@ -239,10 +252,10 @@ void APlayableCharacter::UseThirdAbility_Implementation()
 
 void APlayableCharacter::PassiveInitializeFunction()
 {
-	if(Passive)
+	if (Passive)
 	{
 		UPassiveBase* NewPassive = NewObject<UPassiveBase>(this, Passive);
-		NewPassive ->InitializePassive(this);
+		NewPassive->InitializePassive(this);
 		RunTimePassive = NewPassive;
 		CachedPassiveInterface = Cast<IPassive>(RunTimePassive);
 	}
@@ -295,27 +308,28 @@ void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
 
 void APlayableCharacter::AddRoot(float TimeAmount)
 {
-    StatusEffectsComponent->AddRoot(TimeAmount);
+	StatusEffectsComponent->AddRoot(TimeAmount);
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 {
-    if(CastParticleSystem)
-    {
-    CastParticleSystem->Template = NewParticle;
-    CastParticleSystem->Activate(true);
-    }
+	// TODO FIX PARTICLE CAST EFFECTS CRASHING
+	// if (CastParticleSystem)
+	// {
+	// 	CastParticleSystem->Template = NewParticle;
+	// 	CastParticleSystem->Activate(true);
+	// }
 }
 
 void APlayableCharacter::StartRootEffect() const
 {
-	if(RootParticleSystem)
-	RootParticleSystem->Activate(true);
+	if (RootParticleSystem)
+		RootParticleSystem->Activate(true);
 }
 
 void APlayableCharacter::EndRootEffect() const
 {
-	if(RootParticleSystem)
+	if (RootParticleSystem)
 	{
 		RootParticleSystem->Deactivate();
 	}
