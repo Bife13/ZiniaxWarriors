@@ -193,17 +193,19 @@ void APlayableCharacter::ObserveSpeedBuffs()
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
+	GEngine->AddOnScreenDebugMessage(1,2,FColor::Red,"Vertical");
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
 void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 {
+	GEngine->AddOnScreenDebugMessage(1,2,FColor::Red,"Horizontal");
 	const FVector MoveDirection = {0, 1, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
-void APlayableCharacter::UseBasicAttack()
+void APlayableCharacter::UseBasicAttack_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(0))
 	{
@@ -211,7 +213,7 @@ void APlayableCharacter::UseBasicAttack()
 	}
 }
 
-void APlayableCharacter::UseFirstAbility()
+void APlayableCharacter::UseFirstAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(1))
 	{
@@ -219,7 +221,7 @@ void APlayableCharacter::UseFirstAbility()
 	}
 }
 
-void APlayableCharacter::UseSecondAbility()
+void APlayableCharacter::UseSecondAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(2))
 	{
@@ -227,7 +229,7 @@ void APlayableCharacter::UseSecondAbility()
 	}
 }
 
-void APlayableCharacter::UseThirdAbility()
+void APlayableCharacter::UseThirdAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(3))
 	{

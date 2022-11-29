@@ -110,10 +110,14 @@ protected:
 	void PopulateSkillArray();
     UFUNCTION()
 	void ObserveSpeedBuffs();
-	
+
+	UFUNCTION(Server, Unreliable)
 	virtual void UseBasicAttack() override;
+	UFUNCTION(Server, Unreliable)
 	virtual void UseFirstAbility() override;
+	UFUNCTION(Server, Unreliable)
 	virtual void UseSecondAbility() override;
+	UFUNCTION(Server, Unreliable)
 	virtual void UseThirdAbility() override;
 	
 	UPROPERTY(EditAnywhere)

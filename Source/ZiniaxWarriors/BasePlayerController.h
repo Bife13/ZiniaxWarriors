@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MoveableCharacter.h"
+#include "PlayableCharacter.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/PlayerController.h"
 #include "BasePlayerController.generated.h"
@@ -18,13 +19,17 @@ class ZINIAXWARRIORS_API ABasePlayerController : public APlayerController
 
 public:
 	ABasePlayerController();	
-	void OnCharacterPossess(ACharacter* InCharacter) ;
+	// void OnCharacterPossess(ACharacter* InCharacter) ;
 
 
 protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
+	virtual void BeginPlay() override;
+
+	UPROPERTY()
+	APlayableCharacter* PlayableCharacter;
 
 
 	void BasicAttackPressed();
@@ -35,6 +40,7 @@ protected:
 	void MoveHorizontalInput(float Value);
 	void MouseChanged(FVector Value);
 	void CalculateMousePosition();
+	
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 	IMoveableCharacter* CachedMoveableInterface;
 };
