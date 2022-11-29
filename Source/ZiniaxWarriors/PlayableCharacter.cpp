@@ -223,7 +223,7 @@ void APlayableCharacter::UseSecondAbility()
 {
 	if (RuntimeSkills.IsValidIndex(2))
 	{
-		RuntimeSkills[2]->CastSkill(AttackAnimations[1]);
+		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 	}
 }
 
