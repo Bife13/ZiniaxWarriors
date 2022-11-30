@@ -57,12 +57,12 @@ void APlayableCharacter::BeginPlay()
 	PassiveInitializeFunction();
 }
 
-// void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-// {
-	// Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	// DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
+void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 
-// }
+}
 
 
 void APlayableCharacter::MoveMouse_Implementation(FVector Value)
@@ -74,7 +74,8 @@ void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 	ActualRotation.Pitch = 0;
 	CachedMousePosition = CursorPosition;
 	CachedMouseRotator = ActualRotation;
-	GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+	this->SetActorRotation(ActualRotation);
+	// GetCapsuleComponent()->SetWorldRotation(ActualRotation);
 }
 
 FVector APlayableCharacter::GetMousePos()
@@ -120,8 +121,8 @@ void APlayableCharacter::LockRotation()
 
 void APlayableCharacter::ConfigureCharacterMovement() const
 {
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate character to moving direction
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
+	GetCharacterMovement()->bOrientRotationToMovement = false; // Rotate character to moving direction
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 0.f);
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 }

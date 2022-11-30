@@ -53,7 +53,7 @@ public:
 	FRotator CachedMouseRotator;
 	UFUNCTION(BlueprintCallable)
 	FVector GetMousePos();
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector CachedMousePosition;
 
 	
