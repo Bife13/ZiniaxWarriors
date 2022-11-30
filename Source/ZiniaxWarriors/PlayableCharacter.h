@@ -79,7 +79,10 @@ public:
 	void StartRootEffect() const;
 	UFUNCTION()
 	void EndRootEffect() const;
-	
+
+	UFUNCTION(BlueprintCallable)
+	TArray<USkillBase*> GetRunTimeSkill();
+
 protected:
 	UFUNCTION()
 	void LockRotation();
@@ -116,7 +119,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
 	TArray<USkillBase*> RuntimeSkills;
 	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;

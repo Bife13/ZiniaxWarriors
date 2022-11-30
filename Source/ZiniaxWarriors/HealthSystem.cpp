@@ -22,7 +22,7 @@ void UHealthSystem::TakeDamage(const float Amount)
 {
 	if (Amount > 0)
 	{
-		float damageTaken = Amount * (100) / (100 + Resistance);
+		float damageTaken = Amount * ((100) / (100 + Resistance));
 		Health -= damageTaken;
 		MyOnDamageTakenEvent.Broadcast(damageTaken);
 	}
@@ -32,7 +32,7 @@ void UHealthSystem::RecoverHealth(const float Amount)
 {
 	if (Amount > 0)
 	{
-		if(Health+ Amount>MaxHealth)
+		if(Health + Amount>MaxHealth)
 		{
 			Health = MaxHealth;
 		}

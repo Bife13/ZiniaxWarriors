@@ -312,3 +312,8 @@ void APlayableCharacter::EndRootEffect() const
 		RootParticleSystem->Deactivate();
 	}
 }
+
+TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
+{
+	return RuntimeSkills;
+}

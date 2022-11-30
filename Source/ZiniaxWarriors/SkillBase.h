@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UsableCharacterSkillSlot.h"
 #include "UsableSkill.h"
+#include "Components/Image.h"
 #include "UObject/NoExportTypes.h"
 #include "SkillBase.generated.h"
 
@@ -72,6 +73,10 @@ public:
 	int GetTeamId() const { return TeamId; }
 
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
+	
+	UPROPERTY(BlueprintReadWrite)
+    UTexture* SkillIconTexture;
+	
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);
