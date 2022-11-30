@@ -39,6 +39,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 	
 	NewPlayerController->Possess(SpawnedActor);
 	SpawnedActor->SetOwner(NewPlayerController);
+	// Cast<ABasePlayerController>(NewPlayerController)->OnCharacterPossess(SpawnedActor);
 	
 	SpawnedTeam1 = true;
 	

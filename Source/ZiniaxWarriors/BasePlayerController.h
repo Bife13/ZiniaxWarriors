@@ -27,7 +27,11 @@ protected:
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
 	virtual void BeginPlay() override;
-	
+
+	UPROPERTY()
+	APlayableCharacter* PlayableCharacter;
+
+
 	void BasicAttackPressed();
 	void FirstAbilityPressed();
 	void SecondAbilityPressed();
@@ -36,9 +40,7 @@ protected:
 	void MoveHorizontalInput(float Value);
 	void MouseChanged(FVector Value);
 	void CalculateMousePosition();
-
 	
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
-	
 	IMoveableCharacter* CachedMoveableInterface;
 };

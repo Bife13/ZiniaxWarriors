@@ -29,8 +29,13 @@ void ABasePlayerController::BeginPlay()
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(InCharacter);
 	CachedMoveableInterface = Cast<IMoveableCharacter>(InCharacter);
 
-	GEngine->AddOnScreenDebugMessage(1,100,FColor::Green,CachedCharacterInterface?"true": "false");
+	PlayableCharacter = Cast<APlayableCharacter>(InCharacter);
 }
+//
+// void ABasePlayerController::OnCharacterPossess(ACharacter* InCharacter)
+// {
+//
+// }
 
 void ABasePlayerController::SetupInputComponent()
 {
@@ -82,7 +87,9 @@ void ABasePlayerController::MoveVerticalInput(float Value)
 {
 	if (CachedMoveableInterface)
 	{
-		CachedMoveableInterface->MoveVertical(Value);
+		GEngine->AddOnScreenDebugMessage(1,2,FColor::Red,"Vertical");
+		PlayableCharacter->MoveVertical_Implementation(Value);
+		// CachedMoveableInterface->MoveVertical(Value);
 	}
 }
 
@@ -90,7 +97,8 @@ void ABasePlayerController::MoveHorizontalInput(float Value)
 {
 	if (CachedMoveableInterface)
 	{
-		CachedMoveableInterface->MoveHorizontal(Value);
+		PlayableCharacter->MoveHorizontal_Implementation(Value);
+		// CachedMoveableInterface->MoveHorizontal(Value);
 	}
 }
 
@@ -98,7 +106,8 @@ void ABasePlayerController::MouseChanged(FVector Value)
 {
 	if (CachedMoveableInterface)
 	{
-		CachedMoveableInterface->MoveMouse(Value);
+		PlayableCharacter->MoveMouse_Implementation(Value);
+		// CachedMoveableInterface->MoveMouse(Value);
 	}
 }
 
