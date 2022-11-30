@@ -3,3 +3,15 @@
 
 #include "ZerherPassive.h"
 
+void UZerherPassive::OnTick(float DeltaTime)
+{
+	if(Timer < Cooldown)
+	{
+		Timer += DeltaTime;
+	}
+	else
+	{
+		PassiveOwner->AddShield(Cooldown,ShieldForce);
+		Timer = 0;
+	}
+}

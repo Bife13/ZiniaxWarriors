@@ -26,4 +26,5 @@ public:
 	virtual void OnHit() = 0;
 	virtual float CheckDistance(float Damage,APawn* Owner,APawn* Target) = 0;
 	virtual void InitializePassive(IBuffable* OwnerCharacter) = 0;
+	virtual void OnTick(float DeltaTime) = 0;
 };

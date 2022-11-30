@@ -8,7 +8,7 @@ UStatsComponent::UStatsComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -150,6 +150,23 @@ void UStatsComponent::EndRoot(float Amount)
 	CurrentSpeed = Amount;
 	OnRootRemoved.Broadcast();
 	BuffRemove.Broadcast("ROOT",false,4);
+}
+
+void UStatsComponent::Shield(float Amount)
+{
+	CurrentShield += BaseMaximumHealth * Amount;
+	OnShieldApplied.Broadcast(Amount);
+	BuffApllied.Broadcast("SHIELD",true,4);
+}
+
+void UStatsComponent::RemoveShield(float Amount)
+{
+	CurrentShield -= BaseMaximumHealth * Amount;
+	if(CurrentShield < 0)
+		CurrentShield = 0;
+	
+	OnShieldRemoved.Broadcast(Amount);
+	BuffRemove.Broadcast("SHIELD",true,4);
 }
 
 

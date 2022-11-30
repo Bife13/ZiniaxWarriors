@@ -19,3 +19,7 @@ void UPassiveBase::InitializePassive(IBuffable* OwnerCharacter)
 {
 	PassiveOwner = OwnerCharacter;
 }
+
+void UPassiveBase::OnTick(float DeltaTime)
+{
+}

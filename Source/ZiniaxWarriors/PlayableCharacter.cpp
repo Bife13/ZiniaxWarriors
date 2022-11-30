@@ -83,6 +83,8 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
+    
+	OnTickPassive(DeltaTime);
 
 	//Haste observe
 	StatsComponent->OnHasteAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
@@ -98,6 +100,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Vulnerable observe
 	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"ObserverResistanceBuffs");
 	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"ObserverResistanceBuffs");
+	//Shield observe
+	StatsComponent->OnShieldApplied.AddUFunction(this,"ObserverShieldBuffs");
+	StatsComponent->OnShieldRemoved.AddUFunction(this,"ObserverShieldBuffs");
 }
 
 
@@ -198,6 +203,11 @@ void APlayableCharacter::ObserverResistanceBuffs()
 	HealthComponent->SetResistance(StatsComponent->GetResistance());
 }
 
+void APlayableCharacter::ObserverShieldBuffs()
+{
+	HealthComponent->SetShield(StatsComponent->GetShield());
+}
+
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
@@ -264,6 +274,12 @@ float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn
 	return CachedPassiveInterface->CheckDistance(Damage,OwnerPassive,Target);
 }
 
+void APlayableCharacter::OnTickPassive(float DeltaTime)
+{
+	if(CachedPassiveInterface)
+	CachedPassiveInterface->OnTick(DeltaTime);
+}
+
 void APlayableCharacter::TakeDamage(float Amount)
 {
 	HealthComponent->TakeDamage(Amount);
@@ -302,6 +318,11 @@ void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
 void APlayableCharacter::AddRoot(float TimeAmount)
 {
     StatusEffectsComponent->AddRoot(TimeAmount);
+}
+
+void APlayableCharacter::AddShield(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddShield(TimeAmount,BuffAmount);
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)

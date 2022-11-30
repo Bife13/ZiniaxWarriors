@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Damageable.h"
 #include "HealthSystem.h"
 #include "MoveableCharacter.h"
 #include "PassiveBase.h"
@@ -70,7 +71,8 @@ public:
     virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) override;
-	
+	UFUNCTION(BlueprintCallable)
+	virtual void AddShield(float TimeAmount, float BuffAmount) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
@@ -110,7 +112,8 @@ protected:
 	void ObserveSpeedBuffs();
 	UFUNCTION()
 	void ObserverResistanceBuffs();
-	
+	UFUNCTION()
+	void ObserverShieldBuffs();
 	
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
@@ -137,6 +140,8 @@ protected:
 	void OnHit();
 	UFUNCTION(BlueprintCallable)
 	float CheckDistance(float Damage,APawn* OwnerPassive,APawn* Target);
+	UFUNCTION()
+	void OnTickPassive(float DeltaTime);
 	UPROPERTY()
 	UWorld* CachedWorld;
 	UPROPERTY()

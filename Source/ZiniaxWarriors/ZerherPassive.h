@@ -13,5 +13,10 @@ UCLASS()
 class ZINIAXWARRIORS_API UZerherPassive : public UPassiveBase
 {
 	GENERATED_BODY()
-	
+
+	virtual void OnTick(float DeltaTime) override;
+
+    float Timer = 0;
+	float Cooldown = 10;
+	float ShieldForce = 0.2;
 };

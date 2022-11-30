@@ -17,6 +17,7 @@ public :
 	virtual void OnHit() override;
 	virtual float CheckDistance(float Damage, APawn* Owner,APawn* target) override;
 	virtual void InitializePassive(IBuffable* OwnerCharacter) override;
+	virtual void OnTick(float DeltaTime) override;
 protected:
 	IBuffable* PassiveOwner;
 };

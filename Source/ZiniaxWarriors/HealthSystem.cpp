@@ -22,14 +22,27 @@ void UHealthSystem::TakeDamage(const float Amount)
 {
 	if (Amount > 0)
 	{
-	float damageTaken;
+	float damageTaken; float ExcedingDamage; 
 	     if(Resistance > 0)
 		 damageTaken = Amount * ((100) / (100 + Resistance));
 		 else
 		 damageTaken = Amount * ( 2 - 100 / (100 - Resistance));
-		
-		Health -= damageTaken;
-		MyOnDamageTakenEvent.Broadcast(damageTaken);
+		if(Shield > 0)
+		{
+			Shield -= damageTaken;
+			if(Shield < 0)
+			{
+				ExcedingDamage = Shield;
+				Health -= ExcedingDamage;
+				Shield = 0;
+			}
+			MyOnDamageTakenEvent.Broadcast(damageTaken);
+		}
+		else
+		{
+			Health -= damageTaken;
+			MyOnDamageTakenEvent.Broadcast(damageTaken);
+		}
 	}
 }
 
@@ -83,6 +96,11 @@ void UHealthSystem::SetResistance(float Amount)
 	{
 		Resistance = Amount;
 	}
+}
+
+void UHealthSystem::SetShield(float Amount)
+{
+	Shield = Amount;
 }
 
 #pragma endregion
