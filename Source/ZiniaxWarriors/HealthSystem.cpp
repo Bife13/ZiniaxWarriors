@@ -22,7 +22,12 @@ void UHealthSystem::TakeDamage(const float Amount)
 {
 	if (Amount > 0)
 	{
-		float damageTaken = Amount * (100) / (100 + Resistance);
+	float damageTaken;
+	     if(Resistance > 0)
+		 damageTaken = Amount * ((100) / (100 + Resistance));
+		 else
+		 damageTaken = Amount * ( 2 - 100 / (100 - Resistance));
+		
 		Health -= damageTaken;
 		MyOnDamageTakenEvent.Broadcast(damageTaken);
 	}

@@ -3,8 +3,16 @@
 
 #include "PassiveBase.h"
 
+
 void UPassiveBase::OnHit()
 {
+	
+}
+
+float UPassiveBase::CheckDistance(float Damage, APawn* Owner, APawn* target)
+{
+	
+	return 0;
 }
 
 void UPassiveBase::InitializePassive(IBuffable* OwnerCharacter)

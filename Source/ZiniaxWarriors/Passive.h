@@ -24,6 +24,6 @@ class ZINIAXWARRIORS_API IPassive
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void OnHit() = 0;
-	//virtual void CheckDistance(float* Damage,APawn* Owner,APawn* Target) = 0;
+	virtual float CheckDistance(float Damage,APawn* Owner,APawn* Target) = 0;
 	virtual void InitializePassive(IBuffable* OwnerCharacter) = 0;
 };

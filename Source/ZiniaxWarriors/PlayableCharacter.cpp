@@ -94,7 +94,10 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
 	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
 	StatsComponent->OnRootRemoved.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"EndRootEffect");	
+	StatsComponent->OnRootRemoved.AddUFunction(this,"EndRootEffect");
+	//Vulnerable observe
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"ObserverResistanceBuffs");
 }
 
 
@@ -190,6 +193,11 @@ void APlayableCharacter::ObserveSpeedBuffs()
 	BaseSpeed = StatsComponent->GetSpeed();
 }
 
+void APlayableCharacter::ObserverResistanceBuffs()
+{
+	HealthComponent->SetResistance(StatsComponent->GetResistance());
+}
+
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
@@ -249,6 +257,11 @@ void APlayableCharacter::PassiveInitializeFunction()
 void APlayableCharacter::OnHit()
 {
 	CachedPassiveInterface->OnHit();
+}
+
+float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target)
+{
+	return CachedPassiveInterface->CheckDistance(Damage,OwnerPassive,Target);
 }
 
 void APlayableCharacter::TakeDamage(float Amount)

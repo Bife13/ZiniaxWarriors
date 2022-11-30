@@ -4,18 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "PassiveBase.h"
-#include "NyaxPassiveBase.generated.h"
+#include "ZerherPassive.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZINIAXWARRIORS_API UNyaxPassiveBase : public UPassiveBase
+class ZINIAXWARRIORS_API UZerherPassive : public UPassiveBase
 {
 	GENERATED_BODY()
-public:
-	virtual void OnHit() override;
-
-	float Time = 1;
-	float Amount = 0.15;
+	
 };

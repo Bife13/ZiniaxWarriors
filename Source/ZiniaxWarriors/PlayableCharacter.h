@@ -108,6 +108,9 @@ protected:
 	void PopulateSkillArray();
     UFUNCTION()
 	void ObserveSpeedBuffs();
+	UFUNCTION()
+	void ObserverResistanceBuffs();
+	
 	
 	virtual void UseBasicAttack() override;
 	virtual void UseFirstAbility() override;
@@ -132,7 +135,8 @@ protected:
     
 	UFUNCTION(BlueprintCallable)
 	void OnHit();
-	
+	UFUNCTION(BlueprintCallable)
+	float CheckDistance(float Damage,APawn* OwnerPassive,APawn* Target);
 	UPROPERTY()
 	UWorld* CachedWorld;
 	UPROPERTY()
@@ -145,8 +149,8 @@ protected:
 	int TeamID;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
-		UPROPERTY(BlueprintReadWrite)
-    	UArrowComponent* FeetPoint;
+	UPROPERTY(BlueprintReadWrite)
+	UArrowComponent* FeetPoint;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
 	UStatsComponent* StatsComponent;

@@ -107,6 +107,7 @@ void UStatsComponent::Vulnerable(float Amount)
 		OnVulnerableRemovedEvent.Broadcast(CurrentResistance);
 		BuffRemove.Broadcast("VULNERABLE",false,2);
 	}
+
 }
 
 void UStatsComponent::Haste(float Amount)
