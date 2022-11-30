@@ -31,11 +31,7 @@ void ABasePlayerController::BeginPlay()
 
 	PlayableCharacter = Cast<APlayableCharacter>(InCharacter);
 }
-//
-// void ABasePlayerController::OnCharacterPossess(ACharacter* InCharacter)
-// {
-//
-// }
+
 
 void ABasePlayerController::SetupInputComponent()
 {
@@ -48,7 +44,6 @@ void ABasePlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveVertical", this, &ABasePlayerController::MoveVerticalInput);
 	InputComponent->BindAxis("MoveHorizontal", this, &ABasePlayerController::MoveHorizontalInput);
 }
-
 
 
 void ABasePlayerController::BasicAttackPressed()
@@ -87,8 +82,11 @@ void ABasePlayerController::MoveVerticalInput(float Value)
 {
 	if (CachedMoveableInterface)
 	{
-		GEngine->AddOnScreenDebugMessage(1,2,FColor::Red,"Vertical");
+		// TODO WORKS
 		PlayableCharacter->MoveVertical_Implementation(Value);
+		// TODO DOESNT WORK
+		// PlayableCharacter->MoveVertical(Value);
+		// TODO DOESNT WORK
 		// CachedMoveableInterface->MoveVertical(Value);
 	}
 }
@@ -97,7 +95,11 @@ void ABasePlayerController::MoveHorizontalInput(float Value)
 {
 	if (CachedMoveableInterface)
 	{
+		// TODO WORKS
 		PlayableCharacter->MoveHorizontal_Implementation(Value);
+		// TODO DOESNT WORK
+		// PlayableCharacter->MoveHorizontal(Value);
+		// TODO DOESNT WORK
 		// CachedMoveableInterface->MoveHorizontal(Value);
 	}
 }
@@ -106,8 +108,7 @@ void ABasePlayerController::MouseChanged(FVector Value)
 {
 	if (CachedMoveableInterface)
 	{
-		PlayableCharacter->MoveMouse_Implementation(Value);
-		// CachedMoveableInterface->MoveMouse(Value);
+		CachedMoveableInterface->MoveMouse(Value);
 	}
 }
 
