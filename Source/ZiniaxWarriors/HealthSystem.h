@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Damageable.h"
 #include "Microsoft/AllowMicrosoftPlatformTypes.h"
 #include "HealthSystem.generated.h"
 
@@ -42,6 +41,8 @@ public:
 	void SetMaxHealth(float Amount);
 	UFUNCTION(BlueprintCallable)
 	void SetResistance(float Amount);
+	UFUNCTION()
+	void SetShield(float Amount);
 
 protected: // Functions
 
@@ -56,6 +57,8 @@ public: // Events
 
 private: // This can be protected if we want to subclass the Health Component
 
+	UPROPERTY(VisibleAnywhere)
+	float Shield = 0;
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 	UPROPERTY(VisibleAnywhere)

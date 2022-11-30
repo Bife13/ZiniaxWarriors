@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Damageable.h"
 #include "HealthSystem.h"
 #include "MoveableCharacter.h"
 #include "PassiveBase.h"
@@ -75,7 +76,8 @@ virtual void RecoverHealth(float Amount) override;
     virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) override;
-	
+	UFUNCTION(BlueprintCallable)
+	virtual void AddShield(float TimeAmount, float BuffAmount) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
@@ -114,8 +116,13 @@ protected:
     UFUNCTION()
 	void ObserveSpeedBuffs();
 
+	UFUNCTION()
+	void ObserverResistanceBuffs();
+	UFUNCTION()
+	void ObserverShieldBuffs();
+
 	UFUNCTION(Server, Unreliable)
-	virtual void UseBasicAttack() override;
+    virtual void UseBasicAttack() override;
 	UFUNCTION(Server, Unreliable)
 	virtual void UseFirstAbility() override;
 	UFUNCTION(Server, Unreliable)
@@ -141,7 +148,10 @@ protected:
     
 	UFUNCTION(BlueprintCallable)
 	void OnHit();
-	
+	UFUNCTION(BlueprintCallable)
+	float CheckDistance(float Damage,APawn* OwnerPassive,APawn* Target);
+	UFUNCTION()
+	void OnTickPassive(float DeltaTime);
 	UPROPERTY()
 	UWorld* CachedWorld;
 	UPROPERTY()
@@ -154,8 +164,8 @@ protected:
 	int TeamID;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
-		UPROPERTY(BlueprintReadWrite)
-    	UArrowComponent* FeetPoint;
+	UPROPERTY(BlueprintReadWrite)
+	UArrowComponent* FeetPoint;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
 	UStatsComponent* StatsComponent;

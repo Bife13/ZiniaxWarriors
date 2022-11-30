@@ -16,6 +16,6 @@ class ZINIAXWARRIORS_API UNyaxPassiveBase : public UPassiveBase
 public:
 	virtual void OnHit() override;
 
-	float Time = 3;
-	float Amount = 1;
+	float Time = 1;
+	float Amount = 0.15;
 };

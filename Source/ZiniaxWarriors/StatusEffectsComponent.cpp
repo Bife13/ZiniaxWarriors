@@ -8,6 +8,7 @@
 #include "Bulk.h"
 #include "Haste.h"
 #include "Root.h"
+#include "Shield.h"
 #include "Slow.h"
 #include "Vulnerable.h"
 #include "Weaken.h"
@@ -95,6 +96,11 @@ void UStatusEffectsComponent::AddVulnerable(float TimeAmount, float DebuffAmount
 void UStatusEffectsComponent::AddRoot(float TimeAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<URoot>(TimeAmount, 0));
+}
+
+void UStatusEffectsComponent::AddShield(float TimeAmount, float BuffAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UShield>(TimeAmount,BuffAmount));
 }
 
 

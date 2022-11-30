@@ -13,5 +13,7 @@ UCLASS()
 class ZINIAXWARRIORS_API UDrexPassive : public UPassiveBase
 {
 	GENERATED_BODY()
-	
+	virtual float CheckDistance(float Damage, APawn* Owner, APawn* Target) override;
+	float TolerationDistance = 400;
+	float DamageChange = 0.15;
 };

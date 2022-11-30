@@ -6,6 +6,8 @@
 #include "HealthSystem.h"
 #include "Components/ActorComponent.h"
 #include "StatsComponent.generated.h"
+
+
 //AttackPower Buff/Debuff events
 DECLARE_EVENT_OneParam(UStatsComponent, EnrageAppliedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, EnrageRemovedEvent, float)
@@ -24,6 +26,9 @@ DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
 //Root Debuff events
 DECLARE_EVENT(UStatsComponent, RootAppliedEvent)
 DECLARE_EVENT(UStatsComponent, RootRemoveEvent)
+//Shield Buff events
+DECLARE_EVENT_OneParam(UStatsComponent, ShieldAppliedEvent,float);
+DECLARE_EVENT_OneParam(UStatsComponent, ShieldRemovedEvent,float);
 
 //UI Stuff
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
@@ -51,7 +56,8 @@ public:
 	float GetResistance() const { return CurrentResistance; }
 	UFUNCTION(BlueprintCallable)
 	float GetViewRange() const { return CurrentViewRange; }
-
+	UFUNCTION(BlueprintCallable)
+	float GetShield() const {return CurrentShield;}
 
     void Enrage(float Amount);
 	EnrageAppliedEvent OnEnrageAppliedEvent;
@@ -84,6 +90,11 @@ public:
 	RootAppliedEvent OnRootApplied;
 	RootRemoveEvent OnRootRemoved;
 
+	void Shield(float Amount);
+	void RemoveShield(float Amount);
+	ShieldAppliedEvent OnShieldApplied;
+	ShieldRemovedEvent OnShieldRemoved;
+	
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }
 	// FORCEINLINE void SetMaximumHealth(float Value) { MaximumHealth = Value; }
@@ -109,11 +120,13 @@ protected:
 	float BaseResistance;
 	float BaseViewRange;
 
+	UPROPERTY()
+	UHealthSystem* HealthSystem;
+	
 	float CurrentPower;
 	float CurrentSpeed;
 	float CurrentMaximumHealth;
 	float CurrentResistance;
 	float CurrentViewRange;
-	UPROPERTY()
-	UHealthSystem* HealthSystem;
+	float CurrentShield;
 };
