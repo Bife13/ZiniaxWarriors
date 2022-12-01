@@ -11,7 +11,7 @@ void UZerherPassive::OnTick(float DeltaTime)
 	}
 	else
 	{
-		PassiveOwner->AddShield(Cooldown,ShieldForce);
+		PassiveOwner->AddShield(Cooldown - 2,ShieldForce);
 		Timer = 0;
 	}
 }

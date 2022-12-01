@@ -39,7 +39,8 @@ APlayableCharacter::APlayableCharacter()
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
 	SetupRootParticleSystem();
-
+	SetupShieldParticleSystem();
+	
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
@@ -117,6 +118,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Shield observe
 	StatsComponent->OnShieldApplied.AddUFunction(this,"ObserverShieldBuffs");
 	StatsComponent->OnShieldRemoved.AddUFunction(this,"ObserverShieldBuffs");
+	StatsComponent->OnShieldApplied.AddUFunction(this,"Shielded");
+	StatsComponent->OnShieldRemoved.AddUFunction(this,"ShieldOver");
+	HealthComponent->OnShieldBrokenEvent.AddUFunction(this,"ShieldOver");
 }
 
 
@@ -160,6 +164,15 @@ void APlayableCharacter::SetupRootParticleSystem()
 {
 	RootParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Root Particle"));
 	RootParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupShieldParticleSystem()
+{
+	ShieldParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle"));
+	ShieldParticleSystem->SetupAttachment(RootComponent);
+	
+	ShieldParticleSystemOver = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle Over"));
+	ShieldParticleSystemOver->SetupAttachment(RootComponent);
 }
 
 void APlayableCharacter::SetupHealthComponent()
@@ -367,5 +380,26 @@ void APlayableCharacter::EndRootEffect() const
 	if (RootParticleSystem)
 	{
 		RootParticleSystem->Deactivate();
+	}
+}
+
+void APlayableCharacter::Shielded() const
+{
+	if(ShieldParticleSystem)
+	{
+		ShieldParticleSystem->Template = ShieldedEffect;
+		ShieldParticleSystem->Activate(true);
+	}
+
+}
+
+void APlayableCharacter::ShieldOver() const
+{
+	if(ShieldParticleSystemOver && ShieldParticleSystem)
+	{
+		ShieldParticleSystem->Deactivate();
+		
+		ShieldParticleSystemOver->Template = ShieldOverEffect;
+		ShieldParticleSystemOver->Activate(true);
 	}
 }

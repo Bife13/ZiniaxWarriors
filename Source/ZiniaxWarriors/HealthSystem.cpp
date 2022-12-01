@@ -35,6 +35,7 @@ void UHealthSystem::TakeDamage(const float Amount)
 				ExcedingDamage = Shield;
 				Health -= ExcedingDamage;
 				Shield = 0;
+				OnShieldBrokenEvent.Broadcast(ExcedingDamage);
 			}
 			MyOnDamageTakenEvent.Broadcast(damageTaken);
 		}

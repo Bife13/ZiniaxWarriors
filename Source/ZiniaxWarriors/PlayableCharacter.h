@@ -86,6 +86,10 @@ virtual void RecoverHealth(float Amount) override;
 	void StartRootEffect() const;
 	UFUNCTION()
 	void EndRootEffect() const;
+	UFUNCTION()
+	void Shielded() const;
+	UFUNCTION()
+	void ShieldOver() const;
 	
 protected:
 	UFUNCTION()
@@ -109,6 +113,8 @@ protected:
 	void SetupCastParticleSystem();
 	UFUNCTION()
 	void SetupRootParticleSystem();
+	UFUNCTION()
+	void SetupShieldParticleSystem();
 	UFUNCTION()
 	void SetupTopDownCamera();
 	UFUNCTION()
@@ -182,7 +188,18 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* RootParticleSystem;
 
-private:
+    UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* ShieldParticleSystem;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* ShieldParticleSystemOver;
+	
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ShieldedEffect;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ShieldOverEffect;
+	
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* TopDownCameraComponent;
@@ -192,3 +209,7 @@ private:
 	USpringArmComponent* CameraBoom;
 
 };
+
+
+
+
