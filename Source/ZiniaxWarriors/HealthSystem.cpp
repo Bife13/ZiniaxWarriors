@@ -27,7 +27,7 @@ void UHealthSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 }
 #pragma endregion
 #pragma region GeneralFunctions
-void UHealthSystem::TakeDamage(const float Amount)
+void UHealthSystem::TakeDamage_Implementation(const float Amount)
 {
 	if (Amount > 0)
 	{
@@ -56,7 +56,7 @@ void UHealthSystem::TakeDamage(const float Amount)
 	}
 }
 
-void UHealthSystem::RecoverHealth(const float Amount)
+void UHealthSystem::RecoverHealth_Implementation(const float Amount)
 {
 	if (Amount > 0)
 	{
