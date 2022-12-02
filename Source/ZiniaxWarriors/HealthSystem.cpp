@@ -3,6 +3,8 @@
 
 #include "HealthSystem.h"
 
+#include "Net/UnrealNetwork.h"
+
 #pragma region MustHaveFunctions
 UHealthSystem::UHealthSystem()
 {
@@ -15,6 +17,13 @@ void UHealthSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = MaxHealth;
+}
+
+void UHealthSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UHealthSystem, Health);
+
 }
 #pragma endregion
 #pragma region GeneralFunctions

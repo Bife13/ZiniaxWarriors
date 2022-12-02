@@ -60,7 +60,7 @@ private: // This can be protected if we want to subclass the Health Component
 
 	UPROPERTY(VisibleAnywhere)
 	float Shield = 0;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Replicated)
 	float Health;
 	UPROPERTY(VisibleAnywhere)
 	float MaxHealth;

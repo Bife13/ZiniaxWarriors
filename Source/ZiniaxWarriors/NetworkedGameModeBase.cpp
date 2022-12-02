@@ -25,7 +25,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Drex", "")->PlayableCharacter;
 	if(SpawnedTeam1)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Nyax", "")->PlayableCharacter;
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Zerher", "")->PlayableCharacter;
 	}
 
 	FVector Location = PlayerStart->GetActorLocation();
