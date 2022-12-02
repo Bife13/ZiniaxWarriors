@@ -363,12 +363,12 @@ void APlayableCharacter::AddCastingSlow(float TimeAmount, float BuffAmount)
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 {
-	CastParticleSystem->ForceReset();
-	 if (CastParticleSystem)
-	{
-		CastParticleSystem->Template = NewParticle;
-		CastParticleSystem->Activate(true);
-	 }
+	// CastParticleSystem->ForceReset();
+	//  if (CastParticleSystem)
+	// {
+	// 	CastParticleSystem->Template = NewParticle;
+	// 	CastParticleSystem->Activate(true);
+	//  }
 }
 
 void APlayableCharacter::StartRootEffect() const

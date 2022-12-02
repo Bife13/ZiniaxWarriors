@@ -28,9 +28,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealthAsPercentage() const;
 	//General functions
-	UFUNCTION(BlueprintCallable,Server,Reliable)
+	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
 	void TakeDamage(float Amount);
-	UFUNCTION(BlueprintCallable, Server, Reliable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	void RecoverHealth(float Amount);
 	//Sets
 	UFUNCTION(BlueprintCallable)

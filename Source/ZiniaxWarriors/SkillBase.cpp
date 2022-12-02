@@ -5,6 +5,7 @@
 #include "PlayableCharacter.h"
 #include "SkillActor.h"
 #include "Components/DecalComponent.h"
+#include "Net/UnrealNetwork.h"
 
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {
@@ -130,4 +131,10 @@ FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition, const F
 		return MaxRangePosition;
 	}
 	return MousePosition;
+}
+
+void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(USkillBase, TeamId);
 }
