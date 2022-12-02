@@ -92,6 +92,14 @@ virtual void RecoverHealth(float Amount) override;
 	void Shielded() const;
 	UFUNCTION()
 	void ShieldOver() const;
+	UFUNCTION()
+	void StartEnrageEffect() const;
+	UFUNCTION()
+	void EndEnrageEffect() const;
+	UFUNCTION()
+    void StartVulnerableEffect() const;
+	UFUNCTION()
+	void EndVulnerableEffect() const;
 	
 protected:
 	UFUNCTION()
@@ -117,6 +125,10 @@ protected:
 	void SetupRootParticleSystem();
 	UFUNCTION()
 	void SetupShieldParticleSystem();
+	UFUNCTION()
+	void SetupEnrageParticleSystem();
+	UFUNCTION()
+    void SetupVulnerableParticleSystem();
 	UFUNCTION()
 	void SetupTopDownCamera();
 	UFUNCTION()
@@ -195,6 +207,22 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* ShieldParticleSystemOver;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* EnrageParticleSystem;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* VulnerableParticleSystem;
+    //to do
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* WeakenParticleSystem;
+	//to do 
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UParticleSystemComponent* SlowParticleSystem;
+;
+	
+	
+	
 	
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ShieldedEffect;

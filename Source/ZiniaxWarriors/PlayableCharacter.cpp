@@ -40,6 +40,8 @@ APlayableCharacter::APlayableCharacter()
 	SetupCastParticleSystem();
 	SetupRootParticleSystem();
 	SetupShieldParticleSystem();
+	SetupEnrageParticleSystem();
+	SetupVulnerableParticleSystem();
 	
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
@@ -109,12 +111,18 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Vulnerable observe
 	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"ObserverResistanceBuffs");
 	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"StartVulnerableEffect");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"EndVulnerableEffect");
 	//Shield observe
 	StatsComponent->OnShieldApplied.AddUFunction(this,"ObserverShieldBuffs");
 	StatsComponent->OnShieldRemoved.AddUFunction(this,"ObserverShieldBuffs");
 	StatsComponent->OnShieldApplied.AddUFunction(this,"Shielded");
 	StatsComponent->OnShieldRemoved.AddUFunction(this,"ShieldOver");
 	HealthComponent->OnShieldBrokenEvent.AddUFunction(this,"ShieldOver");
+    //Enrage observe
+	StatsComponent->OnEnrageAppliedEvent.AddUFunction(this,"StartEnrageEffect");
+	StatsComponent->OnEnrageRemovedEvent.AddUFunction(this,"EndEnrageEffect");
+
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	
@@ -170,6 +178,18 @@ void APlayableCharacter::SetupShieldParticleSystem()
 	
 	ShieldParticleSystemOver = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle Over"));
 	ShieldParticleSystemOver->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupEnrageParticleSystem()
+{
+	EnrageParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Enrage Particle System"));
+	EnrageParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupVulnerableParticleSystem()
+{
+	VulnerableParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Vulnerable Particle System"));
+	VulnerableParticleSystem->SetupAttachment(RootComponent);
 }
 
 void APlayableCharacter::SetupHealthComponent()
@@ -405,3 +425,25 @@ void APlayableCharacter::ShieldOver() const
 		ShieldParticleSystemOver->Activate(true);
 	}
 }
+
+void APlayableCharacter::StartEnrageEffect() const
+{
+	EnrageParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndEnrageEffect() const
+{
+	EnrageParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartVulnerableEffect() const
+{
+	VulnerableParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndVulnerableEffect() const
+{
+	VulnerableParticleSystem->Deactivate();
+}
+
+
