@@ -78,6 +78,8 @@ virtual void RecoverHealth(float Amount) override;
 	virtual void AddRoot(float TimeAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddShield(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddCastingSlow(float TimeAmount, float BuffAmount) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
