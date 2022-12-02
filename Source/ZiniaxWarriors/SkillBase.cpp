@@ -7,7 +7,7 @@
 #include "Components/DecalComponent.h"
 #include "Net/UnrealNetwork.h"
 
-void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
+void USkillBase::InitializeSkill_Implementation(ACharacter* Playable, UWorld* World, int Team)
 {
 	OwnerCharacter = Playable;
 	CachedWorld = World;

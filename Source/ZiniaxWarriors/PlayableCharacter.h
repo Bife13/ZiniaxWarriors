@@ -42,7 +42,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetTeamIdCharacter() const { return TeamID; }
-	
+	UFUNCTION(Server, Reliable)
+	void SetTeamId(float Value);
+
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(Server, Unreliable)
@@ -168,7 +170,7 @@ protected:
 
 	UPROPERTY()
 	float BaseSpeed;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere,Replicated)
 	int TeamID;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;

@@ -14,7 +14,7 @@ class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
 public:
 	GENERATED_BODY()
-	
+	UFUNCTION(Server, Reliable)
 	virtual void InitializeSkill(ACharacter* Playable, UWorld* World, int Team) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;

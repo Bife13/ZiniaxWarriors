@@ -40,7 +40,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupCastParticleSystem();
 	SetupRootParticleSystem();
 	SetupShieldParticleSystem();
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
@@ -58,11 +58,16 @@ void APlayableCharacter::BeginPlay()
 	PassiveInitializeFunction();
 }
 
+void APlayableCharacter::SetTeamId_Implementation(float Value)
+{
+	TeamID = Value;
+}
+
 void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
-
+	DOREPLIFETIME(APlayableCharacter, TeamID);
 }
 
 
@@ -89,7 +94,7 @@ FVector APlayableCharacter::GetMousePos()
 void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    
+
 	OnTickPassive(DeltaTime);
 
 	//Haste observe
@@ -99,25 +104,24 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	//Casting Slow Observe
-	StatsComponent->OnCastingSlowApplied.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnCastingSlowApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	//Root observe
-	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"EndRootEffect");
+	StatsComponent->OnRootApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootApplied.AddUFunction(this, "StartRootEffect");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "EndRootEffect");
 	//Vulnerable observe
-	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"ObserverResistanceBuffs");
-	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this, "ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this, "ObserverResistanceBuffs");
 	//Shield observe
-	StatsComponent->OnShieldApplied.AddUFunction(this,"ObserverShieldBuffs");
-	StatsComponent->OnShieldRemoved.AddUFunction(this,"ObserverShieldBuffs");
-	StatsComponent->OnShieldApplied.AddUFunction(this,"Shielded");
-	StatsComponent->OnShieldRemoved.AddUFunction(this,"ShieldOver");
-	HealthComponent->OnShieldBrokenEvent.AddUFunction(this,"ShieldOver");
+	StatsComponent->OnShieldApplied.AddUFunction(this, "ObserverShieldBuffs");
+	StatsComponent->OnShieldRemoved.AddUFunction(this, "ObserverShieldBuffs");
+	StatsComponent->OnShieldApplied.AddUFunction(this, "Shielded");
+	StatsComponent->OnShieldRemoved.AddUFunction(this, "ShieldOver");
+	HealthComponent->OnShieldBrokenEvent.AddUFunction(this, "ShieldOver");
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
-	
 }
 
 
@@ -167,7 +171,7 @@ void APlayableCharacter::SetupShieldParticleSystem()
 {
 	ShieldParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle"));
 	ShieldParticleSystem->SetupAttachment(RootComponent);
-	
+
 	ShieldParticleSystemOver = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle Over"));
 	ShieldParticleSystemOver->SetupAttachment(RootComponent);
 }
@@ -297,13 +301,13 @@ void APlayableCharacter::OnHit()
 
 float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target)
 {
-	return CachedPassiveInterface->CheckDistance(Damage,OwnerPassive,Target);
+	return CachedPassiveInterface->CheckDistance(Damage, OwnerPassive, Target);
 }
 
 void APlayableCharacter::OnTickPassive(float DeltaTime)
 {
-	if(CachedPassiveInterface)
-	CachedPassiveInterface->OnTick(DeltaTime);
+	if (CachedPassiveInterface)
+		CachedPassiveInterface->OnTick(DeltaTime);
 }
 
 void APlayableCharacter::TakeDamage(float Amount)
@@ -353,12 +357,12 @@ void APlayableCharacter::AddRoot(float TimeAmount)
 
 void APlayableCharacter::AddShield(float TimeAmount, float BuffAmount)
 {
-	StatusEffectsComponent->AddShield(TimeAmount,BuffAmount);
+	StatusEffectsComponent->AddShield(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::AddCastingSlow(float TimeAmount, float BuffAmount)
 {
-	StatusEffectsComponent->AddCastingSlow(TimeAmount,BuffAmount);
+	StatusEffectsComponent->AddCastingSlow(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
@@ -387,20 +391,19 @@ void APlayableCharacter::EndRootEffect() const
 
 void APlayableCharacter::Shielded() const
 {
-	if(ShieldParticleSystem)
+	if (ShieldParticleSystem)
 	{
 		ShieldParticleSystem->Template = ShieldedEffect;
 		ShieldParticleSystem->Activate(true);
 	}
-
 }
 
 void APlayableCharacter::ShieldOver() const
 {
-	if(ShieldParticleSystemOver && ShieldParticleSystem)
+	if (ShieldParticleSystemOver && ShieldParticleSystem)
 	{
 		ShieldParticleSystem->Deactivate();
-		
+
 		ShieldParticleSystemOver->Template = ShieldOverEffect;
 		ShieldParticleSystemOver->Activate(true);
 	}
