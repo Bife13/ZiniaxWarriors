@@ -14,6 +14,18 @@ UStatsComponent::UStatsComponent()
 }
 
 
+void UStatsComponent::CastingSlow(float Amount)
+{
+	CurrentSpeed -= (CurrentSpeed * Amount);
+	OnCastingSlowApplied.Broadcast(Amount);
+}
+
+void UStatsComponent::RemoveCastingSlow(float Amount)
+{
+	CurrentSpeed += Amount;
+	OnCastingSlowRemovedEvent.Broadcast(Amount);
+}
+
 void UStatsComponent::SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue,
                                       float ResistanceValue,
                                       float ViewRangeValue)

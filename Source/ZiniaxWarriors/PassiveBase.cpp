@@ -12,7 +12,7 @@ void UPassiveBase::OnHit()
 float UPassiveBase::CheckDistance(float Damage, APawn* Owner, APawn* target)
 {
 	
-	return 0;
+	return Damage;
 }
 
 void UPassiveBase::InitializePassive(IBuffable* OwnerCharacter)

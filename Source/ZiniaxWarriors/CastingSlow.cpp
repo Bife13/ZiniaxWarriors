@@ -1,18 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Slow.h"
+#include "CastingSlow.h"
 
-void USlow::OnBuffBegin(UStatsComponent* StatsComponent)
+void UCastingSlow::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
 	float const initialSpeed = StatsComponent->GetSpeed();
-	StatsComponent->Slow(Amount);
+	StatsComponent->CastingSlow(Amount);
 	TemporarySpeed = initialSpeed - StatsComponent->GetSpeed();
+	
 }
 
-void USlow::OnBuffTick(float DeltaTime)
+void UCastingSlow::OnBuffTick(float DeltaTime)
 {
 	if(Timer > 0)
 	{
@@ -23,7 +24,7 @@ void USlow::OnBuffTick(float DeltaTime)
 	}
 }
 
-void USlow::OnBuffEnd(UStatsComponent* StatsComponent)
+void UCastingSlow::OnBuffEnd(UStatsComponent* StatsComponent)
 {
-	StatsComponent->SlowRemove(TemporarySpeed);
+	StatsComponent->RemoveCastingSlow(TemporarySpeed);
 }

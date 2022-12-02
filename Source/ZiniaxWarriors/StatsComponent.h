@@ -29,6 +29,9 @@ DECLARE_EVENT(UStatsComponent, RootRemoveEvent)
 //Shield Buff events
 DECLARE_EVENT_OneParam(UStatsComponent, ShieldAppliedEvent,float);
 DECLARE_EVENT_OneParam(UStatsComponent, ShieldRemovedEvent,float);
+//Casting Slow events
+DECLARE_EVENT_OneParam(UStatsComponent, CastingSlowRemovedEvent, float)
+DECLARE_EVENT_OneParam(UStatsComponent, CastingSlowAppliedEvent, float)
 
 //UI Stuff
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
@@ -94,6 +97,11 @@ public:
 	void RemoveShield(float Amount);
 	ShieldAppliedEvent OnShieldApplied;
 	ShieldRemovedEvent OnShieldRemoved;
+
+	void CastingSlow(float Amount);
+	void RemoveCastingSlow(float Amount);
+	CastingSlowAppliedEvent OnCastingSlowApplied;
+	CastingSlowRemovedEvent OnCastingSlowRemovedEvent;
 	
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }

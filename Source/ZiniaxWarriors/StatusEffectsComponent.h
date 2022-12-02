@@ -29,6 +29,7 @@ public:
 	void AddVulnerable(float TimeAmount, float DebuffAmount);
 	void AddRoot(float TimeAmount);
 	void AddShield(float TimeAmount, float BuffAmount);
+	void AddCastingSlow(float TimeAmount,float BuffAmount);
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
 	
 

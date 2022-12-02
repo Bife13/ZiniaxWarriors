@@ -37,4 +37,6 @@ public:
 	virtual void AddRoot(float TimeAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddShield(float TimeAmount,float BuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddCastingSlow(float TimeAmount,float BuffAmount) = 0;
 };

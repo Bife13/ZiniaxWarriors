@@ -89,15 +89,6 @@ FVector APlayableCharacter::GetMousePos()
 void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bIsCasting)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * .3f;
-	}
-	else
-	{
-		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
-	}
     
 	OnTickPassive(DeltaTime);
 
@@ -107,6 +98,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Slow observe
 	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	//Casting Slow Observe
+	StatsComponent->OnCastingSlowApplied.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
 	//Root observe
 	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
 	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
@@ -121,6 +115,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	StatsComponent->OnShieldApplied.AddUFunction(this,"Shielded");
 	StatsComponent->OnShieldRemoved.AddUFunction(this,"ShieldOver");
 	HealthComponent->OnShieldBrokenEvent.AddUFunction(this,"ShieldOver");
+
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	
 }
 
 
@@ -359,14 +356,19 @@ void APlayableCharacter::AddShield(float TimeAmount, float BuffAmount)
 	StatusEffectsComponent->AddShield(TimeAmount,BuffAmount);
 }
 
+void APlayableCharacter::AddCastingSlow(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddCastingSlow(TimeAmount,BuffAmount);
+}
+
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 {
-	// TODO FIX PARTICLE CAST EFFECTS CRASHING
-	// if (CastParticleSystem)
-	// {
-	// 	CastParticleSystem->Template = NewParticle;
-	// 	CastParticleSystem->Activate(true);
-	// }
+	CastParticleSystem->ForceReset();
+	 if (CastParticleSystem)
+	{
+		CastParticleSystem->Template = NewParticle;
+		CastParticleSystem->Activate(true);
+	 }
 }
 
 void APlayableCharacter::StartRootEffect() const

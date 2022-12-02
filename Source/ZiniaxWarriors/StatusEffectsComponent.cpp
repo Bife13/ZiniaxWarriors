@@ -6,6 +6,7 @@
 #include "FBuffFactory.h"
 #include "Enrage.h"
 #include "Bulk.h"
+#include "CastingSlow.h"
 #include "Haste.h"
 #include "Root.h"
 #include "Shield.h"
@@ -101,6 +102,11 @@ void UStatusEffectsComponent::AddRoot(float TimeAmount)
 void UStatusEffectsComponent::AddShield(float TimeAmount, float BuffAmount)
 {
 	CurrentBuffArray.Add(BuffFactory->CreateBuff<UShield>(TimeAmount,BuffAmount));
+}
+
+void UStatusEffectsComponent::AddCastingSlow(float TimeAmount, float BuffAmount)
+{
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UCastingSlow>(TimeAmount,BuffAmount));
 }
 
 
