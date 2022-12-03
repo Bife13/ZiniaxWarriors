@@ -42,6 +42,9 @@ APlayableCharacter::APlayableCharacter()
 	SetupShieldParticleSystem();
 	SetupEnrageParticleSystem();
 	SetupVulnerableParticleSystem();
+	SetupHasteParticleSystem();
+	SetupWeakenParticleSystem();
+	SetupSlowParticleSystem();
 	
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -102,9 +105,13 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Haste observe
 	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "StartHasteEffect");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "EndHasteEffect");
 	//Slow observe
 	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this,"StartSlowEffect");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this,"EndSlowEffect");
 	//Casting Slow Observe
 	StatsComponent->OnCastingSlowApplied.AddUFunction(this, "ObserveSpeedBuffs");
 	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
@@ -127,7 +134,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
     //Enrage observe
 	StatsComponent->OnEnrageAppliedEvent.AddUFunction(this,"StartEnrageEffect");
 	StatsComponent->OnEnrageRemovedEvent.AddUFunction(this,"EndEnrageEffect");
-
+    //Weaken Observe
+	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this,"StartWeakenEffect");
+	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this,"EndWeakenEffect");
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
@@ -194,6 +203,24 @@ void APlayableCharacter::SetupVulnerableParticleSystem()
 {
 	VulnerableParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Vulnerable Particle System"));
 	VulnerableParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupHasteParticleSystem()
+{
+	HasteParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HASTE Particle System"));
+	HasteParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupSlowParticleSystem()
+{
+	SlowParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SLOW Particle System"));
+	SlowParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupWeakenParticleSystem()
+{
+	WeakenParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Weaken Particle System"));
+	WeakenParticleSystem->SetupAttachment(RootComponent);
 }
 
 void APlayableCharacter::SetupHealthComponent()
@@ -447,6 +474,36 @@ void APlayableCharacter::StartVulnerableEffect() const
 void APlayableCharacter::EndVulnerableEffect() const
 {
 	VulnerableParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartHasteEffect() const
+{
+	HasteParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndHasteEffect() const
+{
+	HasteParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartSlowEffect() const
+{
+	SlowParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndSlowEffect() const
+{
+	SlowParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartWeakenEffect() const
+{
+	WeakenParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndWeakenEffect() const
+{
+	WeakenParticleSystem->Deactivate();
 }
 
 
