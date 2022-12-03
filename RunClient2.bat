@@ -8,10 +8,10 @@ set ProjectDir="%cd%/ZiniaxWarriors.uproject"
 set Role=-game
 
 :: Port To Use! This would be passed in as a parameter by the matchmaking server
-set Port="1337"
+set Port="1222"
 
 :: Default Map To Load Into As A Server
-set Map="127.0.0.1:1337"
+set Map="192.168.68.103:1222"
 
 :: Comment this out if you dont want your server logging
 set Log=-log

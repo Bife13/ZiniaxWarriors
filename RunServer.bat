@@ -5,13 +5,13 @@ set UE4Dir="C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.
 set ProjectDir="%cd%/ZiniaxWarriors.uproject"
 
 :: Default Map To Load Into As A Server
-set Map=Levels/TestMap
+set Map=/Game/Maps/TestMap
 
 :: Nothing To Do Here Just The Role (Client (game) Or Server (server))
 set Role=-server
 
 :: Port To Use! This would be passed in as a parameter by the matchmaking server
-set Port=-port=1337
+set Port=-port=1222
 
 :: Comment this out if you dont want your server logging
 set Log=-log
