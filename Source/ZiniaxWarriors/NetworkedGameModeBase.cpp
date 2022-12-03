@@ -10,71 +10,89 @@
 
 
 FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
-	const FString& Options, const FString& Portal)
+                                              const FString& Options, const FString& Portal)
 {
-
-	APlayerStart* PlayerStart = GetPlayerStartForTeam1();
-	if(SpawnedTeam1)
+	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
+	if (SpawnedTeam1)
 	{
-		PlayerStart = GetPlayerStartForTeam2();
+		PlayerStart = GetPlayerStartsForTeam2()[CurrentStart];
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Picked StartPointNamed: %s"), *PlayerStart->GetName());
 
+	TArray<FName> CharacterNames = {"Nyax", "Drex", "Zerher"};
+
 	// Spawn An Actor												// Nyax, Drex, Zerher
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Drex", "")->PlayableCharacter;
-	if(SpawnedTeam1)
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[0], "")->PlayableCharacter;
+	if (SpawnedTeam1)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>("Zerher", "")->PlayableCharacter;
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[1], "")->PlayableCharacter;
 	}
 
 	FVector Location = PlayerStart->GetActorLocation();
 	FRotator Rotation = PlayerStart->GetActorRotation();
 	FActorSpawnParameters spawnParams;
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	
-	ACharacter* SpawnedActor = Cast<ACharacter>(GetWorld()->SpawnActor(ClassToSpawn, &Location, &Rotation, spawnParams));
 
-	NewPlayerController->ClientSetLocation (Location, Rotation);
-	
+	ACharacter* SpawnedActor = Cast<
+		ACharacter>(GetWorld()->SpawnActor(ClassToSpawn, &Location, &Rotation, spawnParams));
+
+	NewPlayerController->ClientSetLocation(Location, Rotation);
+
 	NewPlayerController->Possess(SpawnedActor);
 	SpawnedActor->SetOwner(NewPlayerController);
+
+	Cast<APlayableCharacter>(SpawnedActor)->SetTeamId(1);
+	if (SpawnedTeam1)
+	{
+		Cast<APlayableCharacter>(SpawnedActor)->SetTeamId(2);
+	}
+
 	// Cast<ABasePlayerController>(NewPlayerController)->OnCharacterPossess(SpawnedActor);
-	
-	SpawnedTeam1 = true;
-	
+
+	CurrentStart++;
+
+	if (CurrentStart > 1)
+	{
+		SpawnedTeam1 = true;
+		CurrentStart = 0;
+	}
+
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
 
-APlayerStart* ANetworkedGameModeBase::GetPlayerStartForTeam1()
+TArray<APlayerStart*> ANetworkedGameModeBase::GetPlayerStartsForTeam1()
 {
-	if(PlayerStarts.Num() == 0)
+	if (PlayerStarts.Num() == 0)
 		CachePlayerStarts();
-	
-	for(int i = 0; i < PlayerStarts.Num(); ++i)
+
+	TArray<APlayerStart*> Team1PlayerStarts;
+
+	for (int i = 0; i < PlayerStarts.Num(); ++i)
 	{
-		if(PlayerStarts[i]->Tags.Contains("Team1"))
+		if (PlayerStarts[i]->Tags.Contains("Team1"))
 		{
-			return Cast<APlayerStart>(PlayerStarts[i]);
+			Team1PlayerStarts.Add(Cast<APlayerStart>(PlayerStarts[i]));
 		}
 	}
+	return Team1PlayerStarts;
+}
 
-	return nullptr;}
-
-APlayerStart* ANetworkedGameModeBase::GetPlayerStartForTeam2()
+TArray<APlayerStart*> ANetworkedGameModeBase::GetPlayerStartsForTeam2()
 {
-	if(PlayerStarts.Num() == 0)
+	if (PlayerStarts.Num() == 0)
 		CachePlayerStarts();
-	
-	for(int i = 0; i < PlayerStarts.Num(); ++i)
+
+	TArray<APlayerStart*> Team2PlayerStarts;
+
+	for (int i = 0; i < PlayerStarts.Num(); ++i)
 	{
-		if(PlayerStarts[i]->Tags.Contains("Team2"))
+		if (PlayerStarts[i]->Tags.Contains("Team2"))
 		{
-			return Cast<APlayerStart>(PlayerStarts[i]);
+			Team2PlayerStarts.Add(Cast<APlayerStart>(PlayerStarts[i]));
 		}
 	}
-
-	return nullptr;
+	return Team2PlayerStarts;
 }
 
 void ANetworkedGameModeBase::CachePlayerStarts()
