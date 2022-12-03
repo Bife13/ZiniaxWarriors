@@ -17,10 +17,9 @@
 #include "PlayableCharacter.generated.h"
 
 
-
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
-												public IMoveableCharacter, public IDamageable, public IBuffable 
+                                              public IMoveableCharacter, public IDamageable, public IBuffable
 {
 	GENERATED_BODY()
 
@@ -31,8 +30,8 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void BeginPlay() override;
-	
+	void StartBeginPlay();
+
 
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -41,8 +40,11 @@ public:
 	/** Returns CursorToWorld SubObject **/
 
 	UFUNCTION(BlueprintCallable)
-	int GetTeamIdCharacter() const { return TeamID; }
-	
+	int GetServerTeamIdCharacter() const { return ServerTeamID; }
+
+	UFUNCTION()
+	void SetServerTeamId(float Value);
+
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(Server, Unreliable)
@@ -57,11 +59,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector CachedMousePosition;
 
-	
+
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
-virtual void RecoverHealth(float Amount) override;
+	virtual void RecoverHealth(float Amount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddEnrage(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
@@ -71,16 +73,16 @@ virtual void RecoverHealth(float Amount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
-    virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
+	virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
-    virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
+	virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddShield(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddCastingSlow(float TimeAmount, float BuffAmount) override;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
@@ -97,7 +99,7 @@ virtual void RecoverHealth(float Amount) override;
 	UFUNCTION()
 	void EndEnrageEffect() const;
 	UFUNCTION()
-    void StartVulnerableEffect() const;
+	void StartVulnerableEffect() const;
 	UFUNCTION()
 	void EndVulnerableEffect() const;
 	UFUNCTION()
@@ -140,7 +142,7 @@ protected:
 	UFUNCTION()
 	void SetupEnrageParticleSystem();
 	UFUNCTION()
-    void SetupVulnerableParticleSystem();
+	void SetupVulnerableParticleSystem();
 	UFUNCTION()
 	void SetupHasteParticleSystem();
 	UFUNCTION()
@@ -151,7 +153,7 @@ protected:
 	void SetupTopDownCamera();
 	UFUNCTION()
 	void PopulateSkillArray();
-    UFUNCTION()
+	UFUNCTION()
 	void ObserveSpeedBuffs();
 
 	UFUNCTION()
@@ -160,14 +162,14 @@ protected:
 	void ObserverShieldBuffs();
 
 	UFUNCTION(Server, Unreliable)
-    virtual void UseBasicAttack() override;
+	virtual void UseBasicAttack() override;
 	UFUNCTION(Server, Unreliable)
 	virtual void UseFirstAbility() override;
 	UFUNCTION(Server, Unreliable)
 	virtual void UseSecondAbility() override;
 	UFUNCTION(Server, Unreliable)
 	virtual void UseThirdAbility() override;
-	
+
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY(VisibleAnywhere)
@@ -181,13 +183,13 @@ protected:
 	UPassiveBase* RunTimePassive;
 	IPassive* CachedPassiveInterface;
 
-    UFUNCTION()
-    void PassiveInitializeFunction();
-    
+	UFUNCTION()
+	void PassiveInitializeFunction();
+
 	UFUNCTION(BlueprintCallable)
 	void OnHit();
 	UFUNCTION(BlueprintCallable)
-	float CheckDistance(float Damage,APawn* OwnerPassive,APawn* Target);
+	float CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target);
 	UFUNCTION()
 	void OnTickPassive(float DeltaTime);
 	UPROPERTY()
@@ -198,38 +200,39 @@ protected:
 
 	UPROPERTY()
 	float BaseSpeed;
-	UPROPERTY(EditAnywhere)
-	int TeamID;
+
+	UPROPERTY(Replicated, VisibleAnywhere)
+	int ServerTeamID;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* FeetPoint;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Stats)
 	UStatsComponent* StatsComponent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	UHealthSystem* HealthComponent;
 
 	UPROPERTY(EditAnywhere, Category = Status)
 	UStatusEffectsComponent* StatusEffectsComponent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* CastParticleSystem;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* RootParticleSystem;
 
-    UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* ShieldParticleSystem;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* ShieldParticleSystemOver;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* EnrageParticleSystem;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* VulnerableParticleSystem;
     
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
@@ -240,13 +243,22 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* HasteParticleSystem;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
+	UParticleSystemComponent* WeakenParticleSystem;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
+	UParticleSystemComponent* SlowParticleSystem;
+	
+
+
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ShieldedEffect;
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ShieldOverEffect;
-	
+
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* TopDownCameraComponent;
@@ -254,9 +266,4 @@ protected:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
-
 };
-
-
-
-
