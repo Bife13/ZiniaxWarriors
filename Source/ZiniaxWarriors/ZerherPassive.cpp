@@ -5,13 +5,16 @@
 
 void UZerherPassive::OnTick(float DeltaTime)
 {
-	if(Timer < Cooldown)
+	if(Timer > 0)
 	{
-		Timer += DeltaTime;
+		Timer -= DeltaTime;
+		GEngine->AddOnScreenDebugMessage(1,2,FColor::Blue,FString::Printf(TEXT("%f"),Timer));
+
 	}
 	else
 	{
 		PassiveOwner->AddShield(Cooldown - 2,ShieldForce);
-		Timer = 0;
+		GEngine->AddOnScreenDebugMessage(1,2,FColor::Blue,"SHIELD");
+		Timer = Cooldown;
 	}
 }

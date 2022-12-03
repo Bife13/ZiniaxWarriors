@@ -183,11 +183,11 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UPassiveBase> Passive;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UPassiveBase* RunTimePassive;
 	IPassive* CachedPassiveInterface;
 
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Unreliable)
 	void PassiveInitializeFunction();
 
 	UFUNCTION(BlueprintCallable)
@@ -195,7 +195,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	float CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target);
 	UFUNCTION()
-	void OnTickPassive(float DeltaTime);
+	void OnTickPassive(float DeltaTime) const;
 	UPROPERTY()
 	UWorld* CachedWorld;
 	UPROPERTY()

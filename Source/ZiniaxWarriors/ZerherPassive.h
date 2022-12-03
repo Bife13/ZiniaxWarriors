@@ -16,7 +16,7 @@ class ZINIAXWARRIORS_API UZerherPassive : public UPassiveBase
 
 	virtual void OnTick(float DeltaTime) override;
 
-    float Timer = 0;
+    float Timer = 10;
 	float Cooldown = 10;
 	float ShieldForce = 0.2;
 };
