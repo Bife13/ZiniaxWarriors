@@ -39,6 +39,7 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
                                             FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
 	if (CurrentBuffArray.Num() > 0)
 	{
 		for (int i = 0; i < CurrentBuffArray.Num(); ++i)
