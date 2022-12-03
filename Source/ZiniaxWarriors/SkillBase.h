@@ -88,4 +88,9 @@ protected:
 	FVector CalculateMaxRangeSpawn(const FVector& MousePosition,const FVector& PlayerPosition);
 	UPROPERTY()
 	int TeamId;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	float CooldownForUi(){ return  AbilityCooldown;} 
+	
 };
