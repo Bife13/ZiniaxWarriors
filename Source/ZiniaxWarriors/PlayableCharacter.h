@@ -248,13 +248,7 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* HasteParticleSystem;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
-	UParticleSystemComponent* WeakenParticleSystem;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
-	UParticleSystemComponent* SlowParticleSystem;
-	
-
 
 
 	UPROPERTY(EditAnywhere)
