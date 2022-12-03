@@ -32,6 +32,6 @@ float UZerherPassive::CheckDistance(float Damage, APawn* Owner, APawn* Target)
 void UZerherPassive::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(UZerherPassive, Timer);
+	DOREPLIFETIME(UZerherPassive, Timer );
 	DOREPLIFETIME(UZerherPassive, Cooldown);
 }

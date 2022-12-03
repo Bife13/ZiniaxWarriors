@@ -40,31 +40,31 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if (CurrentBuffArray.Num() > 0)
-	{
-		for (int i = 0; i < CurrentBuffArray.Num(); ++i)
-		{
-			if (CurrentBuffArray[i])
-			{
-				if (!CurrentBuffArray[i]->GetActivated())
-				{
-					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
-				}else
-				{
-					CurrentBuffArray[i]->OnBuffTick(DeltaTime);
-
-					if (CurrentBuffArray[i]->GetTimer() <= 0)
-					{
-						CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
-						CurrentBuffArray.RemoveAt(i,1,true);
-					}
-				}
-			}else
-			{
-				break;
-			}
-		}
-	}
+	// if (CurrentBuffArray.Num() > 0)
+	// {
+	// 	for (int i = 0; i < CurrentBuffArray.Num(); ++i)
+	// 	{
+	// 		if (CurrentBuffArray[i])
+	// 		{
+	// 			if (!CurrentBuffArray[i]->GetActivated())
+	// 			{
+	// 				CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
+	// 			}else
+	// 			{
+	// 				CurrentBuffArray[i]->OnBuffTick(DeltaTime);
+	//
+	// 				if (CurrentBuffArray[i]->GetTimer() <= 0)
+	// 				{
+	// 					CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
+	// 					CurrentBuffArray.RemoveAt(i,1,true);
+	// 				}
+	// 			}
+	// 		}else
+	// 		{
+	// 			break;
+	// 		}
+	// 	}
+	// }
 
 	ArrayLength = CurrentBuffArray.Num();
 }
