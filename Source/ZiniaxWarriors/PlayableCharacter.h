@@ -248,8 +248,6 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
 	UParticleSystemComponent* HasteParticleSystem;
 	
-	
-
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ShieldedEffect;
