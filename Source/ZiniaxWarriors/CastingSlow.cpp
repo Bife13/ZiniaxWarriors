@@ -7,9 +7,9 @@ void UCastingSlow::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
-	float const initialSpeed = StatsComponent->GetSpeed();
+	float const InitialSpeed = StatsComponent->GetSpeed();
 	StatsComponent->CastingSlow(Amount);
-	TemporarySpeed = initialSpeed - StatsComponent->GetSpeed();
+	TemporarySpeed = InitialSpeed - StatsComponent->GetSpeed();
 	
 }
 

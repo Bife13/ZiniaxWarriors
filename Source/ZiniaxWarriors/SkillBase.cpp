@@ -7,7 +7,7 @@
 #include "Components/DecalComponent.h"
 #include "Net/UnrealNetwork.h"
 
-void USkillBase::InitializeSkill_Implementation(ACharacter* Playable, UWorld* World, int Team)
+void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {
 	OwnerCharacter = Playable;
 	CachedWorld = World;
@@ -45,7 +45,7 @@ void USkillBase::DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfP
 	FTimerHandle THandle;
 	const float Delay = AbilitySpawnTime * NumberOfProjectile;
 	FTimerDelegate DelaySpawnDelegate;
-	DelaySpawnDelegate.BindUFunction(this,FName("DelayedSpawn"),OwnerCharacter->GetActorLocation());
+	DelaySpawnDelegate.BindUFunction(this, FName("DelayedSpawn"), OwnerCharacter->GetActorLocation());
 	CachedWorld->GetTimerManager().SetTimer(THandle, DelaySpawnDelegate, Delay, false);
 }
 
@@ -55,7 +55,8 @@ void USkillBase::DelayedSpawn(const FVector& SpawnPosition)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
-	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition, OwnerCharacter);
+	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition,
+	                                       OwnerCharacter);
 }
 
 void USkillBase::ResetCooldown()
@@ -104,7 +105,8 @@ void USkillBase::SpawnSkillActor(const FVector& SpawnPosition)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* SpawnedAbility = CachedWorld->SpawnActor(ActorToSpawn, &SpawnPosition, &AbilityRotation, SpawnParams);
 	const ISkillActor* SkillActorInterface = Cast<ISkillActor>(SpawnedAbility);
-	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition, OwnerCharacter);
+	SkillActorInterface->Execute_SetValues(SpawnedAbility, TeamId, AbilityDamage, AbilityRange, SpawnPosition,
+	                                       OwnerCharacter);
 }
 
 
@@ -133,8 +135,8 @@ FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition, const F
 	return MousePosition;
 }
 
-void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(USkillBase, TeamId);
-}
+// void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+// {
+// 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+// 	DOREPLIFETIME_CONDITION(USkillBase, TeamId, COND_OwnerOnly);
+// }

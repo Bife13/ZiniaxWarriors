@@ -14,7 +14,6 @@ class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
 public:
 	GENERATED_BODY()
-	UFUNCTION(Server, Reliable)
 	virtual void InitializeSkill(ACharacter* Playable, UWorld* World, int Team) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
@@ -92,6 +91,6 @@ protected:
 	void ChangeRotator(const float ZOffsetAngle);
 	UFUNCTION(BlueprintCallable)
 	FVector CalculateMaxRangeSpawn(const FVector& MousePosition,const FVector& PlayerPosition);
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	int TeamId;
 };

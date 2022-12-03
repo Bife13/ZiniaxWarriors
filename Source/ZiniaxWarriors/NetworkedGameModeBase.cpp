@@ -41,11 +41,17 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	NewPlayerController->Possess(SpawnedActor);
 	SpawnedActor->SetOwner(NewPlayerController);
-
-	Cast<APlayableCharacter>(SpawnedActor)->SetTeamId(1);
+	APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(SpawnedActor);
+	
 	if (SpawnedTeam1)
 	{
-		Cast<APlayableCharacter>(SpawnedActor)->SetTeamId(2);
+		PlayableCharacter->SetServerTeamId(2);
+		PlayableCharacter->StartBeginPlay();
+	}
+	else
+	{
+		PlayableCharacter->SetServerTeamId(1);
+		PlayableCharacter->StartBeginPlay();
 	}
 
 	// Cast<ABasePlayerController>(NewPlayerController)->OnCharacterPossess(SpawnedActor);
