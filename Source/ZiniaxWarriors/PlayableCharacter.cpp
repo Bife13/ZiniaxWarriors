@@ -507,3 +507,7 @@ void APlayableCharacter::EndWeakenEffect() const
 }
 
 
+TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
+{
+	return RuntimeSkills;
+}
