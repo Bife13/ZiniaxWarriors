@@ -3,26 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "PassiveBase.h"
 #include "NyaxPassive.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ZINIAXWARRIORS_API UNyaxPassive : public UActorComponent
+/**
+ * 
+ */
+UCLASS()
+class ZINIAXWARRIORS_API UNyaxPassive : public UPassiveBase
 {
 	GENERATED_BODY()
+public:
+	virtual void OnHit() override;
 
-public:	
-	// Sets default values for this component's properties
-	UNyaxPassive();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	float Time = 1;
+	float Amount = 0.15;
 };

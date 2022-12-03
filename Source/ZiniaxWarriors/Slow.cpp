@@ -7,8 +7,9 @@ void USlow::OnBuffBegin(UStatsComponent* StatsComponent)
 {
 	Activated = true;
 	Timer = Time;
+	float const initialSpeed = StatsComponent->GetSpeed();
 	StatsComponent->Slow(Amount);
-	TemporarySpeed = StatsComponent->GetSpeed();
+	TemporarySpeed = initialSpeed - StatsComponent->GetSpeed();
 }
 
 void USlow::OnBuffTick(float DeltaTime)

@@ -15,8 +15,9 @@ class ZINIAXWARRIORS_API UPassiveBase : public UObject , public IPassive
 	GENERATED_BODY()
 public :
 	virtual void OnHit() override;
-	//virtual void CheckDistance(float* Damage, APawn* Onwer,APawn* ) override;
+	virtual float CheckDistance(float Damage, APawn* Owner,APawn* target) override;
 	virtual void InitializePassive(IBuffable* OwnerCharacter) override;
+	virtual void OnTick(float DeltaTime) override;
 protected:
 	IBuffable* PassiveOwner;
 };

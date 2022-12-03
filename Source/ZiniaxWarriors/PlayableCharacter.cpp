@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Net/UnrealNetwork.h"
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -19,7 +20,7 @@ APlayableCharacter::APlayableCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set size for player capsule
-	GetCapsuleComponent()->InitCapsuleSize(50.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(45.f, 96.0f);
 
 	// Don't rotate character to camera direction
 	LockRotation();
@@ -27,7 +28,7 @@ APlayableCharacter::APlayableCharacter()
 	ConfigureCharacterMovement();
 
 	SetupStatsComponent();
-	
+
 	// Create a camera boom...
 	SetupCameraBoom();
 
@@ -38,14 +39,20 @@ APlayableCharacter::APlayableCharacter()
 	SetupStatusEffectComponent();
 	SetupCastParticleSystem();
 	SetupRootParticleSystem();
+	SetupShieldParticleSystem();
+	SetupEnrageParticleSystem();
+	SetupVulnerableParticleSystem();
+	SetupHasteParticleSystem();
+	SetupWeakenParticleSystem();
+	SetupSlowParticleSystem();
 	
+
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
-void APlayableCharacter::BeginPlay()
+void APlayableCharacter::StartBeginPlay()
 {
-	Super::BeginPlay();
 
 	if (UWorld* World = GetWorld())
 	{
@@ -54,6 +61,18 @@ void APlayableCharacter::BeginPlay()
 
 	PopulateSkillArray();
 	PassiveInitializeFunction();
+}
+
+void APlayableCharacter::SetServerTeamId(float Value)
+{
+	ServerTeamID = Value;
+}
+
+void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
+	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
 }
 
 
@@ -66,7 +85,13 @@ void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 	ActualRotation.Pitch = 0;
 	CachedMousePosition = CursorPosition;
 	CachedMouseRotator = ActualRotation;
-	GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+	this->SetActorRotation(ActualRotation);
+	// GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+}
+
+FVector APlayableCharacter::GetMousePos()
+{
+	return CachedMousePosition;
 }
 
 
@@ -75,26 +100,45 @@ void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsCasting)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * .3f;
-	}
-	else
-	{
-		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
-	}
+	OnTickPassive(DeltaTime);
 
 	//Haste observe
-	StatsComponent->OnHasteAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnHasteRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "StartHasteEffect");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "EndHasteEffect");
 	//Slow observe
-	StatsComponent->OnSlowAppliedEvent.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnSlowRemovedEvent.AddUFunction(this,"ObserveSpeedBuffs");
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this,"StartSlowEffect");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this,"EndSlowEffect");
+	//Casting Slow Observe
+	StatsComponent->OnCastingSlowApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
 	//Root observe
-	StatsComponent->OnRootApplied.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootApplied.AddUFunction(this,"StartRootEffect");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"ObserveSpeedBuffs");
-	StatsComponent->OnRootRemoved.AddUFunction(this,"EndRootEffect");	
+	StatsComponent->OnRootApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootApplied.AddUFunction(this, "StartRootEffect");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "EndRootEffect");
+	//Vulnerable observe
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this,"StartVulnerableEffect");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this,"EndVulnerableEffect");
+	//Shield observe
+	StatsComponent->OnShieldApplied.AddUFunction(this,"ObserverShieldBuffs");
+	StatsComponent->OnShieldRemoved.AddUFunction(this,"ObserverShieldBuffs");
+	StatsComponent->OnShieldApplied.AddUFunction(this,"Shielded");
+	StatsComponent->OnShieldRemoved.AddUFunction(this,"ShieldOver");
+	HealthComponent->OnShieldBrokenEvent.AddUFunction(this,"ShieldOver");
+    //Enrage observe
+	StatsComponent->OnEnrageAppliedEvent.AddUFunction(this,"StartEnrageEffect");
+	StatsComponent->OnEnrageRemovedEvent.AddUFunction(this,"EndEnrageEffect");
+    //Weaken Observe
+	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this,"StartWeakenEffect");
+	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this,"EndWeakenEffect");
+
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
 
@@ -107,8 +151,8 @@ void APlayableCharacter::LockRotation()
 
 void APlayableCharacter::ConfigureCharacterMovement() const
 {
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate character to moving direction
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
+	GetCharacterMovement()->bOrientRotationToMovement = false; // Rotate character to moving direction
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 0.f);
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 }
@@ -138,6 +182,45 @@ void APlayableCharacter::SetupRootParticleSystem()
 {
 	RootParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Root Particle"));
 	RootParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupShieldParticleSystem()
+{
+	ShieldParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle"));
+	ShieldParticleSystem->SetupAttachment(RootComponent);
+
+	ShieldParticleSystemOver = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shield Particle Over"));
+	ShieldParticleSystemOver->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupEnrageParticleSystem()
+{
+	EnrageParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Enrage Particle System"));
+	EnrageParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupVulnerableParticleSystem()
+{
+	VulnerableParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Vulnerable Particle System"));
+	VulnerableParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupHasteParticleSystem()
+{
+	HasteParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HASTE Particle System"));
+	HasteParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupSlowParticleSystem()
+{
+	SlowParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SLOW Particle System"));
+	SlowParticleSystem->SetupAttachment(RootComponent);
+}
+
+void APlayableCharacter::SetupWeakenParticleSystem()
+{
+	WeakenParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Weaken Particle System"));
+	WeakenParticleSystem->SetupAttachment(RootComponent);
 }
 
 void APlayableCharacter::SetupHealthComponent()
@@ -179,7 +262,7 @@ void APlayableCharacter::PopulateSkillArray()
 	{
 		if (USkillBase* NewSkill = NewObject<USkillBase>(this, Skills[i]))
 		{
-			NewSkill->InitializeSkill(this, CachedWorld, TeamID);
+			NewSkill->InitializeSkill(this, CachedWorld, ServerTeamID);
 			RuntimeSkills.Add(NewSkill);
 		};
 	}
@@ -190,19 +273,32 @@ void APlayableCharacter::ObserveSpeedBuffs()
 	BaseSpeed = StatsComponent->GetSpeed();
 }
 
+void APlayableCharacter::ObserverResistanceBuffs()
+{
+	HealthComponent->SetResistance(StatsComponent->GetResistance());
+}
+
+void APlayableCharacter::ObserverShieldBuffs()
+{
+	HealthComponent->SetShield(StatsComponent->GetShield());
+}
+
+
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "Vertical");
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
 void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 {
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "Horizontal");
 	const FVector MoveDirection = {0, 1, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
-void APlayableCharacter::UseBasicAttack()
+void APlayableCharacter::UseBasicAttack_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(0))
 	{
@@ -210,7 +306,7 @@ void APlayableCharacter::UseBasicAttack()
 	}
 }
 
-void APlayableCharacter::UseFirstAbility()
+void APlayableCharacter::UseFirstAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(1))
 	{
@@ -218,28 +314,28 @@ void APlayableCharacter::UseFirstAbility()
 	}
 }
 
-void APlayableCharacter::UseSecondAbility()
+void APlayableCharacter::UseSecondAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(2))
 	{
-		RuntimeSkills[2]->CastSkill(AttackAnimations[1]);
+		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 	}
 }
 
-void APlayableCharacter::UseThirdAbility()
+void APlayableCharacter::UseThirdAbility_Implementation()
 {
 	if (RuntimeSkills.IsValidIndex(3))
 	{
-		RuntimeSkills[3]->CastSkill(AttackAnimations[1]);
+		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 	}
 }
 
 void APlayableCharacter::PassiveInitializeFunction()
 {
-	if(Passive)
+	if (Passive)	
 	{
 		UPassiveBase* NewPassive = NewObject<UPassiveBase>(this, Passive);
-		NewPassive ->InitializePassive(this);
+		NewPassive->InitializePassive(this);
 		RunTimePassive = NewPassive;
 		CachedPassiveInterface = Cast<IPassive>(RunTimePassive);
 	}
@@ -250,9 +346,25 @@ void APlayableCharacter::OnHit()
 	CachedPassiveInterface->OnHit();
 }
 
+float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target)
+{
+	return CachedPassiveInterface->CheckDistance(Damage, OwnerPassive, Target);
+}
+
+void APlayableCharacter::OnTickPassive(float DeltaTime)
+{
+	if (CachedPassiveInterface)
+		CachedPassiveInterface->OnTick(DeltaTime);
+}
+
 void APlayableCharacter::TakeDamage(float Amount)
 {
 	HealthComponent->TakeDamage(Amount);
+}
+
+void APlayableCharacter::RecoverHealth(float Amount)
+{
+	HealthComponent->RecoverHealth(Amount);
 }
 
 void APlayableCharacter::AddEnrage(float TimeAmount, float BuffAmount)
@@ -287,31 +399,113 @@ void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
 
 void APlayableCharacter::AddRoot(float TimeAmount)
 {
-    StatusEffectsComponent->AddRoot(TimeAmount);
+	StatusEffectsComponent->AddRoot(TimeAmount);
+}
+
+void APlayableCharacter::AddShield(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddShield(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::AddCastingSlow(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddCastingSlow(TimeAmount, BuffAmount);
 }
 
 void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 {
-    if(CastParticleSystem)
-    {
-    CastParticleSystem->Template = NewParticle;
-    CastParticleSystem->Activate(true);
-    }
+	// CastParticleSystem->ForceReset();
+	//  if (CastParticleSystem)
+	// {
+	// 	CastParticleSystem->Template = NewParticle;
+	// 	CastParticleSystem->Activate(true);
+	//  }
 }
 
 void APlayableCharacter::StartRootEffect() const
 {
-	if(RootParticleSystem)
-	RootParticleSystem->Activate(true);
+	if (RootParticleSystem)
+		RootParticleSystem->Activate(true);
 }
 
 void APlayableCharacter::EndRootEffect() const
 {
-	if(RootParticleSystem)
+	if (RootParticleSystem)
 	{
 		RootParticleSystem->Deactivate();
 	}
 }
+
+void APlayableCharacter::Shielded() const
+{
+	if (ShieldParticleSystem)
+	{
+		ShieldParticleSystem->Template = ShieldedEffect;
+		ShieldParticleSystem->Activate(true);
+	}
+}
+
+void APlayableCharacter::ShieldOver() const
+{
+	if (ShieldParticleSystemOver && ShieldParticleSystem)
+	{
+		ShieldParticleSystem->Deactivate();
+
+		ShieldParticleSystemOver->Template = ShieldOverEffect;
+		ShieldParticleSystemOver->Activate(true);
+	}
+}
+
+void APlayableCharacter::StartEnrageEffect() const
+{
+	EnrageParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndEnrageEffect() const
+{
+	EnrageParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartVulnerableEffect() const
+{
+	VulnerableParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndVulnerableEffect() const
+{
+	VulnerableParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartHasteEffect() const
+{
+	HasteParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndHasteEffect() const
+{
+	HasteParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartSlowEffect() const
+{
+	SlowParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndSlowEffect() const
+{
+	SlowParticleSystem->Deactivate();
+}
+
+void APlayableCharacter::StartWeakenEffect() const
+{
+	WeakenParticleSystem->Activate(true);
+}
+
+void APlayableCharacter::EndWeakenEffect() const
+{
+	WeakenParticleSystem->Deactivate();
+}
+
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {

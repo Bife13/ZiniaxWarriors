@@ -15,11 +15,16 @@ class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
 public:
 	GENERATED_BODY()
-
 	virtual void InitializeSkill(ACharacter* Playable, UWorld* World, int Team) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
+
+	UFUNCTION(BlueprintCallable)
+	void DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfProjectile);
+
+	UFUNCTION()
+	void DelayedSpawn(const FVector& SpawnPosition);
 	
 	UFUNCTION()
 	void ResetCooldown();
@@ -40,6 +45,11 @@ public:
 	float AbilityCastTime;
 	UFUNCTION(BlueprintCallable)
 	void SetCastTime(float CastTime);
+
+	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
+	float AbilitySpawnTime;
+	UFUNCTION(BlueprintCallable)
+	void SetSpawnTime(float SpawnTime);
 
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float AbilityDamage;

@@ -3,6 +3,8 @@
 
 #include "HealthSystem.h"
 
+#include "Net/UnrealNetwork.h"
+
 #pragma region MustHaveFunctions
 UHealthSystem::UHealthSystem()
 {
@@ -16,19 +18,44 @@ void UHealthSystem::BeginPlay()
 	Super::BeginPlay();
 	Health = MaxHealth;
 }
+
+void UHealthSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UHealthSystem, Health);
+}
 #pragma endregion
 #pragma region GeneralFunctions
-void UHealthSystem::TakeDamage(const float Amount)
+void UHealthSystem::TakeDamage_Implementation(const float Amount)
 {
 	if (Amount > 0)
 	{
-		float damageTaken = Amount * ((100) / (100 + Resistance));
-		Health -= damageTaken;
-		MyOnDamageTakenEvent.Broadcast(damageTaken);
+	float damageTaken; float ExcedingDamage; 
+	     if(Resistance > 0)
+		 damageTaken = Amount * ((100) / (100 + Resistance));
+		 else
+		 damageTaken = Amount * ( 2 - 100 / (100 - Resistance));
+		if(Shield > 0)
+		{
+			Shield -= damageTaken;
+			if(Shield < 0)
+			{
+				ExcedingDamage = Shield;
+				Health -= ExcedingDamage;
+				Shield = 0;
+				OnShieldBrokenEvent.Broadcast(ExcedingDamage);
+			}
+			MyOnDamageTakenEvent.Broadcast(damageTaken);
+		}
+		else
+		{
+			Health -= damageTaken;
+			MyOnDamageTakenEvent.Broadcast(damageTaken);
+		}
 	}
 }
 
-void UHealthSystem::RecoverHealth(const float Amount)
+void UHealthSystem::RecoverHealth_Implementation(const float Amount)
 {
 	if (Amount > 0)
 	{
@@ -78,6 +105,11 @@ void UHealthSystem::SetResistance(float Amount)
 	{
 		Resistance = Amount;
 	}
+}
+
+void UHealthSystem::SetShield(float Amount)
+{
+	Shield = Amount;
 }
 
 #pragma endregion

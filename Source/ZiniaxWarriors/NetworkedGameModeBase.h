@@ -20,14 +20,15 @@ protected:
 
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal) override;
 	
-	APlayerStart* GetPlayerStartForTeam1();
-	APlayerStart* GetPlayerStartForTeam2();
+	TArray<APlayerStart*> GetPlayerStartsForTeam1();
+	TArray<APlayerStart*> GetPlayerStartsForTeam2();
 	void CachePlayerStarts();
 
 private:
 	TArray<AActor*> PlayerStarts;
-
+	
 	bool SpawnedTeam1 = false;
+	int CurrentStart = 0;
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
 	UDataTable* SpawnableCharacters;
