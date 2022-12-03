@@ -20,7 +20,7 @@ public:
 	UStatusEffectsComponent();
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-							   FActorComponentTickFunction* ThisTickFunction) override;
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 	void AddEnrage(float TimeAmount, float BuffAmount);
 	void AddBulk(float TimeAmount, float BuffAmount);
 	void AddHaste(float TimeAmount, float BuffAmount);
@@ -29,20 +29,18 @@ public:
 	void AddVulnerable(float TimeAmount, float DebuffAmount);
 	void AddRoot(float TimeAmount);
 	void AddShield(float TimeAmount, float BuffAmount);
-	void AddCastingSlow(float TimeAmount,float BuffAmount);
+	void AddCastingSlow(float TimeAmount, float BuffAmount);
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
-	
+
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	
 	const FBuffFactory* BuffFactory;
 	TArray<IBuff*> CurrentBuffArray;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
-    UPROPERTY()
- 	UStatsComponent* StatsComponent;
-	
-	
+	UPROPERTY()
+	UStatsComponent* StatsComponent;
 };
-	

@@ -59,7 +59,7 @@ void UHealthSystem::RecoverHealth_Implementation(const float Amount)
 {
 	if (Amount > 0)
 	{
-		if(Health+ Amount>MaxHealth)
+		if(Health + Amount>MaxHealth)
 		{
 			Health = MaxHealth;
 		}

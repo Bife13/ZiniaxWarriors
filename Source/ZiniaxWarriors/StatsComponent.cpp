@@ -26,7 +26,7 @@ void UStatsComponent::RemoveCastingSlow(float Amount)
 	OnCastingSlowRemovedEvent.Broadcast(Amount);
 }
 
-void UStatsComponent::SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue,
+void UStatsComponent::SetupStatSystem_Implementation(float PowerValue, float SpeedValue, float MaximumHealthValue,
                                       float ResistanceValue,
                                       float ViewRangeValue)
 {

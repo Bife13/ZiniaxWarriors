@@ -109,6 +109,7 @@ public:
 	// FORCEINLINE void SetResistance(float Value) { Resistance = Value; }
 	// FORCEINLINE void SetViewRange(float Value) { ViewRange = Value; }
 
+	UFUNCTION(NetMulticast, Reliable)
 	void SetupStatSystem(float PowerValue, float SpeedValue, float MaximumHealthValue, float ResistanceValue,
 	                     float ViewRangeValue);
 

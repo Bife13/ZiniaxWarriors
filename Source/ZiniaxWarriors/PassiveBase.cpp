@@ -11,7 +11,6 @@ void UPassiveBase::OnHit()
 
 float UPassiveBase::CheckDistance(float Damage, APawn* Owner, APawn* target)
 {
-	
 	return Damage;
 }
 
