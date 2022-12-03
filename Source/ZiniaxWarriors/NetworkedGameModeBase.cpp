@@ -23,10 +23,10 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 	TArray<FName> CharacterNames = {"Nyax", "Drex", "Zerher"};
 
 	// Spawn An Actor												// Nyax, Drex, Zerher
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[0], "")->PlayableCharacter;
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[2], "")->PlayableCharacter;
 	if (SpawnedTeam1)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[1], "")->PlayableCharacter;
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[2], "")->PlayableCharacter;
 	}
 
 	FVector Location = PlayerStart->GetActorLocation();

@@ -4,6 +4,7 @@
 #include "PlayableCharacter.h"
 
 #include "Buff.h"
+#include "ModuleDescriptor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -343,16 +344,20 @@ void APlayableCharacter::PassiveInitializeFunction()
 
 void APlayableCharacter::OnHit()
 {
+if(HasAuthority())
 	CachedPassiveInterface->OnHit();
 }
 
 float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target)
 {
+	if(HasAuthority())
 	return CachedPassiveInterface->CheckDistance(Damage, OwnerPassive, Target);
+	return 0;
 }
 
-void APlayableCharacter::OnTickPassive(float DeltaTime)
+void APlayableCharacter::OnTickPassive(float DeltaTime) const
 {
+	if(HasAuthority())
 	if (CachedPassiveInterface)
 		CachedPassiveInterface->OnTick(DeltaTime);
 }
