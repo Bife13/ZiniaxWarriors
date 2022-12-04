@@ -44,6 +44,7 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		{
 			if (CurrentBuffArray[i])
 			{
+				
 				if (!CurrentBuffArray[i]->GetActivated())
 				{
 					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
