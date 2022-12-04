@@ -22,8 +22,8 @@ class ZINIAXWARRIORS_API UZerherPassive : public UPassiveBase
 	virtual float CheckDistance(float Damage, APawn* Owner, APawn* Target) override;
 
 	UPROPERTY(Replicated)
-    float Timer = 10;
+    float Timer = 5;
     UPROPERTY(Replicated)
-	float Cooldown = 10;
+	float Cooldown = 5;
 	float ShieldForce = 0.2;
 };

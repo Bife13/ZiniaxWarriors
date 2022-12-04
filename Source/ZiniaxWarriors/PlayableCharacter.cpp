@@ -390,6 +390,11 @@ void APlayableCharacter::AddHaste(float TimeAmount, float BuffAmount)
 	StatusEffectsComponent->AddHaste(TimeAmount, BuffAmount);
 }
 
+void APlayableCharacter::AddHastePassive_Implementation(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddHaste(TimeAmount, BuffAmount);
+}
+
 void APlayableCharacter::AddVulnerable(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
@@ -415,7 +420,12 @@ void APlayableCharacter::AddShield(float TimeAmount, float BuffAmount)
 	StatusEffectsComponent->AddShield(TimeAmount, BuffAmount);
 }
 
-void APlayableCharacter::AddCastingSlow(float TimeAmount, float BuffAmount)
+void APlayableCharacter::AddShieldPassive_Implementation(float TimeAmount, float BuffAmount)
+{
+	StatusEffectsComponent->AddShield(TimeAmount, BuffAmount);
+}
+
+void APlayableCharacter::AddCastingSlow_Implementation(float TimeAmount, float BuffAmount)
 {
 	StatusEffectsComponent->AddCastingSlow(TimeAmount, BuffAmount);
 }

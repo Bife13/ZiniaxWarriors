@@ -70,6 +70,8 @@ public:
 	virtual void AddBulk(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddHaste(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void AddHastePassive(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
@@ -80,7 +82,9 @@ public:
 	virtual void AddRoot(float TimeAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddShield(float TimeAmount, float BuffAmount) override;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void AddShieldPassive(float TimeAmount, float BuffAmount) override;
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void AddCastingSlow(float TimeAmount, float BuffAmount) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -114,7 +118,7 @@ public:
 	void StartWeakenEffect() const;
 	UFUNCTION()
 	void EndWeakenEffect() const;
-	
+
 
 	UFUNCTION(BlueprintCallable)
 	TArray<USkillBase*> GetRunTimeSkill();
@@ -176,7 +180,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<USkillBase*> RuntimeSkills;
 	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;
@@ -238,11 +242,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* VulnerableParticleSystem;
-    
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* WeakenParticleSystem;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Particle)
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* SlowParticleSystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
