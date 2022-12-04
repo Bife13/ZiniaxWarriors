@@ -54,7 +54,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float AbilityDamage;
 	UFUNCTION(BlueprintCallable)
-	void SetAbilityDamage(float Power, float AbilityPower);
+	void SetAbilityDamage(float Power, float AbilityPower, float AddValue);
 
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float AbilityRange;

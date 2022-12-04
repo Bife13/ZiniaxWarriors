@@ -88,9 +88,9 @@ void USkillBase::SetSpawnTime(float SpawnTime)
 	AbilitySpawnTime = SpawnTime;
 }
 
-void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
+void USkillBase::SetAbilityDamage(const float Power, float AbilityPower, float AddValue)
 {
-	AbilityDamage = Power * AbilityPower;
+	AbilityDamage = (Power * AbilityPower) + AddValue;
 }
 
 void USkillBase::SetAbilityRange(const float Range)
