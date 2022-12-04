@@ -24,3 +24,13 @@ float UDrexPassive::CheckDistance(float Damage, APawn* Owner, APawn* Target)
 
 	
 }
+
+void UDrexPassive::OnTick(float DeltaTime)
+{
+	Super::OnTick(DeltaTime);
+}
+
+void UDrexPassive::OnHit()
+{
+	Super::OnHit();
+}

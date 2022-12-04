@@ -3,15 +3,35 @@
 
 #include "ZerherPassive.h"
 
-void UZerherPassive::OnTick(float DeltaTime)
+#include "Net/UnrealNetwork.h"
+
+void UZerherPassive::OnTick_Implementation(float DeltaTime)
 {
-	if(Timer < Cooldown)
+	if(Timer > 0)
 	{
-		Timer += DeltaTime;
+		Timer -= DeltaTime;
 	}
 	else
-	{
-		PassiveOwner->AddShield(Cooldown - 2,ShieldForce);
-		Timer = 0;
+	{	
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GOT HERE")));
+		PassiveOwner->AddShieldPassive(Cooldown - 1,ShieldForce);
+		Timer = Cooldown;
 	}
+}
+
+void UZerherPassive::OnHit()
+{
+	Super::OnHit();
+}
+
+float UZerherPassive::CheckDistance(float Damage, APawn* Owner, APawn* Target)
+{
+	return Super::CheckDistance(Damage, Owner, Target);
+}
+
+void UZerherPassive::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UZerherPassive, Timer );
+	DOREPLIFETIME(UZerherPassive, Cooldown);
 }

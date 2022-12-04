@@ -14,9 +14,16 @@ class ZINIAXWARRIORS_API UZerherPassive : public UPassiveBase
 {
 	GENERATED_BODY()
 
+	UFUNCTION(Server, Unreliable)
 	virtual void OnTick(float DeltaTime) override;
 
-    float Timer = 0;
-	float Cooldown = 10;
+
+	virtual void OnHit() override;
+	virtual float CheckDistance(float Damage, APawn* Owner, APawn* Target) override;
+
+	UPROPERTY(Replicated)
+    float Timer = 5;
+    UPROPERTY(Replicated)
+	float Cooldown = 5;
 	float ShieldForce = 0.2;
 };

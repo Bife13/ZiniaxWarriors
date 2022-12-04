@@ -16,6 +16,10 @@ class ZINIAXWARRIORS_API UNyaxPassive : public UPassiveBase
 public:
 	virtual void OnHit() override;
 
+	virtual float CheckDistance(float Damage, APawn* Owner, APawn* Target) override;
+
+    virtual void OnTick(float DeltaTime) override;
+
 	float Time = 1;
 	float Amount = 0.15;
 };
