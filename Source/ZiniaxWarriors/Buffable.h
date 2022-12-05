@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FunctionalTestUtilityLibrary.h"
 #include "UObject/Interface.h"
 #include "Buffable.generated.h"
 
