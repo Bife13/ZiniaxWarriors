@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "4.27",
+	"EngineAssociation": "{A21DF6BD-4ADB-DE95-0AEB-16897DC597DF}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -18,7 +18,7 @@
 	"Plugins": [
 		{
 			"Name": "ImageResizUEr",
-			"Enabled": true,
+			"Enabled": false,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/670be04026664663875aadd4dea45b9d"
 		}
 	]
