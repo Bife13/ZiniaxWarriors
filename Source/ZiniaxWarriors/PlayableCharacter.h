@@ -31,7 +31,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void StartBeginPlay();
-
+	
 
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -58,7 +58,9 @@ public:
 	FVector GetMousePos();
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector CachedMousePosition;
-
+	
+	UFUNCTION(Server, Reliable)
+	void Respawn(FVector Location);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
@@ -74,10 +76,16 @@ public:
 	virtual void AddHastePassive(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
+	virtual void AddVulnerableMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable, NetMulticast,Reliable)
+	virtual void AddSlowMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)
+	virtual void AddWeakenMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) override;
 	UFUNCTION(BlueprintCallable)
@@ -86,7 +94,7 @@ public:
 	virtual void AddShieldPassive(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void AddCastingSlow(float TimeAmount, float BuffAmount) override;
-
+	
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
@@ -118,8 +126,8 @@ public:
 	void StartWeakenEffect() const;
 	UFUNCTION()
 	void EndWeakenEffect() const;
-
-
+    UFUNCTION()
+	void SetSpawnLocation(FVector newLocation){SpawnLocation = newLocation;}
 	UFUNCTION(BlueprintCallable)
 	TArray<USkillBase*> GetRunTimeSkill();
 
@@ -163,6 +171,7 @@ protected:
 	void PopulateSkillArray();
 	UFUNCTION()
 	void ObserveSpeedBuffs();
+	
 
 	UFUNCTION()
 	void ObserverResistanceBuffs();
@@ -205,6 +214,8 @@ protected:
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
 
+	UPROPERTY()
+	FVector SpawnLocation;
 
 	UPROPERTY()
 	float BaseSpeed;
@@ -215,7 +226,7 @@ protected:
 	UArrowComponent* ShootingPoint;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* FeetPoint;
-
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Stats)
 	UStatsComponent* StatsComponent;
 

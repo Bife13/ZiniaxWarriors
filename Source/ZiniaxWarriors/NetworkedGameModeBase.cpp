@@ -34,6 +34,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 	FVector Location = PlayerStart->GetActorLocation();
 	FRotator Rotation = PlayerStart->GetActorRotation();
 	FActorSpawnParameters spawnParams;
+
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	ACharacter* SpawnedActor = Cast<
@@ -41,10 +42,11 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	NewPlayerController->ClientSetLocation(Location, Rotation);
 
+	
 	NewPlayerController->Possess(SpawnedActor);
 	SpawnedActor->SetOwner(NewPlayerController);
 	APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(SpawnedActor);
-	
+	PlayableCharacter->SetSpawnLocation(Location);
 	if (SpawnedTeam1)
 	{
 		PlayableCharacter->SetServerTeamId(2);

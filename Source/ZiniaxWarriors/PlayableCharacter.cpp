@@ -138,6 +138,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
 
+
+	HealthComponent->OnDeathEvent.AddUFunction(this,"Respawn");
+	
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
@@ -365,6 +368,12 @@ void APlayableCharacter::OnTickPassive(float DeltaTime) const
 		CachedPassiveInterface->OnTick(DeltaTime);
 }
 
+void APlayableCharacter::Respawn_Implementation(FVector Location)
+{
+	//this->SetActorLocation(Location.X,Location.Y,0);
+	HealthComponent->ResetHealth();
+}
+
 void APlayableCharacter::TakeDamage(float Amount)
 {
 	HealthComponent->TakeDamage(Amount);
@@ -400,12 +409,27 @@ void APlayableCharacter::AddVulnerable(float TimeAmount, float DebuffAmount)
 	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
 }
 
+void APlayableCharacter::AddVulnerableMulticast_Implementation(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
+}
+
 void APlayableCharacter::AddSlow(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
 }
 
+void APlayableCharacter::AddSlowMulticast_Implementation(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
+}
+
 void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
+}
+
+void APlayableCharacter::AddWeakenMulticast_Implementation(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
 }

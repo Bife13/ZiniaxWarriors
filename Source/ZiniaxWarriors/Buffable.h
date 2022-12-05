@@ -32,9 +32,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
+    virtual void AddVulnerableMulticast(float TimeAmount, float DebuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
 	virtual void AddWeaken(float TimeAmount, float DebuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
+	virtual void AddWeakenMulticast(float TimeAmount,float DebuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
 	virtual void AddSlow(float TimeAmount, float DebuffAmount) = 0;
+	UFUNCTION(BlueprintCallable)
+    virtual void AddSlowMulticast(float TimeAmount, float DebuffAmount) = 0;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) = 0;
 	UFUNCTION(BlueprintCallable)
