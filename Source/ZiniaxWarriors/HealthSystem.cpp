@@ -44,8 +44,13 @@ void UHealthSystem::TakeDamage_Implementation(const float Amount)
 				Health -= ExcedingDamage;
 				Shield = 0;
 				OnShieldBrokenEvent.Broadcast(ExcedingDamage);
+				MyOnDamageTakenEvent.Broadcast(ExcedingDamage);
 			}
-			MyOnDamageTakenEvent.Broadcast(damageTaken);
+			else
+			{
+				MyOnDamageTakenEvent.Broadcast(damageTaken);	
+			}
+		
 		}
 		else
 		{

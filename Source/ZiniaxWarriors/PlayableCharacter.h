@@ -128,6 +128,8 @@ public:
 	void EndWeakenEffect() const;
     UFUNCTION()
 	void SetSpawnLocation(FVector newLocation){SpawnLocation = newLocation;}
+
+
 	UFUNCTION(BlueprintCallable)
 	TArray<USkillBase*> GetRunTimeSkill();
 

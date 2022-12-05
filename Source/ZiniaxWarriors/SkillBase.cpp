@@ -25,6 +25,7 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
 		OnCast();
+		CastEvent.Broadcast(AbilityCooldown);
 	}
 	else
 	{
@@ -62,6 +63,7 @@ void USkillBase::DelayedSpawn(const FVector& SpawnPosition)
 void USkillBase::ResetCooldown()
 {
 	bCanUse = true;
+	ResetEvent.Broadcast(true);
 }
 
 void USkillBase::UseSkill()
