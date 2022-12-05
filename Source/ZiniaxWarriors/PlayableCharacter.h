@@ -191,7 +191,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere)
 	TArray<USkillBase*> RuntimeSkills;
 	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;

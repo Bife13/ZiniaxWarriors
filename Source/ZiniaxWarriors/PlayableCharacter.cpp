@@ -73,6 +73,8 @@ void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
+	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
+
 }
 
 
@@ -551,5 +553,6 @@ void APlayableCharacter::EndWeakenEffect() const
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
-	return RuntimeSkills;
+	TArray<USkillBase*> SkillsToSend;
+	return SkillsToSend;
 }
