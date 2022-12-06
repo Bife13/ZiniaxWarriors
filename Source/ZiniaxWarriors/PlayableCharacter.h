@@ -42,7 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetServerTeamIdCharacter() const { return ServerTeamID; }
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void SetServerTeamId(float Value);
 
 	UFUNCTION(Server, Unreliable)
@@ -59,6 +59,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector CachedMousePosition;
 
+	UFUNCTION(Server, Reliable)
+	void Respawn(FVector Location);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
@@ -74,10 +76,16 @@ public:
 	virtual void AddHastePassive(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	virtual void AddVulnerableMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	virtual void AddSlowMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	virtual void AddWeakenMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) override;
 	UFUNCTION(BlueprintCallable)
@@ -118,6 +126,14 @@ public:
 	void StartWeakenEffect() const;
 	UFUNCTION()
 	void EndWeakenEffect() const;
+	UFUNCTION()
+	void SetSpawnLocation(FVector newLocation) { SpawnLocation = newLocation; }
+
+	UFUNCTION()
+	virtual bool GetIsCasting() override;
+
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void SetIsCasting(bool Value) override;
 
 
 	UFUNCTION(BlueprintCallable)
@@ -164,6 +180,7 @@ protected:
 	UFUNCTION()
 	void ObserveSpeedBuffs();
 
+
 	UFUNCTION()
 	void ObserverResistanceBuffs();
 	UFUNCTION()
@@ -180,7 +197,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere)
 	TArray<USkillBase*> RuntimeSkills;
 	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;
@@ -205,9 +222,14 @@ protected:
 	UPROPERTY()
 	FRotator RuntimeLookRotator;
 
+	UPROPERTY()
+	FVector SpawnLocation;
 
 	UPROPERTY()
 	float BaseSpeed;
+
+	UPROPERTY(Replicated)
+	bool bIsCasting = false;
 
 	UPROPERTY(Replicated, VisibleAnywhere)
 	int ServerTeamID;

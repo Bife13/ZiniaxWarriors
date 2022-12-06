@@ -63,7 +63,7 @@ void APlayableCharacter::StartBeginPlay()
 	PassiveInitializeFunction();
 }
 
-void APlayableCharacter::SetServerTeamId(float Value)
+void APlayableCharacter::SetServerTeamId_Implementation(float Value)
 {
 	ServerTeamID = Value;
 }
@@ -73,6 +73,7 @@ void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
+	DOREPLIFETIME(APlayableCharacter, bIsCasting);
 }
 
 
@@ -137,6 +138,9 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Weaken Observe
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
+
+
+	HealthComponent->OnDeathEvent.AddUFunction(this, "Respawn");
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
@@ -300,7 +304,7 @@ void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 
 void APlayableCharacter::UseBasicAttack_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(0))
+	if (RuntimeSkills.IsValidIndex(0) && !GetIsCasting())
 	{
 		RuntimeSkills[0]->CastSkill(AttackAnimations[0]);
 	}
@@ -308,7 +312,7 @@ void APlayableCharacter::UseBasicAttack_Implementation()
 
 void APlayableCharacter::UseFirstAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(1))
+	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting())
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
 	}
@@ -316,7 +320,7 @@ void APlayableCharacter::UseFirstAbility_Implementation()
 
 void APlayableCharacter::UseSecondAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(2))
+	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting())
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 	}
@@ -324,7 +328,7 @@ void APlayableCharacter::UseSecondAbility_Implementation()
 
 void APlayableCharacter::UseThirdAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(3))
+	if (RuntimeSkills.IsValidIndex(3) && !GetIsCasting())
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 	}
@@ -360,9 +364,15 @@ float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn
 
 void APlayableCharacter::OnTickPassive(float DeltaTime) const
 {
-	if(HasAuthority())
-	if (CachedPassiveInterface)
-		CachedPassiveInterface->OnTick(DeltaTime);
+	if (HasAuthority())
+		if (CachedPassiveInterface)
+			CachedPassiveInterface->OnTick(DeltaTime);
+}
+
+void APlayableCharacter::Respawn_Implementation(FVector Location)
+{
+	//this->SetActorLocation(Location.X,Location.Y,0);
+	HealthComponent->ResetHealth();
 }
 
 void APlayableCharacter::TakeDamage(float Amount)
@@ -400,12 +410,27 @@ void APlayableCharacter::AddVulnerable(float TimeAmount, float DebuffAmount)
 	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
 }
 
+void APlayableCharacter::AddVulnerableMulticast_Implementation(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
+}
+
 void APlayableCharacter::AddSlow(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
 }
 
+void APlayableCharacter::AddSlowMulticast_Implementation(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
+}
+
 void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
+{
+	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
+}
+
+void APlayableCharacter::AddWeakenMulticast_Implementation(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
 }
@@ -524,8 +549,19 @@ void APlayableCharacter::EndWeakenEffect() const
 	WeakenParticleSystem->Deactivate();
 }
 
+bool APlayableCharacter::GetIsCasting()
+{
+	return bIsCasting;
+}
+
+void APlayableCharacter::SetIsCasting_Implementation(bool Value)
+{
+	bIsCasting = Value;
+}
+
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
-	return RuntimeSkills;
+	TArray<USkillBase*> SkillsToSend;
+	return SkillsToSend;
 }

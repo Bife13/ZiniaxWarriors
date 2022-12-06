@@ -21,6 +21,8 @@ public:
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
 
+	
+
 	UFUNCTION(BlueprintCallable)
 	void DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfProjectile);
 
@@ -55,7 +57,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float AbilityDamage;
 	UFUNCTION(BlueprintCallable)
-	void SetAbilityDamage(float Power, float AbilityPower);
+	void SetAbilityDamage(float Power, float AbilityPower, float AddValue);
 
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 	float AbilityRange;
@@ -63,7 +65,7 @@ public:
 	void SetAbilityRange(float Range);
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bCanUse = true;
+	bool bCanUse;
 
 	UPROPERTY(BlueprintReadWrite)
 	ACharacter* OwnerCharacter;

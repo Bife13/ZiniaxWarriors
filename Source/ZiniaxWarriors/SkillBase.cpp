@@ -7,12 +7,18 @@
 #include "Components/DecalComponent.h"
 #include "Net/UnrealNetwork.h"
 
+// void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+// {
+// 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+// }
+
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {
 	OwnerCharacter = Playable;
 	CachedWorld = World;
 	TeamId = Team;
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(OwnerCharacter);
+	bCanUse = true;
 	OnInitialize();
 }
 
@@ -90,9 +96,9 @@ void USkillBase::SetSpawnTime(float SpawnTime)
 	AbilitySpawnTime = SpawnTime;
 }
 
-void USkillBase::SetAbilityDamage(const float Power, float AbilityPower)
+void USkillBase::SetAbilityDamage(const float Power, float AbilityPower, float AddValue)
 {
-	AbilityDamage = Power * AbilityPower;
+	AbilityDamage = (Power * AbilityPower) + AddValue;
 }
 
 void USkillBase::SetAbilityRange(const float Range)
@@ -137,8 +143,3 @@ FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition, const F
 	return MousePosition;
 }
 
-// void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-// {
-// 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-// 	DOREPLIFETIME_CONDITION(USkillBase, TeamId, COND_OwnerOnly);
-// }

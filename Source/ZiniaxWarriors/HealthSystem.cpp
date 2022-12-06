@@ -57,6 +57,11 @@ void UHealthSystem::TakeDamage_Implementation(const float Amount)
 			Health -= damageTaken;
 			MyOnDamageTakenEvent.Broadcast(damageTaken);
 		}
+
+		if(Health <= 0)
+		{
+			OnDeathEvent.Broadcast();
+		}
 	}
 }
 
@@ -115,6 +120,11 @@ void UHealthSystem::SetResistance(float Amount)
 void UHealthSystem::SetShield(float Amount)
 {
 	Shield = Amount;
+}
+
+void UHealthSystem::ResetHealth()
+{
+	Health = MaxHealth;
 }
 
 #pragma endregion
