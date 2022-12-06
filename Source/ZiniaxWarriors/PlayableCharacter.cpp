@@ -73,7 +73,6 @@ void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
-	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
 
 }
 
