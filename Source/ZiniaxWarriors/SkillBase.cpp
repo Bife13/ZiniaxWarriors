@@ -7,11 +7,11 @@
 #include "Components/DecalComponent.h"
 #include "Net/UnrealNetwork.h"
 
-// void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-// {
-// 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-// 	DOREPLIFETIME(USkillBase, bCanUse);
-// }
+void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(USkillBase, SkillIconTexture);
+}
 
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {

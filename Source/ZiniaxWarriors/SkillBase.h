@@ -89,7 +89,7 @@ public:
 
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Replicated)
     UTexture* SkillIconTexture;
 	
 protected:

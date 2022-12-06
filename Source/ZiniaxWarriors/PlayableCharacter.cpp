@@ -576,6 +576,6 @@ void APlayableCharacter::SetIsCasting_Implementation(bool Value)
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
-	TArray<USkillBase*> SkillsToSend;
+	TArray<USkillBase*> SkillsToSend = RuntimeSkills;
 	return SkillsToSend;
 }
