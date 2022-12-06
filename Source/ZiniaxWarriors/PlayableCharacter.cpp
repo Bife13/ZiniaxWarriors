@@ -7,6 +7,7 @@
 #include "ModuleDescriptor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Engine/ActorChannel.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -63,6 +64,17 @@ void APlayableCharacter::StartBeginPlay()
 	PassiveInitializeFunction();
 }
 
+bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool Wrote = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+		for (int i = 0; i < RuntimeSkills.Num(); ++i)
+		{
+			Wrote |= Channel->ReplicateSubobject(RuntimeSkills[i], *Bunch, *RepFlags);
+		}
+	return Wrote;
+}
+
 void APlayableCharacter::SetServerTeamId_Implementation(float Value)
 {
 	ServerTeamID = Value;
@@ -74,6 +86,8 @@ void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
 	DOREPLIFETIME(APlayableCharacter, bIsCasting);
+	DOREPLIFETIME(APlayableCharacter, AttackAnimations);
+	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
 }
 
 
@@ -260,7 +274,7 @@ void APlayableCharacter::SetupTopDownCamera()
 }
 
 
-void APlayableCharacter::PopulateSkillArray()
+void APlayableCharacter::PopulateSkillArray_Implementation()
 {
 	for (int i = 0; i < Skills.Num(); ++i)
 	{

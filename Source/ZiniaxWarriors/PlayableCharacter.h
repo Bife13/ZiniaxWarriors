@@ -31,6 +31,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void StartBeginPlay();
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 
 	/** Returns TopDownCameraComponent SubObject **/
@@ -175,7 +176,7 @@ protected:
 	void SetupWeakenParticleSystem();
 	UFUNCTION()
 	void SetupTopDownCamera();
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Unreliable)
 	void PopulateSkillArray();
 	UFUNCTION()
 	void ObserveSpeedBuffs();
@@ -197,9 +198,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,Replicated)
 	TArray<USkillBase*> RuntimeSkills;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,Replicated)
 	TArray<UAnimMontage*> AttackAnimations;
 
 	UPROPERTY(EditAnywhere)

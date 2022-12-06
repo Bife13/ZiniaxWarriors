@@ -48,7 +48,7 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			if (CurrentBuffArray[i] && CurrentBuffArray.IsValidIndex(i))
 			{
 				
-				if (!CurrentBuffArray[i]->GetActivated()) //Virtual void pure
+				if (!CurrentBuffArray[i]->GetActivated() && CurrentBuffArray.IsValidIndex(i)) //Virtual void pure
 				{
 					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
 				}
