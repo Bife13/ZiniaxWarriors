@@ -13,7 +13,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
                                               const FString& Options, const FString& Portal)
 {
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
-	if (SpawnedTeam1)
+	if (SpawnedPlayer)
 	{
 		PlayerStart = GetPlayerStartsForTeam2()[CurrentStart];
 	}
@@ -26,7 +26,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	int CharIndex = FMath::RandRange(0,2);
 	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
-	if (SpawnedTeam1)
+	if (SpawnedPlayer)
 	{
 		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
 	}
@@ -47,7 +47,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 	SpawnedActor->SetOwner(NewPlayerController);
 	APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(SpawnedActor);
 	PlayableCharacter->SetSpawnLocation(Location);
-	if (SpawnedTeam1)
+	if (SpawnedPlayer)
 	{
 		PlayableCharacter->SetServerTeamId(2);
 		PlayableCharacter->StartBeginPlay();
@@ -60,14 +60,15 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	// Cast<ABasePlayerController>(NewPlayerController)->OnCharacterPossess(SpawnedActor);
 
-	CurrentStart++;
-
-	if (CurrentStart > 1)
+	if(SpawnedPlayer)
 	{
-		SpawnedTeam1 = true;
-		CurrentStart = 0;
+		CurrentStart++;
+		SpawnedPlayer = false;
+	}else
+	{
+		SpawnedPlayer = true;
 	}
-
+	
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
 
