@@ -63,7 +63,7 @@ void APlayableCharacter::StartBeginPlay()
 	PassiveInitializeFunction();
 }
 
-void APlayableCharacter::SetServerTeamId(float Value)
+void APlayableCharacter::SetServerTeamId_Implementation(float Value)
 {
 	ServerTeamID = Value;
 }

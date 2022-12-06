@@ -42,7 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetServerTeamIdCharacter() const { return ServerTeamID; }
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void SetServerTeamId(float Value);
 
 	UFUNCTION(Server, Unreliable)
