@@ -31,7 +31,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void StartBeginPlay();
-	
+
 
 	/** Returns TopDownCameraComponent SubObject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -58,7 +58,7 @@ public:
 	FVector GetMousePos();
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector CachedMousePosition;
-	
+
 	UFUNCTION(Server, Reliable)
 	void Respawn(FVector Location);
 
@@ -76,15 +76,15 @@ public:
 	virtual void AddHastePassive(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddVulnerable(float TimeAmount, float DebuffAmount) override;
-	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void AddVulnerableMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddSlow(float TimeAmount, float DebuffAmount) override;
-	UFUNCTION(BlueprintCallable, NetMulticast,Reliable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void AddSlowMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddWeaken(float TimeAmount, float DebuffAmount) override;
-	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void AddWeakenMulticast(float TimeAmount, float DebuffAmount) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void AddRoot(float TimeAmount) override;
@@ -94,7 +94,7 @@ public:
 	virtual void AddShieldPassive(float TimeAmount, float BuffAmount) override;
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void AddCastingSlow(float TimeAmount, float BuffAmount) override;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
@@ -126,8 +126,14 @@ public:
 	void StartWeakenEffect() const;
 	UFUNCTION()
 	void EndWeakenEffect() const;
-    UFUNCTION()
-	void SetSpawnLocation(FVector newLocation){SpawnLocation = newLocation;}
+	UFUNCTION()
+	void SetSpawnLocation(FVector newLocation) { SpawnLocation = newLocation; }
+
+	UFUNCTION()
+	virtual bool GetIsCasting() override;
+
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void SetIsCasting(bool Value) override;
 
 
 	UFUNCTION(BlueprintCallable)
@@ -173,7 +179,7 @@ protected:
 	void PopulateSkillArray();
 	UFUNCTION()
 	void ObserveSpeedBuffs();
-	
+
 
 	UFUNCTION()
 	void ObserverResistanceBuffs();
@@ -222,13 +228,16 @@ protected:
 	UPROPERTY()
 	float BaseSpeed;
 
+	UPROPERTY(Replicated)
+	bool bIsCasting = false;
+
 	UPROPERTY(Replicated, VisibleAnywhere)
 	int ServerTeamID;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* ShootingPoint;
 	UPROPERTY(BlueprintReadWrite)
 	UArrowComponent* FeetPoint;
-	
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Stats)
 	UStatsComponent* StatsComponent;
 
