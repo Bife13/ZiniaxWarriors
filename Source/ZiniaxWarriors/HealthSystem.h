@@ -11,6 +11,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamageTakenEvent,float,Cpp_Damage);
 
 
 DECLARE_EVENT_OneParam(UHealthSystem,ShieldBrokenEvent,float)
+DECLARE_EVENT(UHealthSystem,Die)
+
+
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UHealthSystem : public UActorComponent
@@ -42,6 +45,10 @@ public:
 	UFUNCTION()
 	void SetShield(float Amount);
 
+	UFUNCTION()
+	void ResetHealth();
+	
+
 protected: // Functions
 
 	virtual void BeginPlay() override;
@@ -55,6 +62,7 @@ public: // Events
 	FHealDamageEvent OnDamageHealedEvent;
 
 	ShieldBrokenEvent OnShieldBrokenEvent;
+	Die OnDeathEvent;
 	
 private: // This can be protected if we want to subclass the Health Component
 

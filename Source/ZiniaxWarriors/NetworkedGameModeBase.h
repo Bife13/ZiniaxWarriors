@@ -27,7 +27,7 @@ protected:
 private:
 	TArray<AActor*> PlayerStarts;
 	
-	bool SpawnedTeam1 = false;
+	bool SpawnedPlayer = false;
 	int CurrentStart = 0;
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))

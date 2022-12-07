@@ -9,16 +9,21 @@
 #include "UObject/NoExportTypes.h"
 #include "SkillBase.generated.h"
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted,float,Cooldown);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillReset,bool,isReset);
 UCLASS(Blueprintable)
 class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
 public:
 	GENERATED_BODY()
+	UFUNCTION(BlueprintCallable)
 	virtual void InitializeSkill(ACharacter* Playable, UWorld* World, int Team) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void UseSkill() override;
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
+
+	virtual bool IsSupportedForNetworking() const override;
+	
 
 	UFUNCTION(BlueprintCallable)
 	void DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfProjectile);
@@ -26,7 +31,7 @@ public:
 	UFUNCTION()
 	void DelayedSpawn(const FVector& SpawnPosition);
 	
-	UFUNCTION()
+	UFUNCTION(Server,Reliable)
 	void ResetCooldown();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -62,7 +67,7 @@ public:
 	void SetAbilityRange(float Range);
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bCanUse = true;
+	bool bCanUse;
 
 	UPROPERTY(BlueprintReadWrite)
 	ACharacter* OwnerCharacter;
@@ -84,7 +89,7 @@ public:
 
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Replicated)
     UTexture* SkillIconTexture;
 	
 protected:
@@ -101,6 +106,12 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	float CooldownForUi(){ return  AbilityCooldown;} 
+	float CooldownForUi(){ return  AbilityCooldown;}
+
+	UPROPERTY(BlueprintAssignable)
+	FSkillCasted CastEvent;
+
+	UPROPERTY(BlueprintAssignable)
+	FSkillReset ResetEvent;
 	
 };
