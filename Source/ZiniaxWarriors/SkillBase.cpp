@@ -11,6 +11,7 @@ void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(USkillBase, SkillIconTexture);
+
 }
 
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
@@ -32,6 +33,7 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
 		CastEvent.Broadcast(AbilityCooldown);
+
 		OnCast();
 	}
 	else

@@ -46,9 +46,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SetServerTeamId(float Value);
 
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION(NetMulticast, Unreliable)
 	virtual void MoveVertical(float Value) override;
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION(NetMulticast, Unreliable)
 	virtual void MoveHorizontal(float Value) override;
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;

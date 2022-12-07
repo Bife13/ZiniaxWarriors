@@ -28,3 +28,4 @@ void UCastingSlow::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->RemoveCastingSlow(TemporarySpeed);
 }
+

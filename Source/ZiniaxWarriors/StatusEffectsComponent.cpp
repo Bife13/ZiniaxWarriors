@@ -31,6 +31,7 @@ void UStatusEffectsComponent::SetStatsComponent(UStatsComponent* StatsComponentT
 void UStatusEffectsComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	BuffFactory = new FBuffFactory();
 	CurrentBuffArray.Empty();
 }
@@ -48,7 +49,7 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			if (CurrentBuffArray[i] && CurrentBuffArray.IsValidIndex(i))
 			{
 				
-				if (!CurrentBuffArray[i]->GetActivated() && CurrentBuffArray.IsValidIndex(i)) //Virtual void pure
+				if ( CurrentBuffArray.IsValidIndex(i) && !CurrentBuffArray[i]->GetActivated() ) //Virtual void pure
 				{
 					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
 				}
