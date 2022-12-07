@@ -4,7 +4,6 @@
 #include "PlayableCharacter.h"
 
 #include "Buff.h"
-#include "ModuleDescriptor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/ActorChannel.h"
