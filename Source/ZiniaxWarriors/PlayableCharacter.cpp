@@ -303,14 +303,12 @@ void APlayableCharacter::ObserverShieldBuffs()
 
 void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "Vertical");
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
 }
 
 void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 {
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "Horizontal");
 	const FVector MoveDirection = {0, 1, 0};
 	AddMovementInput(MoveDirection, Value);
 }
