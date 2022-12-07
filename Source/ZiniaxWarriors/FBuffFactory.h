@@ -11,6 +11,9 @@
 class ZINIAXWARRIORS_API FBuffFactory
 {
 public:
+	FBuffFactory();
+	~FBuffFactory();
+	
 
 	template <typename T>
 	static IBuff* CreateBuff(const float TimeAmount,const float BuffAmount)

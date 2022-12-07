@@ -3,4 +3,12 @@
 
 #include "FBuffFactory.h"
 
+FBuffFactory::FBuffFactory()
+{
+}
+
+FBuffFactory::~FBuffFactory()
+{
+}
+
 

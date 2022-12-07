@@ -17,12 +17,6 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	if(!CachedMoveableInterface || !CachedCharacterInterface)
-	{
-		CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(GetCharacter());
-		CachedMoveableInterface = Cast<IMoveableCharacter>(GetCharacter());
-	}
-	
 	CalculateMousePosition();
 }
 
@@ -37,6 +31,7 @@ void ABasePlayerController::BeginPlay()
 
 	PlayableCharacter = Cast<APlayableCharacter>(InCharacter);
 }
+
 
 void ABasePlayerController::SetupInputComponent()
 {
@@ -85,27 +80,27 @@ void ABasePlayerController::ThirdAbilityPressed()
 
 void ABasePlayerController::MoveVerticalInput(float Value)
 {
-	if (CachedMoveableInterface && Value != 0)
+	if (CachedMoveableInterface)
 	{
 		// TODO WORKS
-		// PlayableCharacter->MoveVertical_Implementation(Value);
+		PlayableCharacter->MoveVertical_Implementation(Value);
 		// TODO DOESNT WORK
 		// PlayableCharacter->MoveVertical(Value);
 		// TODO DOESNT WORK
-		CachedMoveableInterface->MoveVertical(Value);
+		// CachedMoveableInterface->MoveVertical(Value);
 	}
 }
 
 void ABasePlayerController::MoveHorizontalInput(float Value)
 {
-	if (CachedMoveableInterface && Value != 0)
+	if (CachedMoveableInterface)
 	{
 		// TODO WORKS
-		// PlayableCharacter->MoveHorizontal_Implementation(Value);
+		PlayableCharacter->MoveHorizontal_Implementation(Value);
 		// TODO DOESNT WORK
 		// PlayableCharacter->MoveHorizontal(Value);
 		// TODO DOESNT WORK
-		CachedMoveableInterface->MoveHorizontal(Value);
+		// CachedMoveableInterface->MoveHorizontal(Value);
 	}
 }
 

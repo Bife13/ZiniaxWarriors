@@ -6,7 +6,6 @@
 #include "Buff.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Engine/ActorChannel.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -63,18 +62,7 @@ void APlayableCharacter::StartBeginPlay()
 	PassiveInitializeFunction();
 }
 
-bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool Wrote = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-		for (int i = 0; i < RuntimeSkills.Num(); ++i)
-		{
-			Wrote |= Channel->ReplicateSubobject(RuntimeSkills[i], *Bunch, *RepFlags);
-		}
-	return Wrote;
-}
-
-void APlayableCharacter::SetServerTeamId_Implementation(float Value)
+void APlayableCharacter::SetServerTeamId(float Value)
 {
 	ServerTeamID = Value;
 }
@@ -84,9 +72,6 @@ void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
-	DOREPLIFETIME(APlayableCharacter, bIsCasting);
-	DOREPLIFETIME(APlayableCharacter, AttackAnimations);
-	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
 }
 
 
@@ -151,9 +136,6 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Weaken Observe
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
-
-
-	HealthComponent->OnDeathEvent.AddUFunction(this, "Respawn");
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
@@ -273,7 +255,7 @@ void APlayableCharacter::SetupTopDownCamera()
 }
 
 
-void APlayableCharacter::PopulateSkillArray_Implementation()
+void APlayableCharacter::PopulateSkillArray()
 {
 	for (int i = 0; i < Skills.Num(); ++i)
 	{
@@ -317,7 +299,7 @@ void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 
 void APlayableCharacter::UseBasicAttack_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(0) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(0))
 	{
 		RuntimeSkills[0]->CastSkill(AttackAnimations[0]);
 	}
@@ -325,7 +307,7 @@ void APlayableCharacter::UseBasicAttack_Implementation()
 
 void APlayableCharacter::UseFirstAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(1))
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
 	}
@@ -333,7 +315,7 @@ void APlayableCharacter::UseFirstAbility_Implementation()
 
 void APlayableCharacter::UseSecondAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(2))
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 	}
@@ -341,7 +323,7 @@ void APlayableCharacter::UseSecondAbility_Implementation()
 
 void APlayableCharacter::UseThirdAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(3) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(3))
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 	}
@@ -377,15 +359,9 @@ float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn
 
 void APlayableCharacter::OnTickPassive(float DeltaTime) const
 {
-	if (HasAuthority())
-		if (CachedPassiveInterface)
-			CachedPassiveInterface->OnTick(DeltaTime);
-}
-
-void APlayableCharacter::Respawn_Implementation(FVector Location)
-{
-	//this->SetActorLocation(Location.X,Location.Y,0);
-	HealthComponent->ResetHealth();
+	if(HasAuthority())
+	if (CachedPassiveInterface)
+		CachedPassiveInterface->OnTick(DeltaTime);
 }
 
 void APlayableCharacter::TakeDamage(float Amount)
@@ -423,27 +399,12 @@ void APlayableCharacter::AddVulnerable(float TimeAmount, float DebuffAmount)
 	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
 }
 
-void APlayableCharacter::AddVulnerableMulticast_Implementation(float TimeAmount, float DebuffAmount)
-{
-	StatusEffectsComponent->AddVulnerable(TimeAmount, DebuffAmount);
-}
-
 void APlayableCharacter::AddSlow(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
 }
 
-void APlayableCharacter::AddSlowMulticast_Implementation(float TimeAmount, float DebuffAmount)
-{
-	StatusEffectsComponent->AddSlow(TimeAmount, DebuffAmount);
-}
-
 void APlayableCharacter::AddWeaken(float TimeAmount, float DebuffAmount)
-{
-	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
-}
-
-void APlayableCharacter::AddWeakenMulticast_Implementation(float TimeAmount, float DebuffAmount)
 {
 	StatusEffectsComponent->AddWeaken(TimeAmount, DebuffAmount);
 }
@@ -562,19 +523,8 @@ void APlayableCharacter::EndWeakenEffect() const
 	WeakenParticleSystem->Deactivate();
 }
 
-bool APlayableCharacter::GetIsCasting()
-{
-	return bIsCasting;
-}
-
-void APlayableCharacter::SetIsCasting_Implementation(bool Value)
-{
-	bIsCasting = Value;
-}
-
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
-	TArray<USkillBase*> SkillsToSend = RuntimeSkills;
-	return SkillsToSend;
+	return RuntimeSkills;
 }

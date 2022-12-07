@@ -13,7 +13,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
                                               const FString& Options, const FString& Portal)
 {
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
-	if (SpawnedPlayer)
+	if (SpawnedTeam1)
 	{
 		PlayerStart = GetPlayerStartsForTeam2()[CurrentStart];
 	}
@@ -26,7 +26,7 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	int CharIndex = FMath::RandRange(0,2);
 	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
-	if (SpawnedPlayer)
+	if (SpawnedTeam1)
 	{
 		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
 	}
@@ -34,7 +34,6 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 	FVector Location = PlayerStart->GetActorLocation();
 	FRotator Rotation = PlayerStart->GetActorRotation();
 	FActorSpawnParameters spawnParams;
-
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	ACharacter* SpawnedActor = Cast<
@@ -42,12 +41,11 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	NewPlayerController->ClientSetLocation(Location, Rotation);
 
-	
 	NewPlayerController->Possess(SpawnedActor);
 	SpawnedActor->SetOwner(NewPlayerController);
 	APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(SpawnedActor);
-	PlayableCharacter->SetSpawnLocation(Location);
-	if (SpawnedPlayer)
+	
+	if (SpawnedTeam1)
 	{
 		PlayableCharacter->SetServerTeamId(2);
 		PlayableCharacter->StartBeginPlay();
@@ -60,15 +58,14 @@ FString ANetworkedGameModeBase::InitNewPlayer(APlayerController* NewPlayerContro
 
 	// Cast<ABasePlayerController>(NewPlayerController)->OnCharacterPossess(SpawnedActor);
 
-	if(SpawnedPlayer)
+	CurrentStart++;
+
+	if (CurrentStart > 1)
 	{
-		CurrentStart++;
-		SpawnedPlayer = false;
-	}else
-	{
-		SpawnedPlayer = true;
+		SpawnedTeam1 = true;
+		CurrentStart = 0;
 	}
-	
+
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
 
