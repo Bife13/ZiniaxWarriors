@@ -16,8 +16,11 @@ class ZINIAXWARRIORS_API UBulk : public UObject, public IBuff
 	
 	GENERATED_BODY()
 
+	UFUNCTION()
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
-	virtual void OnBuffTick(float DeltaTime,TArray<IBuff*> CurrentBuffArray,TArray<IBuff*>* CurrentBuffArrayPointer, int index,UStatsComponent* StatComponent) override;
+	UFUNCTION()
+	virtual void OnBuffTick(float DeltaTime) override;
+	UFUNCTION()
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }

@@ -12,17 +12,13 @@ void UHaste::OnBuffBegin(UStatsComponent* StatsComponent)
 	TemporarySpeedToSend = StatsComponent->GetSpeed() - TemporarySpeed;
 }
 
-void UHaste::OnBuffTick(float DeltaTime,TArray<IBuff*> CurrentBuffArray,TArray<IBuff*>* CurrentBuffArrayPointer,int index,UStatsComponent* StatComponent)
+void UHaste::OnBuffTick(float DeltaTime)
 {
 	if(Timer > 0)
 	{
 		Timer -= DeltaTime;
 	}else
 	{
-		
-		CurrentBuffArray[index]->OnBuffEnd(StatComponent);
-		CurrentBuffArrayPointer->RemoveAt(index, 1, true);
-	
 		Timer = 0;
 	}
 }

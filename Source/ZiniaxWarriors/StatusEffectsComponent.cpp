@@ -49,7 +49,13 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		{
 			if(CurrentBuffArray.IsValidIndex(i))
 			{
-				CurrentBuffArray[i]->OnBuffTick(DeltaTime,CurrentBuffArray,PointerCurrentArray,i,StatsComponent);		
+				CurrentBuffArray[i]->OnBuffTick(DeltaTime);
+
+				if(CurrentBuffArray[i]->GetTimer() == 0)
+				{
+					CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
+					CurrentBuffArray.RemoveAt(i);
+				}
 			}
 			else
 			{

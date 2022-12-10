@@ -14,11 +14,15 @@ UCLASS()
 class ZINIAXWARRIORS_API UShield : public UObject, public IBuff
 {
 	GENERATED_BODY()
+	UFUNCTION()
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
-	virtual void OnBuffTick(float DeltaTime,TArray<IBuff*> CurrentBuffArray,TArray<IBuff*>* CurrentBuffArrayPointer, int index,UStatsComponent* StatComponent) override;
+	UFUNCTION()
+	virtual void OnBuffTick(float DeltaTime) override;
+	UFUNCTION()
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
-
+	UFUNCTION()
 	virtual bool GetActivated() override { return Activated; }
+	UFUNCTION()
 	virtual float GetTimer() override { return Timer; }
 	
 	virtual void SetTime(const float Value) override { Time = Value; }
