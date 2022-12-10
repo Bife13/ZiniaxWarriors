@@ -15,7 +15,7 @@ class ZINIAXWARRIORS_API UShield : public UObject, public IBuff
 {
 	GENERATED_BODY()
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
-	virtual void OnBuffTick(float DeltaTime) override;
+	virtual void OnBuffTick(float DeltaTime,TArray<IBuff*> CurrentBuffArray,TArray<IBuff*>* CurrentBuffArrayPointer, int index,UStatsComponent* StatComponent) override;
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }

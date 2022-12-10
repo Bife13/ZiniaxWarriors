@@ -13,13 +13,17 @@ void UCastingSlow::OnBuffBegin(UStatsComponent* StatsComponent)
 	
 }
 
-void UCastingSlow::OnBuffTick(float DeltaTime)
+void UCastingSlow::OnBuffTick(float DeltaTime,TArray<IBuff*> CurrentBuffArray,TArray<IBuff*>* CurrentBuffArrayPointer,int index,UStatsComponent* StatComponent)
 {
 	if(Timer > 0)
 	{
 		Timer -= DeltaTime;
 	}else
 	{
+		
+		CurrentBuffArray[index]->OnBuffEnd(StatComponent);
+		CurrentBuffArrayPointer->RemoveAt(index, 1, true);
+		
 		Timer = 0;
 	}
 }
@@ -27,5 +31,10 @@ void UCastingSlow::OnBuffTick(float DeltaTime)
 void UCastingSlow::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->RemoveCastingSlow(TemporarySpeed);
+}
+
+float UCastingSlow::GetTimer()
+{
+	return Timer;
 }
 

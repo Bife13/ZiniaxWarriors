@@ -39,6 +39,7 @@ protected:
 	
 	const FBuffFactory* BuffFactory;
 	TArray<IBuff*> CurrentBuffArray;
+	TArray<IBuff*> *PointerCurrentArray;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
 	UPROPERTY()

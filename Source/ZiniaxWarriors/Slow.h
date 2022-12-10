@@ -16,11 +16,11 @@ class ZINIAXWARRIORS_API USlow : public UObject , public IBuff
 	GENERATED_BODY()
 
 	virtual void OnBuffBegin(UStatsComponent* StatsComponent) override;
-	virtual void OnBuffTick(float DeltaTime) override;
+	virtual void OnBuffTick(float DeltaTime,TArray<IBuff*> CurrentBuffArray,TArray<IBuff*>* CurrentBuffArrayPointer, int index,UStatsComponent* StatComponent) override;
 	virtual void OnBuffEnd(UStatsComponent* StatsComponent) override;
 
 	virtual bool GetActivated() override { return Activated; }
-	virtual float GetTimer() override { return Timer;}
+	virtual float GetTimer() override;
 	
 	virtual void SetTime(const float Value) override { Time = Value; }
 	virtual void SetAmount(const float Value) override { Amount = Value; }

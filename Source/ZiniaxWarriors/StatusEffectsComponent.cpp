@@ -34,6 +34,7 @@ void UStatusEffectsComponent::BeginPlay()
 	
 	BuffFactory = new FBuffFactory();
 	CurrentBuffArray.Empty();
+	PointerCurrentArray = &CurrentBuffArray;
 }
 
 void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -44,25 +45,11 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 	if (CurrentBuffArray.Num() > 0)
 	{
-		for (int i = 0; i < CurrentBuffArray.Num(); ++i)
+		for(int i = 0; i < CurrentBuffArray.Num(); i++)
 		{
-			if (CurrentBuffArray[i] && CurrentBuffArray.IsValidIndex(i))
+			if(CurrentBuffArray.IsValidIndex(i))
 			{
-				
-				if ( CurrentBuffArray.IsValidIndex(i) && !CurrentBuffArray[i]->GetActivated() ) //Virtual void pure
-				{
-					CurrentBuffArray[i]->OnBuffBegin(StatsComponent);
-				}
-				else
-				{
-					CurrentBuffArray[i]->OnBuffTick(DeltaTime);
-
-					if (CurrentBuffArray[i]->GetTimer() <= 0)
-					{
-						CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
-						CurrentBuffArray.RemoveAt(i, 1, true);
-					}
-				}
+				CurrentBuffArray[i]->OnBuffTick(DeltaTime,CurrentBuffArray,PointerCurrentArray,i,StatsComponent);		
 			}
 			else
 			{
@@ -77,45 +64,45 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 void UStatusEffectsComponent::AddEnrage(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UEnrage>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UEnrage>(TimeAmount, BuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddBulk(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UBulk>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UBulk>(TimeAmount, BuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddHaste(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UHaste>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UHaste>(TimeAmount, BuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddSlow(float TimeAmount, float DebuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<USlow>(TimeAmount, DebuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<USlow>(TimeAmount, DebuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddWeaken(float TimeAmount, float DebuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UWeaken>(TimeAmount, DebuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UWeaken>(TimeAmount, DebuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddVulnerable(float TimeAmount, float DebuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UVulnerable>(TimeAmount, DebuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UVulnerable>(TimeAmount, DebuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddRoot(float TimeAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<URoot>(TimeAmount, 0));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<URoot>(TimeAmount, 0,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddShield(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UShield>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UShield>(TimeAmount, BuffAmount,StatsComponent));
 }
 
 void UStatusEffectsComponent::AddCastingSlow(float TimeAmount, float BuffAmount)
 {
-	CurrentBuffArray.Add(BuffFactory->CreateBuff<UCastingSlow>(TimeAmount, BuffAmount));
+	CurrentBuffArray.Add(BuffFactory->CreateBuff<UCastingSlow>(TimeAmount, BuffAmount,StatsComponent));
 }
