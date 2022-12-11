@@ -13,7 +13,7 @@ class ZINIAXWARRIORS_API FBuffFactory
 public:
 
 	template <typename T>
-	static IBuff* CreateBuff(const float TimeAmount,const float BuffAmount,UStatsComponent* StatsComponent)
+	static UObject* CreateBuff(const float TimeAmount,const float BuffAmount,UStatsComponent* StatsComponent)
 	{
 		T* NewBuff = NewObject<T>();
 		IBuff* Buff = Cast<IBuff>(NewBuff);
@@ -21,6 +21,6 @@ public:
 		Buff->SetAmount(BuffAmount);
 		Buff->OnBuffBegin(StatsComponent);
 			
-		return Buff;
+		return NewBuff;
 	}
 };

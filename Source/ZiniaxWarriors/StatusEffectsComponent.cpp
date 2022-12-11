@@ -33,8 +33,9 @@ void UStatusEffectsComponent::BeginPlay()
 	Super::BeginPlay();
 	
 	BuffFactory = new FBuffFactory();
-	CurrentBuffArray.Empty();
-	PointerCurrentArray = &CurrentBuffArray;
+	// CurrentBuffArray.SetNum(200);
+	// CurrentBuffArray.Empty();
+	// PointerCurrentArray = &CurrentBuffArray;
 }
 
 void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -49,11 +50,11 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		{
 			if(CurrentBuffArray.IsValidIndex(i))
 			{
-				CurrentBuffArray[i]->OnBuffTick(DeltaTime);
+				Cast<IBuff>(CurrentBuffArray[i])->OnBuffTick(DeltaTime);
 
-				if(CurrentBuffArray[i]->GetTimer() == 0)
+				if(Cast<IBuff>(CurrentBuffArray[i])->GetTimer() == 0)
 				{
-					CurrentBuffArray[i]->OnBuffEnd(StatsComponent);
+					Cast<IBuff>(CurrentBuffArray[i])->OnBuffEnd(StatsComponent);
 					CurrentBuffArray.RemoveAt(i);
 				}
 			}
