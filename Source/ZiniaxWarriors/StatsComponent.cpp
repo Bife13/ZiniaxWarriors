@@ -168,6 +168,8 @@ void UStatsComponent::Shield(float Amount)
 {
 	CurrentShield += BaseMaximumHealth * Amount;
 	OnShieldApplied.Broadcast(CurrentShield);
+	BuffRemove.Broadcast("SHIELD",false,4);
+
 }
 
 void UStatsComponent::RemoveShield(float Amount)
