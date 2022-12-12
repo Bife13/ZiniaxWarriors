@@ -23,6 +23,7 @@ void UHealthSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(UHealthSystem, Health);
+	DOREPLIFETIME(UHealthSystem, Shield);
 }
 #pragma endregion
 #pragma region GeneralFunctions
@@ -117,7 +118,7 @@ void UHealthSystem::SetResistance(float Amount)
 	}
 }
 
-void UHealthSystem::SetShield(float Amount)
+void UHealthSystem::SetShield_Implementation(float Amount)
 {
 	Shield = Amount;
 }

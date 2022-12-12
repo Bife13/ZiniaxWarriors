@@ -53,6 +53,7 @@ public:
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;
 
+	
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
 	UFUNCTION(BlueprintCallable)
@@ -60,6 +61,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector CachedMousePosition;
 
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnSpecialAbilityCast();
+
+    UFUNCTION(BlueprintCallable)
+	void OnSpecialAbility();
+
+	
 	UFUNCTION(Server, Reliable)
 	void Respawn(FVector Location);
 
@@ -130,6 +138,7 @@ public:
 	UFUNCTION()
 	void SetSpawnLocation(FVector newLocation) { SpawnLocation = newLocation; }
 
+
 	UFUNCTION()
 	virtual bool GetIsCasting() override;
 
@@ -176,7 +185,7 @@ protected:
 	void SetupWeakenParticleSystem();
 	UFUNCTION()
 	void SetupTopDownCamera();
-	UFUNCTION(NetMulticast, Unreliable)
+	UFUNCTION(Server, Unreliable)
 	void PopulateSkillArray();
 	UFUNCTION()
 	void ObserveSpeedBuffs();
@@ -200,7 +209,7 @@ protected:
 	TArray<TSubclassOf<USkillBase>> Skills;
 	UPROPERTY(VisibleAnywhere,Replicated)
 	TArray<USkillBase*> RuntimeSkills;
-	UPROPERTY(EditAnywhere,Replicated)
+	UPROPERTY(EditAnywhere,Replicated,BlueprintReadOnly)
 	TArray<UAnimMontage*> AttackAnimations;
 
 	UPROPERTY(EditAnywhere)

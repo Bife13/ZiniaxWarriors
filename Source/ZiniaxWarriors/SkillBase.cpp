@@ -33,7 +33,7 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
 		CastEvent.Broadcast(AbilityCooldown);
-
+		
 		OnCast();
 	}
 	else

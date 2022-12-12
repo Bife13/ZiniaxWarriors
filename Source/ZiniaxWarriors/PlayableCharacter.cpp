@@ -389,6 +389,11 @@ void APlayableCharacter::Respawn_Implementation(FVector Location)
 	HealthComponent->ResetHealth();
 }
 
+void APlayableCharacter::OnSpecialAbility()
+{
+	OnSpecialAbilityCast();
+}
+
 void APlayableCharacter::TakeDamage(float Amount)
 {
 	HealthComponent->TakeDamage(Amount);
@@ -562,6 +567,7 @@ void APlayableCharacter::EndWeakenEffect() const
 {
 	WeakenParticleSystem->Deactivate();
 }
+
 
 bool APlayableCharacter::GetIsCasting()
 {
