@@ -23,6 +23,7 @@ void UHealthSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(UHealthSystem, Health);
+	DOREPLIFETIME(UHealthSystem, Shield);
 }
 #pragma endregion
 #pragma region GeneralFunctions

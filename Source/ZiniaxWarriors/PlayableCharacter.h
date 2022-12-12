@@ -176,7 +176,7 @@ protected:
 	void SetupWeakenParticleSystem();
 	UFUNCTION()
 	void SetupTopDownCamera();
-	UFUNCTION(NetMulticast, Unreliable)
+	UFUNCTION(Server, Unreliable)
 	void PopulateSkillArray();
 	UFUNCTION()
 	void ObserveSpeedBuffs();
