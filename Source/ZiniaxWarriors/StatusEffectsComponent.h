@@ -21,6 +21,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
 	void AddEnrage(float TimeAmount, float BuffAmount);
 	void AddBulk(float TimeAmount, float BuffAmount);
 	void AddHaste(float TimeAmount, float BuffAmount);
@@ -34,11 +37,12 @@ public:
 
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-	
 	const FBuffFactory* BuffFactory;
-	TArray<IBuff*> CurrentBuffArray;
+	
+	UPROPERTY()
+	TArray<UObject*> CurrentBuffArray;
+	    
+	TArray<IBuff*> CurrentBuffInterface;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
 	UPROPERTY()

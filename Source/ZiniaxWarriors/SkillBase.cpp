@@ -7,10 +7,12 @@
 #include "Components/DecalComponent.h"
 #include "Net/UnrealNetwork.h"
 
-// void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-// {
-// 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-// }
+void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(USkillBase, SkillIconTexture);
+
+}
 
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 {
@@ -19,7 +21,7 @@ void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 	TeamId = Team;
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(OwnerCharacter);
 	bCanUse = true;
-	OnInitialize();
+	OnInitialize();	
 }
 
 
@@ -30,13 +32,19 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 		CachedCharacterInterface->SetIsCasting(true);
 		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
-		OnCast();
 		CastEvent.Broadcast(AbilityCooldown);
+
+		OnCast();
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Red, "On Cooldown");
 	}
+}
+
+bool USkillBase::IsSupportedForNetworking() const
+{
+	return true;
 }
 
 
@@ -66,7 +74,7 @@ void USkillBase::DelayedSpawn(const FVector& SpawnPosition)
 	                                       OwnerCharacter);
 }
 
-void USkillBase::ResetCooldown()
+void USkillBase::ResetCooldown_Implementation()
 {
 	bCanUse = true;
 	ResetEvent.Broadcast(true);
@@ -77,7 +85,6 @@ void USkillBase::UseSkill()
 	const APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(OwnerCharacter);
 	AbilityRotation = PlayableCharacter->CachedMouseRotator;
 	CachedCharacterInterface->SetIsCasting(false);
-
 	OnUse();
 }
 

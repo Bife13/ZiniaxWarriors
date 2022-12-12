@@ -117,7 +117,7 @@ void UHealthSystem::SetResistance(float Amount)
 	}
 }
 
-void UHealthSystem::SetShield(float Amount)
+void UHealthSystem::SetShield_Implementation(float Amount)
 {
 	Shield = Amount;
 }

@@ -25,3 +25,8 @@ void UBulk::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->Bulk(-Amount);
 }
+
+float UBulk::GetTimer()
+{
+	return Timer;
+}

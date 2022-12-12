@@ -27,3 +27,8 @@ void URoot::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->EndRoot(TemporarySpeed);
 }
+
+float URoot::GetTimer()
+{
+	return Timer;
+}

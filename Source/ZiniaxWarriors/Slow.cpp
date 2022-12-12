@@ -27,3 +27,8 @@ void USlow::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->SlowRemove(TemporarySpeed);
 }
+
+float USlow::GetTimer()
+{
+	return Timer;
+}

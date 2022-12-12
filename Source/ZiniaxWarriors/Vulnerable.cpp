@@ -20,8 +20,12 @@ void UVulnerable::OnBuffTick(float DeltaTime)
 		Timer = 0;
 	}
 }
-
 void UVulnerable::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->Vulnerable(-Amount);
+}
+
+float UVulnerable::GetTimer()
+{
+	return Timer;
 }
