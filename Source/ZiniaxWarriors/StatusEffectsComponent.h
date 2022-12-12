@@ -41,7 +41,8 @@ protected:
 	
 	UPROPERTY()
 	TArray<UObject*> CurrentBuffArray;
-	TArray<IBuff*>* PointerCurrentArray;
+	    
+	TArray<IBuff*> CurrentBuffInterface;
 	UPROPERTY(EditAnywhere)
 	float ArrayLength;
 	UPROPERTY()
