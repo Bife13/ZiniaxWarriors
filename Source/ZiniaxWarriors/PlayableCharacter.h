@@ -62,10 +62,10 @@ public:
 	FVector CachedMousePosition;
 
 	UFUNCTION(BlueprintImplementableEvent)
-    void OnSpecialAbilityCast();
+    void OnSpecialAbilityCast(int Index);
 
     UFUNCTION(BlueprintCallable)
-	void OnSpecialAbility();
+	void OnSpecialAbility(int Index);
 
 	
 	UFUNCTION(Server, Reliable)

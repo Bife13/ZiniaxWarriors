@@ -389,9 +389,9 @@ void APlayableCharacter::Respawn_Implementation(FVector Location)
 	HealthComponent->ResetHealth();
 }
 
-void APlayableCharacter::OnSpecialAbility()
+void APlayableCharacter::OnSpecialAbility(int Index)
 {
-	OnSpecialAbilityCast();
+	OnSpecialAbilityCast(Index);
 }
 
 void APlayableCharacter::TakeDamage(float Amount)
