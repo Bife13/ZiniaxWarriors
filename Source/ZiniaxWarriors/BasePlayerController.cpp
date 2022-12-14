@@ -5,6 +5,7 @@
 
 #include "PlayableCharacter.h"
 #include "GameFramework/Character.h"
+#include "Net/UnrealNetwork.h"
 
 ABasePlayerController::ABasePlayerController()
 {
@@ -12,17 +13,27 @@ ABasePlayerController::ABasePlayerController()
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
 }
 
+void ABasePlayerController::CharacterActivate()
+{
+	bIsCharacterActivated = true;
+}
+
+void ABasePlayerController::CharacterDeactivate()
+{
+	bIsCharacterActivated = false;
+}
+
 
 void ABasePlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	if(!CachedMoveableInterface || !CachedCharacterInterface)
+	if (!CachedMoveableInterface || !CachedCharacterInterface)
 	{
 		CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(GetCharacter());
 		CachedMoveableInterface = Cast<IMoveableCharacter>(GetCharacter());
 	}
-	
+
 	CalculateMousePosition();
 }
 
@@ -36,6 +47,12 @@ void ABasePlayerController::BeginPlay()
 	CachedMoveableInterface = Cast<IMoveableCharacter>(InCharacter);
 
 	PlayableCharacter = Cast<APlayableCharacter>(InCharacter);
+}
+
+void ABasePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABasePlayerController, bIsCharacterActivated);
 }
 
 void ABasePlayerController::SetupInputComponent()
@@ -53,7 +70,7 @@ void ABasePlayerController::SetupInputComponent()
 
 void ABasePlayerController::BasicAttackPressed()
 {
-	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting() && bIsCharacterActivated)
 	{
 		CachedCharacterInterface->UseBasicAttack();
 	}
@@ -61,7 +78,7 @@ void ABasePlayerController::BasicAttackPressed()
 
 void ABasePlayerController::FirstAbilityPressed()
 {
-	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting() && bIsCharacterActivated)
 	{
 		CachedCharacterInterface->UseFirstAbility();
 	}
@@ -69,7 +86,7 @@ void ABasePlayerController::FirstAbilityPressed()
 
 void ABasePlayerController::SecondAbilityPressed()
 {
-	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting() && bIsCharacterActivated)
 	{
 		CachedCharacterInterface->UseSecondAbility();
 	}
@@ -77,7 +94,7 @@ void ABasePlayerController::SecondAbilityPressed()
 
 void ABasePlayerController::ThirdAbilityPressed()
 {
-	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting())
+	if (CachedCharacterInterface && !CachedCharacterInterface->GetIsCasting() && bIsCharacterActivated)
 	{
 		CachedCharacterInterface->UseThirdAbility();
 	}
@@ -85,26 +102,16 @@ void ABasePlayerController::ThirdAbilityPressed()
 
 void ABasePlayerController::MoveVerticalInput(float Value)
 {
-	if (CachedMoveableInterface && Value != 0)
+	if (CachedMoveableInterface && Value != 0 && bIsCharacterActivated)
 	{
-		// TODO WORKS
-		// PlayableCharacter->MoveVertical_Implementation(Value);
-		// TODO DOESNT WORK
-		// PlayableCharacter->MoveVertical(Value);
-		// TODO DOESNT WORK
 		CachedMoveableInterface->MoveVertical(Value);
 	}
 }
 
 void ABasePlayerController::MoveHorizontalInput(float Value)
 {
-	if (CachedMoveableInterface && Value != 0)
+	if (CachedMoveableInterface && Value != 0 && bIsCharacterActivated)
 	{
-		// TODO WORKS
-		// PlayableCharacter->MoveHorizontal_Implementation(Value);
-		// TODO DOESNT WORK
-		// PlayableCharacter->MoveHorizontal(Value);
-		// TODO DOESNT WORK
 		CachedMoveableInterface->MoveHorizontal(Value);
 	}
 }

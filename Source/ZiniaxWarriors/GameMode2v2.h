@@ -23,9 +23,18 @@ protected:
 	                              const FString& Options, const FString& Portal) override;
 	virtual void Tick(float DeltaSeconds) override;
 
+	virtual bool ReadyToStartMatch_Implementation() override;
+
+
 	UFUNCTION()
-	static void Respawn(APlayableCharacter* CharacterToSpawn,FVector LocationToSpawn );
-	
+	void SetDeathEvents();
+	UFUNCTION()
+	void RespawnCharacters();
+	UFUNCTION()
+	void CountDeath(int TeamId);
+	UFUNCTION()
+	bool CheckRoundCounter();
+
 	UFUNCTION()
 	TArray<APlayerStart*> GetPlayerStartsForTeam1();
 	UFUNCTION()
@@ -33,9 +42,18 @@ protected:
 	UFUNCTION()
 	void CachePlayerStarts();
 
+	UFUNCTION()
+	void StartInBetweenRoundTimer(float Time);
+	UFUNCTION()
+	void ActivateAllCharacters();
+	UFUNCTION()
+	void DeactivateAllCharacters();
+
 private:
 	UPROPERTY()
 	TArray<AActor*> PlayerStarts;
+	UPROPERTY()
+	TArray<ABasePlayerController*> PlayerControllers;
 	UPROPERTY()
 	TArray<APlayableCharacter*> Team1PlayerCharacters;
 	UPROPERTY()
@@ -54,6 +72,22 @@ private:
 	UPROPERTY()
 	bool bIsGameStarted = false;
 
+	UPROPERTY(VisibleAnywhere)
+	int Team1DeathCounter = 0;
+	UPROPERTY(VisibleAnywhere)
+	int Team2DeathCounter = 0;
+
+	UPROPERTY()
+	int RoundCounter = 0;
+	UPROPERTY()
+	int Team1RoundsWon = 0;
+	UPROPERTY()
+	int Team2RoundsWon = 0;
+
+	
+	
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
 	UDataTable* SpawnableCharacters;
+
 };
+
