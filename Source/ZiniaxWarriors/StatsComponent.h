@@ -103,6 +103,8 @@ public:
 	void Vulnerable(float Amount);
 	VulnerableAppliedEvent OnVulnerableAppliedEvent;
 	VulnerableRemovedEvent OnVulnerableRemovedEvent;
+	UFUNCTION(NetMulticast, Reliable)
+	void HandleVulnerableEvents(float Amount);
 
 	UFUNCTION()
 	void Haste(float Amount);

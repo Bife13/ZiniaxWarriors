@@ -30,7 +30,6 @@ void UStatusEffectsComponent::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(UStatusEffectsComponent, CurrentBuffArray);
 	DOREPLIFETIME(UStatusEffectsComponent, ArrayLength);
-
 }
 
 
@@ -67,12 +66,11 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
                                             FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	TickArrays(DeltaTime);
 	
+	TickArrays(DeltaTime);
 }
 
-void UStatusEffectsComponent::TickArrays_Implementation(float DeltaTime)
+void UStatusEffectsComponent::TickArrays(float DeltaTime)
 {
 	if (CurrentBuffArray.Num() > 0 && CurrentBuffInterfaceArray.Num() > 0)
 	{
@@ -161,4 +159,3 @@ void UStatusEffectsComponent::AddCastingSlow(float TimeAmount, float BuffAmount)
 	CurrentBuffArray.Add(BuffToAdd);
 	CurrentBuffInterfaceArray.Add(Cast<IBuff>(BuffToAdd));
 }
-
