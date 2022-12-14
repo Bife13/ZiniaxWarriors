@@ -31,7 +31,7 @@ APlayableCharacter::APlayableCharacter()
 
 	SetupStatsComponent();
 
-	// Create a camera boom...
+	// Create a camera boom... 
 	SetupCameraBoom();
 
 	// Create a camera...
@@ -62,6 +62,42 @@ void APlayableCharacter::StartBeginPlay()
 
 	PopulateSkillArray();
 	PassiveInitializeFunction();
+
+	//Haste observe
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "StartHasteEffect");
+	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "EndHasteEffect");
+	//Slow observe
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "StartSlowEffect");
+	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "EndSlowEffect");
+	//Casting Slow Observe
+	StatsComponent->OnCastingSlowApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
+	//Root observe
+	StatsComponent->OnRootApplied.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootApplied.AddUFunction(this, "StartRootEffect");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "ObserveSpeedBuffs");
+	StatsComponent->OnRootRemoved.AddUFunction(this, "EndRootEffect");
+	//Vulnerable observe
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this, "ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this, "ObserverResistanceBuffs");
+	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this, "StartVulnerableEffect");
+	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this, "EndVulnerableEffect");
+	//Shield observe
+	StatsComponent->OnShieldApplied.AddUFunction(this, "ObserverShieldBuffs");
+	StatsComponent->OnShieldRemoved.AddUFunction(this, "ObserverShieldBuffs");
+	StatsComponent->OnShieldApplied.AddUFunction(this, "Shielded");
+	StatsComponent->OnShieldRemoved.AddUFunction(this, "ShieldOver");
+	HealthComponent->OnShieldBrokenEvent.AddUFunction(this, "ShieldOver");
+	//Enrage observe
+	StatsComponent->OnEnrageAppliedEvent.AddUFunction(this, "StartEnrageEffect");
+	StatsComponent->OnEnrageRemovedEvent.AddUFunction(this, "EndEnrageEffect");
+	//Weaken Observe
+	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
+	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
 }
 
 bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -117,45 +153,8 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	OnTickPassive(DeltaTime);
 
-	//Haste observe
-	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "StartHasteEffect");
-	StatsComponent->OnHasteRemovedEvent.AddUFunction(this, "EndHasteEffect");
-	//Slow observe
-	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnSlowAppliedEvent.AddUFunction(this, "StartSlowEffect");
-	StatsComponent->OnSlowRemovedEvent.AddUFunction(this, "EndSlowEffect");
-	//Casting Slow Observe
-	StatsComponent->OnCastingSlowApplied.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnCastingSlowRemovedEvent.AddUFunction(this, "ObserveSpeedBuffs");
-	//Root observe
-	StatsComponent->OnRootApplied.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnRootApplied.AddUFunction(this, "StartRootEffect");
-	StatsComponent->OnRootRemoved.AddUFunction(this, "ObserveSpeedBuffs");
-	StatsComponent->OnRootRemoved.AddUFunction(this, "EndRootEffect");
-	//Vulnerable observe
-	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this, "ObserverResistanceBuffs");
-	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this, "ObserverResistanceBuffs");
-	StatsComponent->OnVulnerableAppliedEvent.AddUFunction(this, "StartVulnerableEffect");
-	StatsComponent->OnVulnerableRemovedEvent.AddUFunction(this, "EndVulnerableEffect");
-	//Shield observe
-	StatsComponent->OnShieldApplied.AddUFunction(this, "ObserverShieldBuffs");
-	StatsComponent->OnShieldRemoved.AddUFunction(this, "ObserverShieldBuffs");
-	StatsComponent->OnShieldApplied.AddUFunction(this, "Shielded");
-	StatsComponent->OnShieldRemoved.AddUFunction(this, "ShieldOver");
-	HealthComponent->OnShieldBrokenEvent.AddUFunction(this, "ShieldOver");
-	//Enrage observe
-	StatsComponent->OnEnrageAppliedEvent.AddUFunction(this, "StartEnrageEffect");
-	StatsComponent->OnEnrageRemovedEvent.AddUFunction(this, "EndEnrageEffect");
-	//Weaken Observe
-	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
-	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
-
-
-	HealthComponent->OnDeathEvent.AddUFunction(this, "Respawn");
-
+	
+	
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
@@ -383,12 +382,6 @@ void APlayableCharacter::OnTickPassive(float DeltaTime) const
 			CachedPassiveInterface->OnTick(DeltaTime);
 }
 
-void APlayableCharacter::Respawn_Implementation(FVector Location)
-{
-	//this->SetActorLocation(Location.X,Location.Y,0);
-	HealthComponent->ResetHealth();
-}
-
 void APlayableCharacter::OnSpecialAbility(int Index)
 {
 	OnSpecialAbilityCast(Index);
@@ -484,13 +477,13 @@ void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 	//  }
 }
 
-void APlayableCharacter::StartRootEffect() const
+void APlayableCharacter::StartRootEffect_Implementation() const
 {
 	if (RootParticleSystem)
 		RootParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndRootEffect() const
+void APlayableCharacter::EndRootEffect_Implementation() const
 {
 	if (RootParticleSystem)
 	{
@@ -518,52 +511,52 @@ void APlayableCharacter::ShieldOver() const
 	}
 }
 
-void APlayableCharacter::StartEnrageEffect() const
+void APlayableCharacter::StartEnrageEffect_Implementation() const
 {
 	EnrageParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndEnrageEffect() const
+void APlayableCharacter::EndEnrageEffect_Implementation() const
 {
 	EnrageParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartVulnerableEffect() const
+void APlayableCharacter::StartVulnerableEffect_Implementation() const
 {
 	VulnerableParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndVulnerableEffect() const
+void APlayableCharacter::EndVulnerableEffect_Implementation() const
 {
 	VulnerableParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartHasteEffect() const
+void APlayableCharacter::StartHasteEffect_Implementation() const
 {
 	HasteParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndHasteEffect() const
+void APlayableCharacter::EndHasteEffect_Implementation() const
 {
 	HasteParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartSlowEffect() const
+void APlayableCharacter::StartSlowEffect_Implementation() const
 {
 	SlowParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndSlowEffect() const
+void APlayableCharacter::EndSlowEffect_Implementation() const
 {
 	SlowParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartWeakenEffect() const
+void APlayableCharacter::StartWeakenEffect_Implementation() const
 {
 	WeakenParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndWeakenEffect() const
+void APlayableCharacter::EndWeakenEffect_Implementation() const
 {
 	WeakenParticleSystem->Deactivate();
 }
@@ -584,4 +577,11 @@ TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
 	TArray<USkillBase*> SkillsToSend = RuntimeSkills;
 	return SkillsToSend;
+}
+
+void APlayableCharacter::ResetCharacter() const
+{
+	HealthComponent->SetHealthToMaxHealth();
+	StatusEffectsComponent->CleanBuffs();
+	
 }

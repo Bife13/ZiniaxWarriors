@@ -68,9 +68,6 @@ public:
 	void OnSpecialAbility(int Index);
 
 	
-	UFUNCTION(Server, Reliable)
-	void Respawn(FVector Location);
-
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
@@ -107,33 +104,33 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartRootEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndRootEffect() const;
 	UFUNCTION()
 	void Shielded() const;
 	UFUNCTION()
 	void ShieldOver() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartEnrageEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndEnrageEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast,Reliable)
 	void StartVulnerableEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndVulnerableEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartHasteEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndHasteEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartSlowEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndSlowEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartWeakenEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndWeakenEffect() const;
 	UFUNCTION()
 	void SetSpawnLocation(FVector newLocation) { SpawnLocation = newLocation; }
@@ -148,6 +145,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	TArray<USkillBase*> GetRunTimeSkill();
+
+	UFUNCTION()
+	void ResetCharacter() const;
 
 protected:
 	UFUNCTION()

@@ -3,6 +3,8 @@
 
 #include "StatsComponent.h"
 
+#include "Net/UnrealNetwork.h"
+
 // Sets default values for this component's properties
 UStatsComponent::UStatsComponent()
 {
@@ -11,6 +13,18 @@ UStatsComponent::UStatsComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
+}
+
+void UStatsComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UStatsComponent, CurrentPower);
+	DOREPLIFETIME(UStatsComponent, CurrentResistance);
+	DOREPLIFETIME(UStatsComponent, CurrentShield);
+	DOREPLIFETIME(UStatsComponent, CurrentSpeed);
+	DOREPLIFETIME(UStatsComponent, CurrentMaximumHealth);
+	DOREPLIFETIME(UStatsComponent, CurrentViewRange);
+
 }
 
 
