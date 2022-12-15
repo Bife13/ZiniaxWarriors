@@ -136,13 +136,15 @@ void AGameMode2v2::SetDeathEvents()
 		for (int i = 0; i < Team1HealthComponents.Num(); i++)
 		{
 			if (Team1HealthComponents[i])
-				Team1HealthComponents[i]->OnDeathEvent.AddUFunction(this, "CountDeath", 1);
+				Team1HealthComponents[i]->OnDeathEvent.AddUFunction(this, "CountDeath", 1,
+				                                                    Team1PlayerCharacters[i]->GetController());
 		}
 
 		for (int i = 0; i < Team2HealthComponents.Num(); i++)
 		{
 			if (Team2HealthComponents[i])
-				Team2HealthComponents[i]->OnDeathEvent.AddUFunction(this, "CountDeath", 2);
+				Team2HealthComponents[i]->OnDeathEvent.AddUFunction(this, "CountDeath", 2,
+				                                                    Team2PlayerCharacters[i]->GetController());
 		}
 	}
 }
@@ -164,15 +166,17 @@ void AGameMode2v2::RespawnCharacters()
 	}
 }
 
-void AGameMode2v2::CountDeath(int TeamId)
+void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterController)
 {
 	if (TeamId == 1)
 	{
 		Team1DeathCounter++;
+		DeadCharacterController->CharacterDeactivate();
 	}
 	else
 	{
 		Team2DeathCounter++;
+		DeadCharacterController->CharacterDeactivate();
 	}
 
 	if (Team1DeathCounter >= Team1PlayerCharacters.Num() || Team2DeathCounter >= Team2PlayerCharacters.Num())
