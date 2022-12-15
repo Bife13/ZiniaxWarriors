@@ -27,6 +27,18 @@ void UStatsComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 }
 
 
+void UStatsComponent::HandleShieldAppliedEvent_Implementation(float Amount)
+{
+	OnShieldApplied.Broadcast(CurrentShield);
+	BuffApllied.Broadcast("SHIELD", true, 4);
+}
+
+void UStatsComponent::HandleShieldRemovedEvent_Implementation(float Amount)
+{
+	OnShieldRemoved.Broadcast(CurrentShield);
+	BuffRemove.Broadcast("SHIELD", true, 4);
+}
+
 void UStatsComponent::CastingSlow(float Amount)
 {
 	CurrentSpeed -= (CurrentSpeed * Amount);
@@ -77,6 +89,11 @@ void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 void UStatsComponent::Enrage(float Amount)
 {
 	CurrentPower += (BasePower * Amount);
+	HandleEnrageEvents(Amount);
+}
+
+void UStatsComponent::HandleEnrageEvents_Implementation(float Amount)
+{
 	if (Amount > 0)
 	{
 		OnEnrageAppliedEvent.Broadcast(CurrentPower);
@@ -92,6 +109,11 @@ void UStatsComponent::Enrage(float Amount)
 void UStatsComponent::Weaken(float Amount)
 {
 	CurrentPower -= (BasePower * Amount);
+	HandleWeakenEvents(Amount);
+}
+
+void UStatsComponent::HandleWeakenEvents_Implementation(float Amount)
+{
 	if (Amount > 0)
 	{
 		OnWeakenAppliedEvent.Broadcast(CurrentPower);
@@ -107,6 +129,11 @@ void UStatsComponent::Weaken(float Amount)
 void UStatsComponent::Bulk(float Amount)
 {
 	CurrentResistance += (BaseResistance * Amount);
+    HandleBulkEvents(Amount);
+}
+
+void UStatsComponent::HandleBulkEvents_Implementation(float Amount)
+{
 	if (Amount > 0)
 	{
 		OnBulkAppliedEvent.Broadcast(CurrentResistance);
@@ -142,41 +169,71 @@ void UStatsComponent::HandleVulnerableEvents_Implementation(float Amount)
 void UStatsComponent::Haste(float Amount)
 {
 	CurrentSpeed += (CurrentSpeed * Amount);
-	OnHasteAppliedEvent.Broadcast(CurrentSpeed);
-	BuffApllied.Broadcast("HASTE", true, 3);
+	HandleHasteEventsApplied(CurrentSpeed);
 }
 
 void UStatsComponent::HasteRemove(float Amount)
 {
 	CurrentSpeed -= Amount;
-	OnHasteRemovedEvent.Broadcast(CurrentSpeed);
+	HandleHasteEventsRemove(Amount);
+}
+
+void UStatsComponent::HandleHasteEventsRemove_Implementation(float Amount)
+{
+	OnHasteRemovedEvent.Broadcast(Amount);
 	BuffRemove.Broadcast("HASTE", true, 3);
+}
+
+void UStatsComponent::HandleHasteEventsApplied_Implementation(float Amount)
+{
+	OnHasteAppliedEvent.Broadcast(Amount);
+	BuffApllied.Broadcast("HASTE", true, 3);
 }
 
 void UStatsComponent::Slow(float Amount)
 {
 	CurrentSpeed -= (CurrentSpeed * Amount);
-	OnSlowAppliedEvent.Broadcast(CurrentSpeed);
-	BuffApllied.Broadcast("SLOW", false, 3);
+	HandleSlowAppliedEvent(CurrentSpeed);
 }
 
 void UStatsComponent::SlowRemove(float Amount)
 {
 	CurrentSpeed += Amount;
-	OnSlowRemovedEvent.Broadcast(CurrentSpeed);
+	HandleSlowRemoveEvent(Amount);
+}
+
+void UStatsComponent::HandleSlowAppliedEvent_Implementation(float Amount)
+{
+	OnSlowAppliedEvent.Broadcast(Amount);
+	BuffApllied.Broadcast("SLOW", false, 3);
+}
+
+void UStatsComponent::HandleSlowRemoveEvent_Implementation(float Amount)
+{
+	OnSlowRemovedEvent.Broadcast(Amount);
 	BuffRemove.Broadcast("SLOW", false, 3);
 }
 
 void UStatsComponent::Root()
 {
 	CurrentSpeed -= CurrentSpeed + 0;
-	OnRootApplied.Broadcast();
-	BuffApllied.Broadcast("ROOT", false, 4);
+	HandleRootAppliedEvent();
 }
 
 void UStatsComponent::EndRoot(float Amount)
 {
 	CurrentSpeed = Amount;
+    HandleRootRemovedEvent();
+}
+
+void UStatsComponent::HandleRootAppliedEvent_Implementation()
+{
+	OnRootApplied.Broadcast();
+	BuffApllied.Broadcast("ROOT", false, 4);
+}
+
+void UStatsComponent::HandleRootRemovedEvent_Implementation()
+{
 	OnRootRemoved.Broadcast();
 	BuffRemove.Broadcast("ROOT", false, 4);
 }
@@ -184,8 +241,7 @@ void UStatsComponent::EndRoot(float Amount)
 void UStatsComponent::Shield(float Amount)
 {
 	CurrentShield += BaseMaximumHealth * Amount;
-	OnShieldApplied.Broadcast(CurrentShield);
-	BuffApllied.Broadcast("SHIELD", true, 4);
+	HandleShieldAppliedEvent(CurrentShield);
 }
 
 void UStatsComponent::RemoveShield(float Amount)
@@ -194,6 +250,5 @@ void UStatsComponent::RemoveShield(float Amount)
 	if (CurrentShield < 0)
 		CurrentShield = 0;
 
-	OnShieldRemoved.Broadcast(CurrentShield);
-	BuffRemove.Broadcast("SHIELD", true, 4);
+    HandleShieldRemovedEvent(CurrentShield);
 }

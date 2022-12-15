@@ -88,16 +88,22 @@ public:
 	void Enrage(float Amount);
 	EnrageAppliedEvent OnEnrageAppliedEvent;
 	EnrageRemovedEvent OnEnrageRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleEnrageEvents(float Amount);
 
 	UFUNCTION()
 	void Weaken(float Amount);
 	WeakenAppliedEvent OnWeakenAppliedEvent;
 	WeakenRemovedEvent OnWeakenRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleWeakenEvents(float Amount);
 
 	UFUNCTION()
 	void Bulk(float Amount);
 	BulkAppliedEvent OnBulkAppliedEvent;
 	BulkRemovedEvent OnBulkRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleBulkEvents(float Amount);
 
 	UFUNCTION()
 	void Vulnerable(float Amount);
@@ -112,6 +118,10 @@ public:
 	void HasteRemove(float Amount);
 	HasteAppliedEvent OnHasteAppliedEvent;
 	HasteRemovedEvent OnHasteRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleHasteEventsRemove(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleHasteEventsApplied(float Amount);
 
 	UFUNCTION()
 	void Slow(float Amount);
@@ -119,6 +129,10 @@ public:
 	void SlowRemove(float Amount);
 	SlowAppliedEvent OnSlowAppliedEvent;
 	SlowRemovedEvent OnSlowRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleSlowAppliedEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+    void HandleSlowRemoveEvent(float Amount);
 
 	UFUNCTION()
 	void Root();
@@ -126,13 +140,21 @@ public:
 	void EndRoot(float Amount);
 	RootAppliedEvent OnRootApplied;
 	RootRemoveEvent OnRootRemoved;
-
+    UFUNCTION(NetMulticast,Reliable)
+	void HandleRootAppliedEvent();
+	UFUNCTION(NetMulticast,Reliable)
+    void HandleRootRemovedEvent();
+	
 	UFUNCTION()
 	void Shield(float Amount);
 	UFUNCTION()
 	void RemoveShield(float Amount);
 	ShieldAppliedEvent OnShieldApplied;
 	ShieldRemovedEvent OnShieldRemoved;
+	UFUNCTION(NetMulticast,Reliable)
+    void HandleShieldAppliedEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleShieldRemovedEvent(float Amount);
 
 	UFUNCTION()
 	void CastingSlow(float Amount);
