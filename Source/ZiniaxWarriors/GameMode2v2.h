@@ -31,7 +31,7 @@ protected:
 	UFUNCTION()
 	void RespawnCharacters();
 	UFUNCTION()
-	void CountDeath(int TeamId);
+	void CountDeath(int TeamId, ABasePlayerController* DeadCharacterController);
 	UFUNCTION()
 	bool CheckRoundCounter();
 

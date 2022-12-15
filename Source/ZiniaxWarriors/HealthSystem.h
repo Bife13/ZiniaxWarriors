@@ -33,6 +33,12 @@ public:
 	//General functions
 	UFUNCTION(BlueprintCallable,Server,Reliable)
 	void TakeDamage(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleShieldBrokenEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleDamageTakenEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleHealEvent(float Amount);
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void RecoverHealth(float Amount);
 	//Sets

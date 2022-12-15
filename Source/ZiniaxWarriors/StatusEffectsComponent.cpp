@@ -66,11 +66,12 @@ void UStatusEffectsComponent::TickComponent(float DeltaTime, ELevelTick TickType
                                             FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
-	TickArrays(DeltaTime);
+
+	if (GetOwnerRole() == ROLE_Authority)
+		TickArrays(DeltaTime);
 }
 
-void UStatusEffectsComponent::TickArrays(float DeltaTime)
+void UStatusEffectsComponent::TickArrays_Implementation(float DeltaTime)
 {
 	if (CurrentBuffArray.Num() > 0 && CurrentBuffInterfaceArray.Num() > 0)
 	{
