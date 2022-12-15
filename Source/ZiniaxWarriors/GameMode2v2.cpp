@@ -26,10 +26,10 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	// Spawn An Actor												// Nyax, Drex, Zerher
 
 	int CharIndex = FMath::RandRange(0, 2);
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[0], "")->PlayableCharacter;
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
 	if (SpawnedPlayer)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[0], "")->PlayableCharacter;
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
 	}
 
 	FVector Location = PlayerStart->GetActorLocation();
