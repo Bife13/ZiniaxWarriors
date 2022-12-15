@@ -31,7 +31,7 @@ protected:
 	UFUNCTION()
 	void RespawnCharacters();
 	UFUNCTION()
-	void CountDeath(int TeamId, ABasePlayerController* DeadCharacterController);
+	void CountDeath(int TeamId, ABasePlayerController* DeadCharacterController, APlayableCharacter* DeadCharacter);
 	UFUNCTION()
 	bool CheckRoundCounter();
 
@@ -48,6 +48,10 @@ protected:
 	void ActivateAllCharacters();
 	UFUNCTION()
 	void DeactivateAllCharacters();
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
+
+
 
 private:
 	UPROPERTY()
@@ -72,6 +76,9 @@ private:
 	UPROPERTY()
 	bool bIsGameStarted = false;
 
+	UPROPERTY()
+	int MaxPlayers = 4;
+
 	UPROPERTY(VisibleAnywhere)
 	int Team1DeathCounter = 0;
 	UPROPERTY(VisibleAnywhere)
@@ -84,10 +91,7 @@ private:
 	UPROPERTY()
 	int Team2RoundsWon = 0;
 
-	
-	
+
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
 	UDataTable* SpawnableCharacters;
-
 };
-

@@ -104,10 +104,10 @@ bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* 
 {
 	bool Wrote = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-		for (int i = 0; i < RuntimeSkills.Num(); ++i)
-		{
-			Wrote |= Channel->ReplicateSubobject(RuntimeSkills[i], *Bunch, *RepFlags);
-		}
+	for (int i = 0; i < RuntimeSkills.Num(); ++i)
+	{
+		Wrote |= Channel->ReplicateSubobject(RuntimeSkills[i], *Bunch, *RepFlags);
+	}
 	return Wrote;
 }
 
@@ -122,6 +122,7 @@ void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
 	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
 	DOREPLIFETIME(APlayableCharacter, bIsCasting);
+	DOREPLIFETIME(APlayableCharacter, bIsDead);
 	DOREPLIFETIME(APlayableCharacter, AttackAnimations);
 	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
 }
@@ -153,8 +154,7 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	OnTickPassive(DeltaTime);
 
-	
-	
+
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
@@ -504,7 +504,7 @@ void APlayableCharacter::ShieldOver_Implementation() const
 	if (ShieldParticleSystemOver && ShieldParticleSystem)
 	{
 		ShieldParticleSystem->Deactivate();
-		
+
 		ShieldParticleSystemOver->Activate(true);
 	}
 }
@@ -570,6 +570,16 @@ void APlayableCharacter::SetIsCasting_Implementation(bool Value)
 	bIsCasting = Value;
 }
 
+bool APlayableCharacter::GetIsDead()
+{
+	return bIsCasting;
+}
+
+void APlayableCharacter::SetIsDead_Implementation(bool Value)
+{
+	bIsCasting = Value;
+}
+
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
@@ -581,5 +591,5 @@ void APlayableCharacter::ResetCharacter() const
 {
 	HealthComponent->SetHealthToMaxHealth();
 	StatusEffectsComponent->CleanBuffs();
-	
 }
+

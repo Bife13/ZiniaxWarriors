@@ -53,7 +53,7 @@ public:
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;
 
-	
+
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
 	UFUNCTION(BlueprintCallable)
@@ -62,12 +62,12 @@ public:
 	FVector CachedMousePosition;
 
 	UFUNCTION(BlueprintImplementableEvent)
-    void OnSpecialAbilityCast(int Index);
+	void OnSpecialAbilityCast(int Index);
 
-    UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void OnSpecialAbility(int Index);
 
-	
+
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
 	UFUNCTION(BlueprintCallable)
@@ -108,15 +108,15 @@ public:
 	void StartRootEffect() const;
 	UFUNCTION(NetMulticast, Reliable)
 	void EndRootEffect() const;
-	UFUNCTION(NetMulticast,Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void Shielded() const;
-	UFUNCTION(NetMulticast,Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void ShieldOver() const;
 	UFUNCTION(NetMulticast, Reliable)
 	void StartEnrageEffect() const;
 	UFUNCTION(NetMulticast, Reliable)
 	void EndEnrageEffect() const;
-	UFUNCTION(NetMulticast,Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void StartVulnerableEffect() const;
 	UFUNCTION(NetMulticast, Reliable)
 	void EndVulnerableEffect() const;
@@ -139,15 +139,21 @@ public:
 	UFUNCTION()
 	virtual bool GetIsCasting() override;
 
-	UFUNCTION(NetMulticast,Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void SetIsCasting(bool Value) override;
 
+	UFUNCTION(BlueprintCallable)
+	bool GetIsDead();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetIsDead(bool Value);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<USkillBase*> GetRunTimeSkill();
 
 	UFUNCTION()
 	void ResetCharacter() const;
+
 
 protected:
 	UFUNCTION()
@@ -207,9 +213,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere,Replicated)
+	UPROPERTY(VisibleAnywhere, Replicated)
 	TArray<USkillBase*> RuntimeSkills;
-	UPROPERTY(EditAnywhere,Replicated,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, Replicated, BlueprintReadOnly)
 	TArray<UAnimMontage*> AttackAnimations;
 
 	UPROPERTY(EditAnywhere)
@@ -240,6 +246,9 @@ protected:
 
 	UPROPERTY(Replicated)
 	bool bIsCasting = false;
+
+	UPROPERTY(Replicated)
+	bool bIsDead = false;
 
 	UPROPERTY(Replicated, VisibleAnywhere)
 	int ServerTeamID;
@@ -283,7 +292,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* HasteParticleSystem;
-	
+
 
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

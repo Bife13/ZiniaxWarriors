@@ -8,6 +8,7 @@
 #include "GameState2v2.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/PlayerStart.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -27,10 +28,12 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	// Spawn An Actor												// Nyax, Drex, Zerher
 
 	int CharIndex = FMath::RandRange(0, 2);
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->
+	                                            PlayableCharacter;
 	if (SpawnedPlayer)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->PlayableCharacter;
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->
+		                                    PlayableCharacter;
 	}
 
 	FVector Location = PlayerStart->GetActorLocation();
@@ -92,12 +95,11 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
 {
-	SetDeathEvents();
-
 	if (GetMatchState() == MatchState::WaitingToStart)
 	{
-		if (PlayerCounter >= 2)
+		if (PlayerCounter >= MaxPlayers)
 		{
+			SetDeathEvents();
 			StartInBetweenRoundTimer(1);
 			return true;
 		}
@@ -131,21 +133,23 @@ void AGameMode2v2::DeactivateAllCharacters()
 
 void AGameMode2v2::SetDeathEvents()
 {
-	if (!bIsGameStarted && PlayerCounter >= 2)
+	if (!bIsGameStarted && PlayerCounter >= MaxPlayers)
 	{
 		bIsGameStarted = true;
 		for (int i = 0; i < Team1HealthComponents.Num(); i++)
 		{
 			if (Team1HealthComponents[i])
 				Team1HealthComponents[i]->OnDeathEvent.AddUFunction(this, "CountDeath", 1,
-				                                                    Team1PlayerCharacters[i]->GetController());
+				                                                    Team1PlayerCharacters[i]->GetController(),
+				                                                    Team1PlayerCharacters[i]);
 		}
 
 		for (int i = 0; i < Team2HealthComponents.Num(); i++)
 		{
 			if (Team2HealthComponents[i])
 				Team2HealthComponents[i]->OnDeathEvent.AddUFunction(this, "CountDeath", 2,
-				                                                    Team2PlayerCharacters[i]->GetController());
+				                                                    Team2PlayerCharacters[i]->GetController(),
+				                                                    Team2PlayerCharacters[i]);
 		}
 	}
 }
@@ -167,17 +171,28 @@ void AGameMode2v2::RespawnCharacters()
 	}
 }
 
-void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterController)
+void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterController,
+                              APlayableCharacter* DeadCharacter)
 {
 	if (TeamId == 1)
 	{
 		Team1DeathCounter++;
 		DeadCharacterController->CharacterDeactivate();
+		DeadCharacter->SetIsDead(true);
+		// DeadCharacter->GetCameraBoom()->TargetArmLength = 5000.f;
+		// FVector Position = {0,0,-500};
+		// DeadCharacter->SetActorLocation(Position);
+		// DeactivateHitbox(DeadCharacter);
 	}
 	else
 	{
 		Team2DeathCounter++;
 		DeadCharacterController->CharacterDeactivate();
+		DeadCharacter->SetIsDead(true);
+		// DeadCharacter->GetCameraBoom()->TargetArmLength = 5000.f;
+		// FVector Position = {0,0,-500};
+		// DeadCharacter->SetActorLocation(Position);
+		// DeactivateHitbox(DeadCharacter);
 	}
 
 	if (Team1DeathCounter >= Team1PlayerCharacters.Num() || Team2DeathCounter >= Team2PlayerCharacters.Num())
