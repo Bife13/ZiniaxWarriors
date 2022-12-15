@@ -108,9 +108,9 @@ public:
 	void StartRootEffect() const;
 	UFUNCTION(NetMulticast, Reliable)
 	void EndRootEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast,Reliable)
 	void Shielded() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast,Reliable)
 	void ShieldOver() const;
 	UFUNCTION(NetMulticast, Reliable)
 	void StartEnrageEffect() const;
@@ -283,12 +283,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* HasteParticleSystem;
-
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* ShieldedEffect;
-
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* ShieldOverEffect;
+	
 
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

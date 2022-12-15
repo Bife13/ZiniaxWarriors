@@ -98,9 +98,6 @@ void APlayableCharacter::StartBeginPlay()
 	//Weaken Observe
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
-
-	ShieldParticleSystemOver->Template = ShieldOverEffect;
-	ShieldParticleSystem->Template = ShieldedEffect;
 }
 
 bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -494,7 +491,7 @@ void APlayableCharacter::EndRootEffect_Implementation() const
 	}
 }
 
-void APlayableCharacter::Shielded() const
+void APlayableCharacter::Shielded_Implementation() const
 {
 	if (ShieldParticleSystem)
 	{
@@ -502,7 +499,7 @@ void APlayableCharacter::Shielded() const
 	}
 }
 
-void APlayableCharacter::ShieldOver() const
+void APlayableCharacter::ShieldOver_Implementation() const
 {
 	if (ShieldParticleSystemOver && ShieldParticleSystem)
 	{
