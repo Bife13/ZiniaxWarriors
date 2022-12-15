@@ -77,7 +77,7 @@ private:
 	bool bIsGameStarted = false;
 
 	UPROPERTY()
-	int MaxPlayers = 4;
+	int MaxPlayers = 2;
 
 	UPROPERTY(VisibleAnywhere)
 	int Team1DeathCounter = 0;
