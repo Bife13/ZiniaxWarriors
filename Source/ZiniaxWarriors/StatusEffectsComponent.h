@@ -46,7 +46,7 @@ public:
 	UFUNCTION()
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void CleanBuffs();
 
 

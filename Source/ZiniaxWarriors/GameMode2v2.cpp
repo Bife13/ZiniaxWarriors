@@ -6,6 +6,7 @@
 #include "BasePlayerController.h"
 #include "DTR_SpawnableCharacter.h"
 #include "GameState2v2.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 

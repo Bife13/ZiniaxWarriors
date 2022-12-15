@@ -38,7 +38,7 @@ void UStatusEffectsComponent::SetStatsComponent(UStatsComponent* StatsComponentT
 	StatsComponent = StatsComponentToSet;
 }
 
-void UStatusEffectsComponent::CleanBuffs()
+void UStatusEffectsComponent::CleanBuffs_Implementation()
 {
 	if (CurrentBuffArray.Num() > 0 && CurrentBuffInterfaceArray.Num() > 0)
 	{
