@@ -7,7 +7,6 @@
 #include "DTR_SkillsDatatable.h"
 #include "DTR_SpawnableCharacter.h"
 #include "GameState2v2.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -105,14 +104,14 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	                                                    FFileHelper::EEncodingOptions::AutoDetect,
 	                                                    &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
 	bool PrintedAbility1 = FFileHelper::SaveStringToFile("Ability1: " + Ability1 + "\r\n", *Filename,
-	                                                    FFileHelper::EEncodingOptions::AutoDetect,
-	                                                    &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+	                                                     FFileHelper::EEncodingOptions::AutoDetect,
+	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
 	bool PrintedAbility2 = FFileHelper::SaveStringToFile("Ability2: " + Ability2 + "\r\n", *Filename,
-	                                                    FFileHelper::EEncodingOptions::AutoDetect,
-	                                                    &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+	                                                     FFileHelper::EEncodingOptions::AutoDetect,
+	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
 	bool PrintedAbility3 = FFileHelper::SaveStringToFile("Ability3: " + Ability3 + "\r\n", *Filename,
-	                                                    FFileHelper::EEncodingOptions::AutoDetect,
-	                                                    &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+	                                                     FFileHelper::EEncodingOptions::AutoDetect,
+	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
 
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
@@ -125,6 +124,8 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 	{
 		OpenDoors(DeltaSeconds);
 	}
+
+	MatchTimer();
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()

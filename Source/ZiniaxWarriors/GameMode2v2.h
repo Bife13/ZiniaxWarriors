@@ -73,6 +73,13 @@ protected:
 	UFUNCTION()
 	void CloseDoors();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void MatchTimer();
+
+	UPROPERTY(BlueprintReadWrite)
+	int Minutes = 1;
+	UPROPERTY(BlueprintReadWrite)
+	int Seconds = 30.f;
 
 private:
 	UPROPERTY()
