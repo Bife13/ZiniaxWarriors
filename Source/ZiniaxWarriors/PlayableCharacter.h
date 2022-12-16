@@ -45,6 +45,7 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void SetServerTeamId(float Value);
+	
 
 	UFUNCTION(NetMulticast, Unreliable)
 	virtual void MoveVertical(float Value) override;

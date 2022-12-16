@@ -15,6 +15,14 @@
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
+
+	// TODO if need to go back to old method, just override the Variables
+	const FString OptionsTest = "?Warrior=Zerher?Ability1=SmallHeal?Ability2=Anchor?Ability3=EletroGate";
+	FString Warrior = ParsingWarriorName(OptionsTest);
+	FString Ability1 = ParsingAbility1(OptionsTest);
+	FString Ability2 = ParsingAbility2(OptionsTest);
+	FString Ability3 = ParsingAbility3(OptionsTest);
+	
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
 	{
@@ -28,11 +36,11 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	// Spawn An Actor												// Nyax, Drex, Zerher
 
 	int CharIndex = FMath::RandRange(0, 2);
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(FName(Warrior), "")->
 	                                            PlayableCharacter;
 	if (SpawnedPlayer)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(FName(Warrior), "")->
 		                                    PlayableCharacter;
 	}
 
@@ -52,6 +60,8 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	SpawnedActor->SetOwner(NewPlayerController);
 	PlayerControllers.Add(Cast<ABasePlayerController>(NewPlayerController));
 	APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(SpawnedActor);
+
+
 	UHealthSystem* CurrentHealthSystem = Cast<UHealthSystem>(
 		PlayableCharacter->GetComponentByClass(UHealthSystem::StaticClass()));
 
@@ -114,6 +124,26 @@ bool AGameMode2v2::ReadyToStartMatch_Implementation()
 		}
 	}
 	return false;
+}
+
+FString AGameMode2v2::ParsingWarriorName(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Warrior");
+}
+
+FString AGameMode2v2::ParsingAbility1(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Ability1");
+}
+
+FString AGameMode2v2::ParsingAbility2(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Ability2");
+}
+
+FString AGameMode2v2::ParsingAbility3(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Ability3");
 }
 
 void AGameMode2v2::StartInBetweenRoundTimer(float Time)

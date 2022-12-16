@@ -25,6 +25,10 @@ protected:
 
 	virtual bool ReadyToStartMatch_Implementation() override;
 
+	static FString ParsingWarriorName(const FString& Options);
+	static FString ParsingAbility1(const FString& Options);
+	static FString ParsingAbility2(const FString& Options);
+	static FString ParsingAbility3(const FString& Options);
 
 	UFUNCTION()
 	void SetDeathEvents();
@@ -98,8 +102,8 @@ private:
 	UPROPERTY()
 	bool bIsGameStarted = false;
 
-	UPROPERTY()
-	int MaxPlayers = 4;
+	UPROPERTY(EditAnywhere)
+	int MaxPlayers;
 
 	UPROPERTY(VisibleAnywhere)
 	int Team1DeathCounter = 0;
