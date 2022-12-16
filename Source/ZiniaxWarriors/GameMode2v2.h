@@ -41,21 +41,33 @@ protected:
 	TArray<APlayerStart*> GetPlayerStartsForTeam2();
 	UFUNCTION()
 	void CachePlayerStarts();
+	UFUNCTION()
+	void CacheDoors();
 
 	UFUNCTION()
 	void StartInBetweenRoundTimer(float Time);
 	UFUNCTION()
+	void StartDoorTimer(float Time);
+	
+	UFUNCTION()
 	void ActivateAllCharacters();
 	UFUNCTION()
 	void DeactivateAllCharacters();
+
+	UFUNCTION()
+	void OpenDoors();
+	UFUNCTION()
+	void CloseDoors();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
-
 
 
 private:
 	UPROPERTY()
 	TArray<AActor*> PlayerStarts;
+	UPROPERTY()
+	TArray<AActor*> SpawnDoors;
 	UPROPERTY()
 	TArray<ABasePlayerController*> PlayerControllers;
 	UPROPERTY()
@@ -77,7 +89,7 @@ private:
 	bool bIsGameStarted = false;
 
 	UPROPERTY()
-	int MaxPlayers = 2;
+	int MaxPlayers = 4;
 
 	UPROPERTY(VisibleAnywhere)
 	int Team1DeathCounter = 0;

@@ -97,6 +97,10 @@ bool AGameMode2v2::ReadyToStartMatch_Implementation()
 {
 	if (GetMatchState() == MatchState::WaitingToStart)
 	{
+		if (SpawnDoors.Num() == 0)
+		{
+			CacheDoors();
+		}
 		if (PlayerCounter >= MaxPlayers)
 		{
 			SetDeathEvents();
@@ -114,12 +118,20 @@ void AGameMode2v2::StartInBetweenRoundTimer(float Time)
 		UnusedHandle, this, &AGameMode2v2::ActivateAllCharacters, Time, false);
 }
 
+void AGameMode2v2::StartDoorTimer(float Time)
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::OpenDoors, Time, false);
+}
+
 void AGameMode2v2::ActivateAllCharacters()
 {
 	for (int i = 0; i < PlayerControllers.Num(); i++)
 	{
 		PlayerControllers[i]->CharacterActivate();
 	}
+	StartDoorTimer(5);
 }
 
 void AGameMode2v2::DeactivateAllCharacters()
@@ -127,6 +139,26 @@ void AGameMode2v2::DeactivateAllCharacters()
 	for (int i = 0; i < PlayerControllers.Num(); i++)
 	{
 		PlayerControllers[i]->CharacterDeactivate();
+	}
+
+	CloseDoors();
+}
+
+void AGameMode2v2::CloseDoors()
+{
+	for (int i = 0; i < SpawnDoors.Num(); i++)
+	{
+		FVector Position = {0, 0, 200};
+		SpawnDoors[i]->SetActorLocation(SpawnDoors[i]->GetActorLocation() + Position);
+	}
+}
+
+void AGameMode2v2::OpenDoors()
+{
+	for (int i = 0; i < SpawnDoors.Num(); i++)
+	{
+		FVector Position = {0, 0, 200};
+		SpawnDoors[i]->SetActorLocation(SpawnDoors[i]->GetActorLocation() - Position);
 	}
 }
 
@@ -162,13 +194,19 @@ void AGameMode2v2::RespawnCharacters()
 	{
 		Team1PlayerCharacters[i]->SetActorLocation(GetPlayerStartsForTeam1()[i]->GetActorLocation());
 		Team1PlayerCharacters[i]->ResetCharacter();
+		Team1PlayerCharacters[i]->SetIsDead(false);
+
 	}
 
 	for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
 	{
 		Team2PlayerCharacters[i]->SetActorLocation(GetPlayerStartsForTeam2()[i]->GetActorLocation());
 		Team2PlayerCharacters[i]->ResetCharacter();
+		Team2PlayerCharacters[i]->SetIsDead(false);
+
 	}
+	
+	StartInBetweenRoundTimer(2);
 }
 
 void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterController,
@@ -219,7 +257,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		DeactivateAllCharacters();
 		return true;
 	}
-	else if (Team2RoundsWon >= 3)
+	if (Team2RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
 		DeactivateAllCharacters();
@@ -266,4 +304,9 @@ TArray<APlayerStart*> AGameMode2v2::GetPlayerStartsForTeam2()
 void AGameMode2v2::CachePlayerStarts()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), PlayerStarts);
+}
+
+void AGameMode2v2::CacheDoors()
+{
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), "Door", SpawnDoors);
 }

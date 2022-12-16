@@ -61,6 +61,7 @@ void UHealthSystem::TakeDamage_Implementation(const float Amount)
 
 		if (Health <= 0)
 		{
+			Health = 0;
 			OnDeathEvent.Broadcast();
 		}
 	}
