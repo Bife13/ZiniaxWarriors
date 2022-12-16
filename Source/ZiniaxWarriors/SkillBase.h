@@ -25,6 +25,7 @@ public:
 	virtual void CastSkill(UAnimMontage* AnimationToPlay) override;
 
 	virtual bool IsSupportedForNetworking() const override;
+	
 
 	UFUNCTION(Client, Reliable)
 	void HandleCastEvents(float Value);
