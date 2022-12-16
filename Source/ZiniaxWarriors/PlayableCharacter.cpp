@@ -137,8 +137,7 @@ void APlayableCharacter::MoveMouse_Implementation(FVector Value)
 	ActualRotation.Pitch = 0;
 	CachedMousePosition = CursorPosition;
 	CachedMouseRotator = ActualRotation;
-	this->SetActorRotation(ActualRotation);
-	// GetCapsuleComponent()->SetWorldRotation(ActualRotation);
+	this->SetActorRotation(FMath::Lerp(GetActorRotation(), ActualRotation, 0.6f));
 }
 
 FVector APlayableCharacter::GetMousePos()
@@ -154,6 +153,7 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	OnTickPassive(DeltaTime);
 
+	
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
@@ -592,4 +592,3 @@ void APlayableCharacter::ResetCharacter() const
 	HealthComponent->SetHealthToMaxHealth();
 	StatusEffectsComponent->CleanBuffs();
 }
-

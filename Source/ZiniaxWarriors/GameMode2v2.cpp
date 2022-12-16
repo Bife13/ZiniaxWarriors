@@ -91,6 +91,11 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 void AGameMode2v2::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (bCanDoorOpen)
+	{
+		OpenDoors(DeltaSeconds);
+	}
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
@@ -122,7 +127,7 @@ void AGameMode2v2::StartDoorTimer(float Time)
 {
 	FTimerHandle UnusedHandle;
 	GetWorldTimerManager().SetTimer(
-		UnusedHandle, this, &AGameMode2v2::OpenDoors, Time, false);
+		UnusedHandle, this, &AGameMode2v2::SetCanDoorOpenTrue, Time, false);
 }
 
 void AGameMode2v2::ActivateAllCharacters()
@@ -148,17 +153,25 @@ void AGameMode2v2::CloseDoors()
 {
 	for (int i = 0; i < SpawnDoors.Num(); i++)
 	{
-		FVector Position = {0, 0, 200};
-		SpawnDoors[i]->SetActorLocation(SpawnDoors[i]->GetActorLocation() + Position);
+		FVector Location = SpawnDoors[i]->GetActorLocation();
+		FVector MoveVector = {0, 0, 200};
+		FVector FinalPosition = Location + MoveVector;
+		SpawnDoors[i]->SetActorLocation(FinalPosition);
 	}
 }
 
-void AGameMode2v2::OpenDoors()
+void AGameMode2v2::OpenDoors(float DeltaTime)
 {
 	for (int i = 0; i < SpawnDoors.Num(); i++)
 	{
-		FVector Position = {0, 0, 200};
-		SpawnDoors[i]->SetActorLocation(SpawnDoors[i]->GetActorLocation() - Position);
+		FVector Location = SpawnDoors[i]->GetActorLocation();
+		FVector Vector = {0, 0, 200};
+		SpawnDoors[i]->SetActorLocation(FMath::VInterpTo(Location, Location - Vector, DeltaTime,
+		                                                 0.6f));
+		if (Location.Z <= 15)
+		{
+			SetCanDoorOpenFalse();
+		}
 	}
 }
 
@@ -195,7 +208,6 @@ void AGameMode2v2::RespawnCharacters()
 		Team1PlayerCharacters[i]->SetActorLocation(GetPlayerStartsForTeam1()[i]->GetActorLocation());
 		Team1PlayerCharacters[i]->ResetCharacter();
 		Team1PlayerCharacters[i]->SetIsDead(false);
-
 	}
 
 	for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
@@ -203,10 +215,7 @@ void AGameMode2v2::RespawnCharacters()
 		Team2PlayerCharacters[i]->SetActorLocation(GetPlayerStartsForTeam2()[i]->GetActorLocation());
 		Team2PlayerCharacters[i]->ResetCharacter();
 		Team2PlayerCharacters[i]->SetIsDead(false);
-
 	}
-	
-	StartInBetweenRoundTimer(2);
 }
 
 void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterController,
@@ -235,7 +244,6 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 
 	if (Team1DeathCounter >= Team1PlayerCharacters.Num() || Team2DeathCounter >= Team2PlayerCharacters.Num())
 	{
-		RespawnCharacters();
 		RoundCounter++;
 		if (Team1DeathCounter >= Team1PlayerCharacters.Num())
 			Team2RoundsWon++;
@@ -243,9 +251,10 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			Team1RoundsWon++;
 		if (!CheckRoundCounter())
 		{
-			StartInBetweenRoundTimer(1);
+			StartInBetweenRoundTimer(2);
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
+		RespawnCharacters();
 	}
 }
 
@@ -254,13 +263,11 @@ bool AGameMode2v2::CheckRoundCounter()
 	if (Team1RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
-		DeactivateAllCharacters();
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
-		DeactivateAllCharacters();
 		return true;
 	}
 	return false;
