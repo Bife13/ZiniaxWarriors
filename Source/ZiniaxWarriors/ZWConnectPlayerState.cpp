@@ -13,6 +13,11 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 
+void AZWConnectPlayerState::UpdateCanvas()
+{
+	
+}
+
 void AZWConnectPlayerState::BeginPlay()
 {
 	
@@ -167,6 +172,31 @@ void AZWConnectPlayerState::OnConnectGameClick()
 	}
 }
 
+void AZWConnectPlayerState::WaitingForGame(bool waiting)
+{
+	ClientWaitingforGame = waiting;
+
+	if(ClientWaitingforGame)
+	{
+		ConnectToGameButton = Cast<UButton>(CustomizationWidget->GetWidgetFromName(TEXT("ConnectToGameButton")));
+		
+		if (ConnectToGameButton)
+		{
+			UTextBlock* BTNText = Cast<UTextBlock>(CustomizationWidget->GetWidgetFromName("ConnectButtonText"));
+			FString btnTextSet ="Cancel MatchMaking";
+			BTNText->SetText(FText::FromString(btnTextSet));
+			
+		}
+	}
+	else
+	{
+		UTextBlock* BTNText = Cast<UTextBlock>(CustomizationWidget->GetWidgetFromName("ConnectButtonText"));
+		FString f= "Connect to Game";
+		BTNText->SetText(FText::FromString(f));
+	}	
+	
+}
+
 
 void AZWConnectPlayerState::ReceiveWarriorConfigUI(int w,int a1,int a2, int a3)
 {
@@ -201,18 +231,9 @@ void AZWConnectPlayerState::SendNameFromInput()
 	
 }
 
-void AZWConnectPlayerState::OnSendNameButtonClicked()
-{
-	ClientName = NameInput->GetText().ToString();
-	tcpClient->SendPlayerNameCommand();
-
-}
 
 
-void AZWConnectPlayerState::OnNewSessionClicked()
-{
-	tcpClient->CreateNewGameSession("My test session");
-}
+
 
 
 

@@ -16,5 +16,5 @@ void UMMButton::SetSessionInfo(int sID, TCPClient* tclient)
 
 void UMMButton::OnClick()
 {
-	tcpClient->JoinGameSession(sessionID);
+	//tcpClient->JoinGameSession(sessionID);
 }

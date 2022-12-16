@@ -95,7 +95,21 @@ uint32 TCPClient::Run()
 
 			if(isClient)
 			{
+				if(saveIp)
+				{
+					saveIp= false;
+					SaveServerIP(ServerMessage);
+				}
 				
+				if(ServerMessage.Compare("IP"))
+				{
+					saveIp = true;
+				}
+				
+				if(ServerMessage.Compare("GameServerWaiting"))
+				{
+					PlayerState->UpdateCanvas();
+				}
 			}
 			else
 			{
@@ -124,42 +138,75 @@ uint32 TCPClient::Run()
 	return 0;
 }
 
+
+void TCPClient::SaveServerIP(FString tosave)
+{
+	UE_LOG(LogTemp, Log, TEXT("Got ip for Game '%s'"),*tosave);
+	GameServerToConnect = tosave;
+	UE_LOG(LogTemp, Log, TEXT("Saved ip for Game '%s'"),*GameServerToConnect);
+};
+
 void TCPClient::ConnectPlayerToGame(FString ConfigStr)
 {
-	FString Command = "/SaveConfig.";
-	UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*Command);
 
-	TCHAR *serializedCharCommand =	(Command).GetCharArray().GetData();
-	int32 sizeCommand = FCString::Strlen(serializedCharCommand);
-	int32 sentCommand = 0;
-	bool successfulCommand = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharCommand), sizeCommand, sentCommand);
-	if (successfulCommand)
+	if(!PlayerState->ClientWaitingforGame)
 	{
+		FString Command = "/SaveConfig.";
+		UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*Command);
 
-		FString temp = ConfigStr + '.';
-		UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*temp);
-
-		TCHAR *serializedChar =	(temp).GetCharArray().GetData();
-		int32 size = FCString::Strlen(serializedChar);
-		int32 sent = 0;
-		bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
-		if (successful)
+		TCHAR *serializedCharCommand =	(Command).GetCharArray().GetData();
+		int32 sizeCommand = FCString::Strlen(serializedCharCommand);
+		int32 sentCommand = 0;
+		bool successfulCommand = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharCommand), sizeCommand, sentCommand);
+		if (successfulCommand)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Sent my config to server!!!"));
-			FString tempL = "/join.";
-			UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*tempL);
 
-			TCHAR *serializedCharL =	(tempL).GetCharArray().GetData();
-			int32 sizeL = FCString::Strlen(serializedCharL);
-			int32 sentL = 0;
-			bool successfulL = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharL), sizeL, sentL);
-			if (successfulL)
+			FString temp = ConfigStr + '.';
+			UE_LOG(LogTemp, Log, TEXT("Config in Thread: '%s'"),*temp);
+
+			TCHAR *serializedChar =	(temp).GetCharArray().GetData();
+			int32 size = FCString::Strlen(serializedChar);
+			int32 sent = 0;
+			bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
+			if (successful)
 			{
-				UE_LOG(LogTemp, Log, TEXT("Matchmaking is oky!!!"));
-			}
+				UE_LOG(LogTemp, Log, TEXT("Sent my config to server!!!"));
+				FString tempL = "/join.";
+				UE_LOG(LogTemp, Log, TEXT("Command in Thread: '%s'"),*tempL);
+
+				TCHAR *serializedCharL =	(tempL).GetCharArray().GetData();
+				int32 sizeL = FCString::Strlen(serializedCharL);
+				int32 sentL = 0;
+				bool successfulL = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharL), sizeL, sentL);
+				if (successfulL)
+				{
+					UE_LOG(LogTemp, Log, TEXT("Matchmaking is oky!!!"));
+
+					PlayerState->WaitingForGame(true);
+				}
 			
+			}
 		}
 	}
+	else
+	{
+		FString Command = "/Cancel.";
+		UE_LOG(LogTemp, Log, TEXT("Command in Thread: '%s'"),*Command);
+
+		TCHAR *serializedCharCommand =	(Command).GetCharArray().GetData();
+		int32 sizeCommand = FCString::Strlen(serializedCharCommand);
+		int32 sentCommand = 0;
+		bool successfulCommand = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharCommand), sizeCommand, sentCommand);
+		if (successfulCommand)
+		{
+			UE_LOG(LogTemp, Log, TEXT("'%s'ed Matchmaking"),*Command);
+			PlayerState->WaitingForGame(false);
+		}
+
+
+		
+	}
+	
 	
 	
 }
@@ -222,43 +269,6 @@ void TCPClient::SendLoginToServer(FString MessageToSend)
 }
 
 
-void TCPClient::CreateNewGameSession(FString sname)
-{
-	FString serialized = "c|" + sname + "|#";
-	//turn FString into Char[]
-	TCHAR *serializedChar = serialized.GetCharArray().GetData();
-	int32 size = FCString::Strlen(serializedChar);
-	int32 sent = 0;
-	bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
-	if (successful)
-	{
-		UE_LOG(LogTemp, Log, TEXT("MESSAGE SENT!!!!"));
-	}
-
-
-	
-}
-
-
-
-
-
-
-
-void TCPClient::SendPlayerNameCommand()
-{
-	FString serialized = "/setName.";
-	TCHAR *serializedChar = serialized.GetCharArray().GetData();
-	int32 size = FCString::Strlen(serializedChar);
-	int32 sent = 0;
-	bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
-	if (successful)
-	{
-		UE_LOG(LogTemp, Log, TEXT("MESSAGE SENT!!!!"));
-	}
-	
-	
-}
 
 void TCPClient::SendMessageToServer( FString MessageToSend)
 {
@@ -284,10 +294,9 @@ void TCPClient::SendGameServerInfo(FString host,FString port)
 	bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
 	if (successful)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Am Server MESSAGE SENT!!!!"));
-		UE_LOG(LogTemp, Log, TEXT("Host is: '%s'"), *host);
-		FString serializedHost = host+':'+port+'.';
-		UE_LOG(LogTemp, Log, TEXT("Sending IP: '%s'"), *serializedHost);
+		//send port
+		FString serializedHost = port+'.';
+		UE_LOG(LogTemp, Log, TEXT("Sending port: '%s'"), *serializedHost);
 		TCHAR *serializedCharHost = serializedHost.GetCharArray().GetData();
 		int32 sizeHost = FCString::Strlen(serializedCharHost);
 		int32 sentHost = 0;
@@ -295,31 +304,13 @@ void TCPClient::SendGameServerInfo(FString host,FString port)
 		if (successfulHost)
 		{
 			UE_LOG(LogTemp, Log, TEXT("IP MESSAGE SENT!!!!"));
-
-			
 		}
-
-
-
-		
 	}
 }
 
 
 
-void TCPClient::JoinGameSession(int sID)
-{
-	FString serialized = "j|" + FString::FromInt(sID) + "|#";
-	TCHAR *serializedChar = serialized.GetCharArray().GetData();
-	int32 size = FCString::Strlen(serializedChar);
-	int32 sent = 0;
-	bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
-	if (successful)
-	{
-		UE_LOG(LogTemp, Log, TEXT("MESSAGE SENT!!!!"));
-	}
-		
-}
+
 
 bool TCPClient::IsConnected()
 {

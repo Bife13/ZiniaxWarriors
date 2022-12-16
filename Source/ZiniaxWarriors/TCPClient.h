@@ -18,20 +18,21 @@ public:
 	~TCPClient();
 	virtual bool Init() override;
 	virtual uint32 Run() override;
+	void SaveServerIP(FString tosave);
 	void ConnectPlayerToGame(FString ConfigStr);
 	void SendPlayerLogin(FString name, FString pass);
 	void SendLoginToServer(FString MessageToSend);
 	virtual void Stop() override;  
-	void CreateNewGameSession(FString sname);
-	void SendPlayerNameCommand();
+
 	void SendMessageToServer(FString MessageToSend);
 
+	bool saveIp=false;
 
 	void SendGameServerInfo(FString host, FString port);
-	void JoinGameSession(int sID);
 	bool IsConnected();
 	
 	private:
+	FString GameServerToConnect;
 	FIPv4Address serverIP;
 	FRunnableThread* Thread;
 	FSocket* Socket;

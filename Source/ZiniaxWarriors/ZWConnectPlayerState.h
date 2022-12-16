@@ -72,6 +72,13 @@ class ZINIAXWARRIORS_API AZWConnectPlayerState : public APlayerState
 
 	UFUNCTION()
 	void OnConnectGameClick();
+
+	UFUNCTION()
+	void WaitingForGame(bool waiting);
+	bool ClientWaitingforGame;
+
+	UFUNCTION()
+	void UpdateCanvas();
 	bool HasConfig;
 protected:
 	virtual void BeginPlay() override;
@@ -134,10 +141,7 @@ protected:
 	UPROPERTY(VisibleAnywhere,Category = "UI")
 	UEditableText* ClientPassInput;
 	
-	UFUNCTION()
-	void OnSendNameButtonClicked();
-	UFUNCTION()
-	void OnNewSessionClicked();
+	
 	UFUNCTION()
 	void OnUpdateServerList(); 
 };

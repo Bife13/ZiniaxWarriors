@@ -82,6 +82,7 @@ struct ServerInfo {
     int serverID;
     SOCKET socket;
     char ip[DEFAULT_BUFLEN];
+    char port[DEFAULT_BUFLEN];
     char config[DEFAULT_BUFLEN];
     int idOfPlayers[PlayersPerLobby];
     int playersOn;
@@ -113,6 +114,7 @@ int isAcceptingClients = 1;
 
 
 
+char tempIp[DEFAULT_BUFLEN];
 int Sender = 0;
 int Receiver = 0;
 
@@ -191,7 +193,7 @@ void PrintServers() {
     for (y; y < ServersConnected; y++) {
 
         printf("////////server %d //////////// \n", y);
-        printf("IP : %s\n", Servers[y].ip);
+        printf("IP : %s:%s\n", Servers[y].ip,Servers[y].port);
         printf("ID : %d\n", Servers[y].serverID);
         switch (Servers[y].state)
         {
@@ -251,7 +253,7 @@ void InformClientOfServerofState(void* in) {
     int ID = (int*)in;
     char msgSender[DEFAULT_BUFLEN];
     int snd = 0;
-    printf("sending info of server '%s' to clietns connected: ", Servers[ID].ip);
+    printf("sending info of server to clients connected: '%s' \n", Servers[ID].ip);
 
     if (Servers[ID].state == ServerWaiting) {
         printf("Server is Waiting for more players\n");
@@ -312,12 +314,12 @@ void HandleServerSocket(void* socket) {
     Servers[sid].socket = ServerSocket;
     Servers[sid].state = 0;
     Servers[sid].playersOn = 0;
+    memcpy(Servers[sid].ip, tempIp,sizeof(tempIp));
 
 
 
 
-
-    printf("Waiting game Server Ip :");
+    printf("Waiting game Server Port :");
 
     iRes = recv(ServerSocket, msgbuf, sizeof(msgbuf), 0);
     if (iRes > 0)
@@ -338,23 +340,14 @@ void HandleServerSocket(void* socket) {
         }
         msgbuf[count] = '\0';
 
-        printf(" %s .ok \n", msgbuf);
-        memcpy(Servers[sid].ip, msgbuf, sizeof(msgbuf));
-
-        iRes = send(Servers[sid].socket, servertowait, sizeof(servertowait), 0);
-
-        if (iRes > 0) {
-            //Server was set to wait
-            //server is set
-        }
-        else {
-            printf("send failed with error: %d\n", WSAGetLastError());
-            closesocket(Servers[sid].socket);
-            WSACleanup();
-            return 1;
-        }
+        //printf(" %s .ok \n", msgbuf);
+        memcpy(Servers[sid].port, msgbuf, sizeof(msgbuf));
+        printf(" %s:%s\n", Servers[sid].ip,Servers[sid].port);
+            
     }
+   
     _endthread();
+
 }
 #pragma endregion
 
@@ -461,6 +454,7 @@ if (base.type == 1)
 #pragma endregion
 
 
+
 #pragma region AcceptSockets
 //ACCEPT CLIENT THREAD 
 void AcceptSockets(void* socketToListen) {
@@ -486,7 +480,10 @@ void AcceptSockets(void* socketToListen) {
     else {
         
         char* ip = inet_ntoa(clientIn.sin_addr);
-        printf(" Connected!from IP: %s\n", ip);
+        strcpy(tempIp, ip);
+        
+
+        printf(" Connected! from IP: %s\n", tempIp);
 
 
         //Clients[ClientConnected].socket = TempSocket;
@@ -515,6 +512,7 @@ void AcceptSockets(void* socketToListen) {
                 int id = ClientConnected;
                 iResult = recv(TempSocket, recvbuf, sizeof(recvbuf), 0);
                 if (iResult > 0) {
+                    //printf("Name of client: %s\n", recvbuf);
                     int  s = sizeof(recvbuf) / sizeof(char);
                     //printf("init is %s \n", init);
                     int count = 0;
@@ -529,12 +527,13 @@ void AcceptSockets(void* socketToListen) {
                     }
                     recvbuf[count] = '\0';
                     // received name from client
-                    //printf("Name of client: %s\n", recvbuf);
+                   
                     memcpy(Clients[id].name, recvbuf, sizeof(recvbuf));
                     printf("Name of client: %s\n", Clients[id].name);
 
                     iResult = recv(TempSocket, recvbuf, sizeof(recvbuf), 0);
                     if (iResult > 0) {
+                        //printf("Pass of client: %s\n", recvbuf);
                         s = sizeof(recvbuf) / sizeof(char);
                         count = 0;
                         j = 0;
@@ -547,7 +546,7 @@ void AcceptSockets(void* socketToListen) {
                             }
                         }
                         recvbuf[count] = '\0';
-                        printf("Pass of client: %s\n", recvbuf);
+                       // printf("Pass of client: %s\n", recvbuf);
                         memcpy(Clients[id].pass, recvbuf, sizeof(recvbuf));
                         printf("Pass of client: %s\n", Clients[id].pass);
 
@@ -576,38 +575,8 @@ void AcceptSockets(void* socketToListen) {
                 _beginthread(HandleServerSocket, 0, (void*)TempSocket);
             }
 
-            // _beginthread(HandleClientSocketConnect, 0, (void*)TempSocket);
-     
+          
 
-            /*
-            //get socket first param
-            iResult = recv(TempSocket, recvbuf, sizeof(recvbuf), 0);
-            if (iResult > 0) {
-
-                if (strcmp(recvbuf, "client")==0) {
-                    printf("Client COnnected\n");
-                    //handle client thread
-                    isAcceptingClients = 0;
-                    _beginthread(HandleClientSocketConnect, 0, (void*)TempSocket);
-                }
-
-                if (strcmp(recvbuf, "gameserver") == 0) {
-                    printf("Server COnnected\n");
-                    //handle server thread
-                    isAcceptingClients = 0;
-                    _beginthread(HandleServerSocket, 0, (void*)TempSocket);
-                }
-
-            }
-            else if (iResult == 0) {
-                printf("Connection closing...\n");
-                closesocket(TempSocket);
-            }
-            else {
-                closesocket(TempSocket);
-                WSACleanup();
-            }
-            */
 
 
         }
@@ -657,6 +626,10 @@ int GetCommandToDo(char msg[]) {
         commando = 1;
     }
 
+    if (strcmp("/cancel", msg) == 0) {
+        commando = 2;
+    }
+
     if (strcmp("/exit", msg) == 0) {
         commando = -1;
     }
@@ -670,19 +643,20 @@ int AvailableServer() {
 
     for (i; i < ServersConnected; i++) {
 
-        if (Servers[i].state == ServerWaiting && (Servers[i].playersOn < PlayersPerLobby)) {
-            printf("Server to join found\n");
+        if ((Servers[i].state == ServerWaiting) && (Servers[i].playersOn < PlayersPerLobby)) {
+            printf("Server to join found with %d players on\n", Servers[i].playersOn);
             servedID = Servers[i].serverID;
             i = 513;
-
+            return servedID;
         }
         else {
 
             if (Servers[i].state == 0) {
-                printf("Server to join found\n");
+                printf("Server to join found with 0 players\n");
                 servedID = Servers[i].serverID;
                 Servers[i].state = ServerWaiting;
                 i = 513;
+                return servedID;
             }
         }
     }
@@ -728,12 +702,22 @@ void HandleClientMessageTh(void* in) {
         serverID = AvailableServer();
         Clients[index].state = 2;
 
+        //printf("%s joinded server at %s\n", Clients[index].name, Servers[serverID].ip);
         Servers[serverID].idOfPlayers[Servers[serverID].playersOn] = Clients[index].clientID;
+        printf("id of player joinded %d\n", Servers[serverID].idOfPlayers[Servers[serverID].playersOn]);
+        
 
         snd = send(Clients[index].socket, "IP", sizeof("IP"), 0);
         if (snd > 0) {
             //inform server ip to join client connected to set server
-            snd = send(Clients[index].socket, Servers[serverID].ip, sizeof(Servers[serverID].ip), 0);
+            char str[DEFAULT_BUFLEN];
+
+            sprintf_s((char*)&str, DEFAULT_BUFLEN, "%s:%s", Servers[serverID].ip, Servers[serverID].port);
+            //send 
+               
+            printf("%s\n", str);
+
+            snd = send(Clients[index].socket, str, sizeof(str), 0);
             if (snd > 0) {
                 // send to sever info that someone joinned
                 snd = send(Servers[serverID].socket, serverJoindedMessage, sizeof(serverJoindedMessage), 0);
@@ -903,7 +887,7 @@ void ReceiveClientMessage(void* Info) {
 
             //if is a servercommand?
             if (IsCommand(msgReceiver) == 1) {
-                //printf("is a comman! \n");
+                printf("is a comman! \n");
                 memcpy(Clients[index].message, msgReceiver, sizeof(msgReceiver));
                 //printf("%s\n",Clients[index].message);
                 _beginthread(HandleClientMessageTh, 0, (void*)index);
