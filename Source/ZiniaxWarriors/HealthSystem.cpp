@@ -31,57 +31,75 @@ void UHealthSystem::TakeDamage_Implementation(const float Amount)
 {
 	if (Amount > 0)
 	{
-	float damageTaken; float ExcedingDamage; 
-	     if(Resistance > 0)
-		 damageTaken = Amount * ((100) / (100 + Resistance));
-		 else
-		 damageTaken = Amount * ( 2 - 100 / (100 - Resistance));
-		if(Shield > 0)
+		float damageTaken;
+		float ExcedingDamage;
+		if (Resistance > 0)
+			damageTaken = Amount * ((100) / (100 + Resistance));
+		else
+			damageTaken = Amount * (2 - 100 / (100 - Resistance));
+		if (Shield > 0)
 		{
 			Shield -= damageTaken;
-			if(Shield < 0)
+			if (Shield < 0)
 			{
 				ExcedingDamage = Shield;
 				Health -= ExcedingDamage;
 				Shield = 0;
-				OnShieldBrokenEvent.Broadcast(ExcedingDamage);
-				MyOnDamageTakenEvent.Broadcast(ExcedingDamage);
+				HandleShieldBrokenEvent(ExcedingDamage);
+				HandleDamageTakenEvent(ExcedingDamage);
 			}
 			else
 			{
-				MyOnDamageTakenEvent.Broadcast(damageTaken);	
+				HandleDamageTakenEvent(damageTaken);
 			}
-		
 		}
 		else
 		{
 			Health -= damageTaken;
-			MyOnDamageTakenEvent.Broadcast(damageTaken);
+			HandleDamageTakenEvent(damageTaken);
 		}
 
-		if(Health <= 0)
+		if (Health <= 0)
 		{
+			Health = 0;
 			OnDeathEvent.Broadcast();
 		}
 	}
 }
 
+void UHealthSystem::HandleShieldBrokenEvent_Implementation(float Amount)
+{
+	OnShieldBrokenEvent.Broadcast(Amount);
+}
+
+void UHealthSystem::HandleDamageTakenEvent_Implementation(float Amount)
+{
+	MyOnDamageTakenEvent.Broadcast(Amount);
+}
+
 void UHealthSystem::RecoverHealth_Implementation(const float Amount)
 {
-	if (Amount > 0)
+	float HealAmount = Amount;
+	if (HealAmount > 0 && Health != MaxHealth)
 	{
-		if(Health + Amount>MaxHealth)
+		if (Health + HealAmount > MaxHealth)
 		{
+			HealAmount = MaxHealth - Health;
 			Health = MaxHealth;
 		}
 		else
 		{
-			Health += Amount;
+			Health += HealAmount;
 		}
-		
-		OnDamageHealedEvent.Broadcast(Amount);
+		HandleHealEvent(HealAmount);
 	}
 }
+
+void UHealthSystem::HandleHealEvent_Implementation(float Amount)
+{
+	OnDamageHealedEvent.Broadcast(Amount);
+}
+
 #pragma endregion
 #pragma region Gets
 float UHealthSystem::GetHealth() const
@@ -98,8 +116,13 @@ float UHealthSystem::GetHealthAsPercentage() const
 {
 	return Health / MaxHealth;
 }
+
+
 #pragma endregion
 #pragma region Sets
+
+
+
 void UHealthSystem::SetHealthToMaxHealth()
 {
 	Health = MaxHealth;

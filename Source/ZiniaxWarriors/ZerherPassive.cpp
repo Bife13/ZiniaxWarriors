@@ -13,8 +13,13 @@ void UZerherPassive::OnTick_Implementation(float DeltaTime)
 	}
 	else
 	{	
+<<<<<<< HEAD
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GOT HERE")));
 		PassiveOwner->AddShieldPassive(Cooldown - 1,ShieldForce);
+=======
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GOT HERE")));
+		PassiveOwner->AddShieldPassive(Cooldown / 3,ShieldForce);
+>>>>>>> master
 		Timer = Cooldown;
 	}
 }
