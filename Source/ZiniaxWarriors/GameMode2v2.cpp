@@ -18,17 +18,17 @@ void AGameMode2v2::BeginPlay()
 
 	if(GetWorld()->IsServer())
 	{
-		FString tempHost = GetWorld()->URL.GetHostPortString();
+		FString MMIP = UGameplayStatics::ParseOption(OptionsString,"IP");
+		UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*MMIP);
 		
-		UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*tempHost);
 		FString tempPort = FString::FromInt( GetWorld()->URL.Port);
 		UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
-		MMServerConnection = new TCPClient();
+		MMServerConnection = new TCPClient(MMIP);
 		
 		if(MMServerConnection->IsConnected())
 		{
 
-			MMServerConnection->SendGameServerInfo(tempHost,tempPort);
+			MMServerConnection->SendGameServerInfo(MMIP,tempPort);
 		}
 		
 	}

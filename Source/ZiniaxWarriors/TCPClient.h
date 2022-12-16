@@ -13,7 +13,7 @@ class ZINIAXWARRIORS_API TCPClient: public FRunnable
 public:
 	
 	TCPClient(AZWConnectPlayerState* pState);
-	TCPClient();
+	TCPClient(FString MMIP);
 	bool isClient;
 	~TCPClient();
 	virtual bool Init() override;

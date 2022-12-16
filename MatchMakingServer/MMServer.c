@@ -3,6 +3,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
+#define  _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #include <windows.h>
 #include <winsock2.h>
@@ -73,6 +74,7 @@ struct ClientInfo {
     char message[DEFAULT_BUFLEN];
     int state;// 0 is off, 1 is on, 2 is looking for game, 3 in game
     int recevingInfo; // 0 is off, 1 is on
+    char* clientIp;
 }Clients[DEFAULT_BUFLEN], tempClient;
 
 
@@ -463,14 +465,18 @@ if (base.type == 1)
 //ACCEPT CLIENT THREAD 
 void AcceptSockets(void* socketToListen) {
 
+    SOCKADDR_IN clientIn = { 0 };
     SOCKET TempSocket;
     SOCKET listenSocket = (SOCKET)socketToListen;
     int iResult = 0;
     char recvbuf[DEFAULT_BUFLEN];
+    int addrsize = sizeof(clientIn);
+
+
 
     printf("AcceptingSockets : ");
     // Accept a client socket
-    TempSocket = accept(listenSocket, NULL, NULL);
+    TempSocket = accept(listenSocket, (struct sockaddr*)&clientIn, &addrsize);
     if (TempSocket == INVALID_SOCKET) {
         printf("s45: accept failed with error: %d\n", WSAGetLastError());
         closesocket(listenSocket);
@@ -478,7 +484,11 @@ void AcceptSockets(void* socketToListen) {
         return 1;
     }
     else {
-        printf("Connected!\n");
+        
+        char* ip = inet_ntoa(clientIn.sin_addr);
+        printf(" Connected!from IP: %s\n", ip);
+
+
         //Clients[ClientConnected].socket = TempSocket;
 
         iResult = recv(TempSocket, recvbuf, sizeof(recvbuf), 0);

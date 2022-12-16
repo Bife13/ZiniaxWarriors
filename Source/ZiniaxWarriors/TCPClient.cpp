@@ -20,13 +20,21 @@ TCPClient::TCPClient(AZWConnectPlayerState* pState)
 	
 }
 
-TCPClient::TCPClient()
+TCPClient::TCPClient(FString MMIP)
 {
-	UE_LOG(LogTemp, Log, TEXT("I AM Server Thread!"));
-	serverIP = FIPv4Address(127,0,0,1);
-	isClient = false;
-	Thread = FRunnableThread::Create(this, TEXT("TCPClientThread"),
-									0,  TPri_Normal);
+	FIPv4Address tosend ;
+	if(FIPv4Address::Parse(MMIP,tosend))
+	{
+		UE_LOG(LogTemp, Log, TEXT("I AM Server Thread!"));
+		serverIP = tosend;
+		isClient = false;
+		Thread = FRunnableThread::Create(this, TEXT("TCPClientThread"),
+										0,  TPri_Normal);
+	}
+	else
+	{
+		UE_LOG(LogTemp,Log, TEXT("Invalid Matchmaking Ip Input"));
+	}
 	
 }
 
@@ -63,9 +71,6 @@ bool TCPClient::Init()
 	if (connected)  {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,FString::Printf(TEXT("Connected!")));
 		UE_LOG(LogTemp, Log, TEXT("CONNECTED!"));
-
-		
-		
 	}
 		
 	return 0;

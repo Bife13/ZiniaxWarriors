@@ -13,5 +13,7 @@ set Role=-game
 :: Comment this out if you dont want your server logging
 set Log=-log
 
+
+
 :: Finally Run The Command
 %UE4Dir% %ProjectDir% %Map% %Role% %Log% -ResX=800 -ResY=700 -WinX=0 -WinY=30 -windowed
