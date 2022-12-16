@@ -14,11 +14,13 @@ TCPClient::TCPClient(AZWConnectPlayerState* pState)
 {
 	PlayerState = pState;
 	serverIP = PlayerState->MatchmakingIP;
+	isClient = true;
 	Thread = FRunnableThread::Create(this, TEXT("TCPClientThread"),
 									0,  TPri_Normal);
-		
-
+	
 }
+
+
 
 
 TCPClient::~TCPClient()
@@ -74,19 +76,12 @@ uint32 TCPClient::Run()
 			FString ServerMessage = FString(UTF8_TO_TCHAR(  ReceivedData.GetData()));
 			UE_LOG(LogTemp, Log, TEXT("RECEIVED: '%s'"), *ServerMessage);
 
-			//RunCode of Player State Here if ServerMessage[0] is something
-			if(ServerMessage.Compare("SendLogin")==0)
-			{
-				UE_LOG(LogTemp, Log, TEXT("SendingLogin"));
-				SendMessageToServer(PlayerState->ClientName);
-			}
-
-			if(ServerMessage.Compare("SendName")==0)
+			if(isClient)
 			{
 				
-				UE_LOG(LogTemp, Log, TEXT("SendingName"));
-				SendMessageToServer(PlayerState->ClientName);
 			}
+			//RunCode of Player State Here if ServerMessage[0] is something
+		
 			
 			if ((ServerMessage[0] == 's') && (PlayerState))
 			{
@@ -130,6 +125,18 @@ void TCPClient::ConnectPlayerToGame(FString ConfigStr)
 		if (successful)
 		{
 			UE_LOG(LogTemp, Log, TEXT("Sent my config to server!!!"));
+			FString tempL = "/join.";
+			UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*tempL);
+
+			TCHAR *serializedCharL =	(tempL).GetCharArray().GetData();
+			int32 sizeL = FCString::Strlen(serializedCharL);
+			int32 sentL = 0;
+			bool successfulL = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharL), sizeL, sentL);
+			if (successfulL)
+			{
+				UE_LOG(LogTemp, Log, TEXT("Matchmaking is oky!!!"));
+			}
+			
 		}
 	}
 	
@@ -138,28 +145,42 @@ void TCPClient::ConnectPlayerToGame(FString ConfigStr)
 
 void TCPClient::SendPlayerLogin(FString name, FString pass)
 {
-	UE_LOG(LogTemp, Log, TEXT("Sending Login"));
-	FString temp = name + '.';
-	UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*temp);
-	TCHAR *serializedChar =	(temp).GetCharArray().GetData();
-	int32 size = FCString::Strlen(serializedChar);
-	int32 sent = 0;
-	bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
-	if (successful)
+
+
+	UE_LOG(LogTemp, Log, TEXT("Sending client"));
+	FString tempC = "/client.";
+	UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*tempC);
+	TCHAR *serializedCharC =	(tempC).GetCharArray().GetData();
+	int32 sizeC = FCString::Strlen(serializedCharC);
+	int32 sentC = 0;
+	bool successfulC = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharC), sizeC, sentC);
+	if (successfulC)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Client name SENT!!!!"));
-		FString temp2 = pass + '.';
-		UE_LOG(LogTemp, Log, TEXT("Pass in Thread: '%s'"),*temp2);
-		TCHAR *serializedCharPass =	(temp2).GetCharArray().GetData();
-		int32 sizeP = FCString::Strlen(serializedCharPass);
-		int32 sentP = 0;
-		bool successfulP = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharPass), sizeP, sentP);
-		if (successfulP)
+		UE_LOG(LogTemp, Log, TEXT("Sending Name"));
+		FString temp = name + '.';
+		UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*temp);
+		TCHAR *serializedChar =	(temp).GetCharArray().GetData();
+		int32 size = FCString::Strlen(serializedChar);
+		int32 sent = 0;
+		bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
+		if (successful)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Client Pass SENT!!!!"));
-			PlayerState->ShowCustomizationMenu();
+			UE_LOG(LogTemp, Log, TEXT("Client name SENT!!!!"));
+			FString temp2 = pass + '.';
+			UE_LOG(LogTemp, Log, TEXT("Pass in Thread: '%s'"),*temp2);
+			TCHAR *serializedCharPass =	(temp2).GetCharArray().GetData();
+			int32 sizeP = FCString::Strlen(serializedCharPass);
+			int32 sentP = 0;
+			bool successfulP = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharPass), sizeP, sentP);
+			if (successfulP)
+			{
+				UE_LOG(LogTemp, Log, TEXT("Client Pass SENT!!!!"));
+				PlayerState->ShowCustomizationMenu();
+			}
 		}
 	}
+
+	
 }
 
 
