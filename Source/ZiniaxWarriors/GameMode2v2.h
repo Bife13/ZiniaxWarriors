@@ -25,7 +25,12 @@ protected:
 
 	virtual bool ReadyToStartMatch_Implementation() override;
 
-
+	
+	class TCPClient* MMServerConnection;
+	
+	UFUNCTION()
+	void BeginPlay() override;
+	
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()

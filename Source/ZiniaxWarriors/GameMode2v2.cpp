@@ -6,11 +6,38 @@
 #include "BasePlayerController.h"
 #include "DTR_SpawnableCharacter.h"
 #include "GameState2v2.h"
+#include "TCPClient.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+void AGameMode2v2::BeginPlay()
+{
+	Super::BeginPlay();
+    UE_LOG(LogTemp, Log, TEXT("Check Am Server:"),);
 
+	if(GetWorld()->IsServer())
+	{
+		FString tempHost = GetWorld()->URL.GetHostPortString();
+		
+		UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*tempHost);
+		FString tempPort = FString::FromInt( GetWorld()->URL.Port);
+		UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
+		MMServerConnection = new TCPClient();
+		
+		if(MMServerConnection->IsConnected())
+		{
+
+			MMServerConnection->SendGameServerInfo(tempHost,tempPort);
+		}
+		
+	}
+
+	
+	
+	
+	
+}
 
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
@@ -161,6 +188,8 @@ void AGameMode2v2::OpenDoors()
 		SpawnDoors[i]->SetActorLocation(SpawnDoors[i]->GetActorLocation() - Position);
 	}
 }
+
+
 
 
 void AGameMode2v2::SetDeathEvents()

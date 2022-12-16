@@ -13,6 +13,7 @@ class ZINIAXWARRIORS_API TCPClient: public FRunnable
 public:
 	
 	TCPClient(AZWConnectPlayerState* pState);
+	TCPClient();
 	bool isClient;
 	~TCPClient();
 	virtual bool Init() override;
@@ -24,7 +25,9 @@ public:
 	void CreateNewGameSession(FString sname);
 	void SendPlayerNameCommand();
 	void SendMessageToServer(FString MessageToSend);
-	
+
+
+	void SendGameServerInfo(FString host, FString port);
 	void JoinGameSession(int sID);
 	bool IsConnected();
 	

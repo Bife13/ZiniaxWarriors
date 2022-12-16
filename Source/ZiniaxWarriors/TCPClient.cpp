@@ -20,6 +20,15 @@ TCPClient::TCPClient(AZWConnectPlayerState* pState)
 	
 }
 
+TCPClient::TCPClient()
+{
+	UE_LOG(LogTemp, Log, TEXT("I AM Server Thread!"));
+	serverIP = FIPv4Address(127,0,0,1);
+	isClient = false;
+	Thread = FRunnableThread::Create(this, TEXT("TCPClientThread"),
+									0,  TPri_Normal);
+	
+}
 
 
 
@@ -54,6 +63,9 @@ bool TCPClient::Init()
 	if (connected)  {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,FString::Printf(TEXT("Connected!")));
 		UE_LOG(LogTemp, Log, TEXT("CONNECTED!"));
+
+		
+		
 	}
 		
 	return 0;
@@ -77,6 +89,10 @@ uint32 TCPClient::Run()
 			UE_LOG(LogTemp, Log, TEXT("RECEIVED: '%s'"), *ServerMessage);
 
 			if(isClient)
+			{
+				
+			}
+			else
 			{
 				
 			}
@@ -253,6 +269,37 @@ void TCPClient::SendMessageToServer( FString MessageToSend)
 		UE_LOG(LogTemp, Log, TEXT("MESSAGE SENT!!!!"));
 	}
 }
+
+void TCPClient::SendGameServerInfo(FString host,FString port)
+{
+	FString serialized = "/gameserver.";
+	TCHAR *serializedChar = serialized.GetCharArray().GetData();
+	int32 size = FCString::Strlen(serializedChar);
+	int32 sent = 0;
+	bool successful = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedChar), size, sent);
+	if (successful)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Am Server MESSAGE SENT!!!!"));
+		UE_LOG(LogTemp, Log, TEXT("Host is: '%s'"), *host);
+		FString serializedHost = host+':'+port+'.';
+		UE_LOG(LogTemp, Log, TEXT("Sending IP: '%s'"), *serializedHost);
+		TCHAR *serializedCharHost = serializedHost.GetCharArray().GetData();
+		int32 sizeHost = FCString::Strlen(serializedCharHost);
+		int32 sentHost = 0;
+		bool successfulHost = Socket->Send((uint8*)  TCHAR_TO_UTF8(serializedCharHost), sizeHost, sentHost);
+		if (successfulHost)
+		{
+			UE_LOG(LogTemp, Log, TEXT("IP MESSAGE SENT!!!!"));
+
+			
+		}
+
+
+
+		
+	}
+}
+
 
 
 void TCPClient::JoinGameSession(int sID)

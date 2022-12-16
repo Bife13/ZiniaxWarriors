@@ -20,7 +20,7 @@ void AZWConnectPlayerState::BeginPlay()
 	levelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	HasConfig =false;
 	
-	if (levelName == "MatchMakingMenu") // change to == for working again on server
+	if (levelName == "LoginMenu") // change to == for working again on server
 	{
 		LoginWidget = CreateWidget<UUserWidget>(GetWorld(),LoginWidgetClass);
 		LoginWidget->AddToViewport();
