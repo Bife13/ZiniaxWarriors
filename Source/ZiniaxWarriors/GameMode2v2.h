@@ -73,9 +73,6 @@ protected:
 	UFUNCTION()
 	void CloseDoors();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
-
 
 private:
 	UPROPERTY()
@@ -120,4 +117,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
 	UDataTable* SpawnableCharacters;
+
+	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
+	UDataTable* SkillsDatatable;
 };
