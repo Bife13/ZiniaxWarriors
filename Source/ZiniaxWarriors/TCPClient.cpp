@@ -10,6 +10,7 @@
 #include "Interfaces/IPv4/IPv4Address.h"
 
 
+// player connecting via UI  
 TCPClient::TCPClient(AZWConnectPlayerState* pState)
 {
 	PlayerState = pState;
@@ -18,6 +19,16 @@ TCPClient::TCPClient(AZWConnectPlayerState* pState)
 	Thread = FRunnableThread::Create(this, TEXT("TCPClientThread"),
 									0,  TPri_Normal);
 	
+}
+
+// Game Server try connect to same machine Macth making serverserver 
+TCPClient::TCPClient()
+{
+	UE_LOG(LogTemp, Log, TEXT("I AM Server Thread!"));
+	serverIP = FIPv4Address(127,0,0,1);
+	isClient = false;
+	Thread = FRunnableThread::Create(this, TEXT("TCPClientThread"),
+									0,  TPri_Normal);
 }
 
 TCPClient::TCPClient(FString MMIP)
@@ -33,7 +44,8 @@ TCPClient::TCPClient(FString MMIP)
 	}
 	else
 	{
-		UE_LOG(LogTemp,Log, TEXT("Invalid Matchmaking Ip Input"));
+		//UE_LOG(LogTemp,Log, TEXT("Invalid Matchmaking Ip Input"));
+		
 	}
 	
 }
@@ -53,7 +65,7 @@ void TCPClient::Stop()
 }
 
 
-
+//on creating class
 bool TCPClient::Init()
 {
 	
@@ -95,6 +107,8 @@ uint32 TCPClient::Run()
 
 			if(isClient)
 			{
+				//TODO game CLIENT   Handle messages from matchmaking server
+				//
 				if(saveIp)
 				{
 					saveIp= false;
@@ -113,6 +127,9 @@ uint32 TCPClient::Run()
 			}
 			else
 			{
+				//TODO game SERVER Handle messages from matchmaking server
+				
+
 				
 			}
 			//RunCode of Player State Here if ServerMessage[0] is something
@@ -138,6 +155,7 @@ uint32 TCPClient::Run()
 	return 0;
 }
 
+#pragma  region Player
 
 void TCPClient::SaveServerIP(FString tosave)
 {
@@ -250,9 +268,10 @@ void TCPClient::SendPlayerLogin(FString name, FString pass)
 
 	
 }
+#pragma endregion 
 
 
-
+/*
 void TCPClient::SendLoginToServer(FString MessageToSend)
 {
 	MessageToSend+='.';
@@ -267,7 +286,7 @@ void TCPClient::SendLoginToServer(FString MessageToSend)
 		UE_LOG(LogTemp, Log, TEXT("MESSAGE SENT!!!!"));
 	}
 }
-
+*/
 
 
 void TCPClient::SendMessageToServer( FString MessageToSend)
@@ -295,7 +314,7 @@ void TCPClient::SendGameServerInfo(FString host,FString port)
 	if (successful)
 	{
 		//send port
-		FString serializedHost = port+'.';
+		FString serializedHost = host+":"+port+'.';
 		UE_LOG(LogTemp, Log, TEXT("Sending port: '%s'"), *serializedHost);
 		TCHAR *serializedCharHost = serializedHost.GetCharArray().GetData();
 		int32 sizeHost = FCString::Strlen(serializedCharHost);

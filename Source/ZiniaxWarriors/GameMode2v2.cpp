@@ -18,18 +18,47 @@ void AGameMode2v2::BeginPlay()
 
 	if(GetWorld()->IsServer())
 	{
-		FString MMIP = UGameplayStatics::ParseOption(OptionsString,"IP");
-		UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*MMIP);
-		
-		FString tempPort = FString::FromInt( GetWorld()->URL.Port);
-		UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
-		MMServerConnection = new TCPClient(MMIP);
-		
-		if(MMServerConnection->IsConnected())
+		// check if on execute is created via exe with OpstionsString v
+		if(!OptionsString.IsEmpty())
 		{
+			FString MMIP = UGameplayStatics::ParseOption(OptionsString,"IP");
+			UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*MMIP);
+			FString tempPort = FString::FromInt( GetWorld()->URL.Port);
+			UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
+			MMServerConnection = new TCPClient(MMIP);
+		
+			if(MMServerConnection->IsConnected())
+			{
 
-			MMServerConnection->SendGameServerInfo(MMIP,tempPort);
+				MMServerConnection->SendGameServerInfo(MMIP,tempPort);
+			}
+			else
+			{
+				// TODO shut down aplication
+				// or
+				// TODO try creating matchmaking server from folder path exe and restarting level after a time
+			}
 		}
+		else
+		{
+			FString tempPort = FString::FromInt( GetWorld()->URL.Port);
+			UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
+			MMServerConnection = new TCPClient();
+		
+			if(MMServerConnection->IsConnected())
+			{
+				FString MMIP ="";
+				MMServerConnection->SendGameServerInfo(MMIP,tempPort);
+			}
+			else
+			{
+				/// TODO shut down aplication
+				// or
+				// TODO try creating matchmaking server from folder path exe and restarting level after a time
+			}
+		}
+
+	
 		
 	}
 
