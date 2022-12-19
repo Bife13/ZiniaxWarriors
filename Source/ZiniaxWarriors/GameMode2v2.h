@@ -41,6 +41,16 @@ protected:
 	bool CheckRoundCounter();
 
 	UFUNCTION()
+	void SetCanDoorOpenTrue() { bCanDoorOpen = true; }
+
+	UFUNCTION()
+	void SetCanDoorOpenFalse() { bCanDoorOpen = false; }
+
+	UPROPERTY()
+	bool bCanDoorOpen = false;
+
+
+	UFUNCTION()
 	TArray<APlayerStart*> GetPlayerStartsForTeam1();
 	UFUNCTION()
 	TArray<APlayerStart*> GetPlayerStartsForTeam2();
@@ -53,17 +63,16 @@ protected:
 	void StartInBetweenRoundTimer(float Time);
 	UFUNCTION()
 	void StartDoorTimer(float Time);
-	
 	UFUNCTION()
 	void ActivateAllCharacters();
 	UFUNCTION()
 	void DeactivateAllCharacters();
 
 	UFUNCTION()
-	void OpenDoors();
+	void OpenDoors(float DeltaTime);
 	UFUNCTION()
 	void CloseDoors();
-	
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
 
