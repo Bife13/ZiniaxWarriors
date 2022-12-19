@@ -13,10 +13,7 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 
-void AZWConnectPlayerState::UpdateCanvas()
-{
-	
-}
+
 
 void AZWConnectPlayerState::BeginPlay()
 {
@@ -234,28 +231,12 @@ void AZWConnectPlayerState::SendNameFromInput()
 
 
 
-void AZWConnectPlayerState::UpdateSessionsList(FString Serverinfo)
+
+
+void AZWConnectPlayerState::UpdateCanvas()
 {
-	TArray<FString> Out;
-	Serverinfo.ParseIntoArray(Out, TEXT("|"), true);
-	for (int i = 1; i < Out.Num() - 1; i += 2)
-	{
-		FSessionInfo *tempInfo = new FSessionInfo();
-		tempInfo->id = FCString::Atoi(*Out[i]);
-		tempInfo->name = Out[i + 1];
-		tempInfo->serverip = "";
-		tempInfo->serverport = -1;
-		ServersList->Add(tempInfo);
-	}
+	
 }
-
-void AZWConnectPlayerState::ConnectToGameServer(FSessionInfo session)
-{
-	canConnectToGameServer = true;
-	connectToGameServerSession = session;  
-}
-
-
 
 void AZWConnectPlayerState::GotoGameLevel()
 {
@@ -284,7 +265,7 @@ void AZWConnectPlayerState::GotoGameLevel()
 }
 
 
-
+/*
 
 void AZWConnectPlayerState::OnUpdateServerList()
 {
@@ -337,7 +318,27 @@ void AZWConnectPlayerState::OnUpdateServerList()
 }
 
 
+void AZWConnectPlayerState::UpdateSessionsList(FString Serverinfo)
+{
+	TArray<FString> Out;
+	Serverinfo.ParseIntoArray(Out, TEXT("|"), true);
+	for (int i = 1; i < Out.Num() - 1; i += 2)
+	{
+		FSessionInfo *tempInfo = new FSessionInfo();
+		tempInfo->id = FCString::Atoi(*Out[i]);
+		tempInfo->name = Out[i + 1];
+		tempInfo->serverip = "";
+		tempInfo->serverport = -1;
+		ServersList->Add(tempInfo);
+	}
+}
 
+void AZWConnectPlayerState::ConnectToGameServer(FSessionInfo session)
+{
+	canConnectToGameServer = true;
+	connectToGameServerSession = session;  
+}
 
+*/
 
 

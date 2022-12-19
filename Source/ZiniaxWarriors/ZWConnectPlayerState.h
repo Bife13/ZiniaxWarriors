@@ -54,8 +54,11 @@ class ZINIAXWARRIORS_API AZWConnectPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	public:
-	void UpdateSessionsList(FString Serverinfo);
-	void ConnectToGameServer(FSessionInfo session);
+		
+	//UFUNCTION()
+	//void OnUpdateServerList(); 
+	//void UpdateSessionsList(FString Serverinfo);
+	//void ConnectToGameServer(FSessionInfo session);
 	UFUNCTION()
 	void GotoGameLevel();
 	UFUNCTION()
@@ -137,7 +140,5 @@ protected:
 	UEditableText* ClientNameInput;
 	UPROPERTY(VisibleAnywhere,Category = "UI")
 	UEditableText* ClientPassInput;
-	
-	UFUNCTION()
-	void OnUpdateServerList(); 
+
 };

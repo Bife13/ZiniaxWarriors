@@ -63,7 +63,7 @@ TCPClient::~TCPClient()
 }
 void TCPClient::Stop()
 {
-	UE_LOG(LogTemp, Log, TEXT("Thread Done!"));
+	UE_LOG(LogTemp, Log, TEXT("Thread Stop!"));
 	running = false;
 }
 
@@ -170,6 +170,9 @@ uint32 TCPClient::Run()
 				PlayerState->ConnectToGameServer(session);
 			}
 			*/
+		}
+		else{
+			PlayerState->UpdateCanvas();
 		}
 	}
 	return 0;
