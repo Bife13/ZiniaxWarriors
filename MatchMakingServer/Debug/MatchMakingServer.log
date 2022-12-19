@@ -16,4 +16,5 @@ C:\Users\BERNARDO\Desktop\Ziniax Warriors\ZiniaxWarriors\MatchMakingServer\MMSer
 C:\Users\BERNARDO\Desktop\Ziniax Warriors\ZiniaxWarriors\MatchMakingServer\MMServer.c(1240,17): warning C4024: 'closesocket': different types for formal and actual parameter 1
 C:\Users\BERNARDO\Desktop\Ziniax Warriors\ZiniaxWarriors\MatchMakingServer\MMServer.c(1142,10): warning C4101: 'recvbuf': unreferenced local variable
 C:\Users\BERNARDO\Desktop\Ziniax Warriors\ZiniaxWarriors\MatchMakingServer\MMServer.c(1141,9): warning C4101: 'iSendResult': unreferenced local variable
+  LINK : C:\Users\BERNARDO\Desktop\Ziniax Warriors\ZiniaxWarriors\MatchMakingServer\Debug\MatchMakingServer.exe not found or not built by the last incremental link; performing full link
   MatchMakingServer.vcxproj -> C:\Users\BERNARDO\Desktop\Ziniax Warriors\ZiniaxWarriors\MatchMakingServer\Debug\MatchMakingServer.exe

@@ -251,7 +251,7 @@ void AZWConnectPlayerState::GotoGameLevel()
 			
 			if (pController)
 			{
-				FString cmd = "open " + tcpClient->getGameIP() + " " +CustomizationMessage;
+				FString cmd = "open " + tcpClient->getGameIP() +CustomizationMessage;
 				tcpClient->Stop();
 				canConnectToGameServer = false;
 				CustomizationWidget->RemoveFromViewport();

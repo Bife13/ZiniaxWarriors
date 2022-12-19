@@ -76,6 +76,8 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
                                     const FString& Options, const FString& Portal)
 {
 	// TODO if need to go back to old method, just override the Variables
+	UE_LOG(LogTemp, Log, TEXT("RECEIVED: '%s'"), *Options);
+				
 	const FString OptionsTest = "?Warrior=Nyax?Ability1=SmallHeal?Ability2=Anchor?Ability3=EletroGate";
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
