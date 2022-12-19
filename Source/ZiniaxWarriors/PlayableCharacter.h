@@ -46,6 +46,11 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SetServerTeamId(float Value);
 
+	UFUNCTION()
+	void SetSkills(TSubclassOf<USkillBase> Ability1, TSubclassOf<USkillBase> Ability2,
+	               TSubclassOf<USkillBase> Ability3);
+
+
 	UFUNCTION(NetMulticast, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(NetMulticast, Unreliable)

@@ -4,6 +4,7 @@
 #include "GameMode2v2.h"
 
 #include "BasePlayerController.h"
+#include "DTR_SkillsDatatable.h"
 #include "DTR_SpawnableCharacter.h"
 #include "GameState2v2.h"
 #include "TCPClient.h"
@@ -74,11 +75,19 @@ void AGameMode2v2::BeginPlay()
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
+	// TODO if need to go back to old method, just override the Variables
+	const FString OptionsTest = "?Warrior=Nyax?Ability1=SmallHeal?Ability2=Anchor?Ability3=EletroGate";
+	FString Warrior = ParsingWarriorName(OptionsTest);
+	FString Ability1 = ParsingAbility1(OptionsTest);
+	FString Ability2 = ParsingAbility2(OptionsTest);
+	FString Ability3 = ParsingAbility3(OptionsTest);
+
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
 	{
 		PlayerStart = GetPlayerStartsForTeam2()[CurrentStart];
 	}
+
 
 	UE_LOG(LogTemp, Warning, TEXT("Picked StartPointNamed: %s"), *PlayerStart->GetName());
 
@@ -87,11 +96,11 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	// Spawn An Actor												// Nyax, Drex, Zerher
 
 	int CharIndex = FMath::RandRange(0, 2);
-	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->
+	UClass* ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(FName(Warrior), "")->
 	                                            PlayableCharacter;
 	if (SpawnedPlayer)
 	{
-		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(CharacterNames[CharIndex], "")->
+		ClassToSpawn = SpawnableCharacters->FindRow<FSpawnableCharacter>(FName(Warrior), "")->
 		                                    PlayableCharacter;
 	}
 
@@ -111,6 +120,13 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	SpawnedActor->SetOwner(NewPlayerController);
 	PlayerControllers.Add(Cast<ABasePlayerController>(NewPlayerController));
 	APlayableCharacter* PlayableCharacter = Cast<APlayableCharacter>(SpawnedActor);
+
+	TSubclassOf<USkillBase> SetAbility1 = SkillsDatatable->FindRow<FSkillsDatatable>(FName(Ability1), "")->Skill;
+	TSubclassOf<USkillBase> SetAbility2 = SkillsDatatable->FindRow<FSkillsDatatable>(FName(Ability2), "")->Skill;
+	TSubclassOf<USkillBase> SetAbility3 = SkillsDatatable->FindRow<FSkillsDatatable>(FName(Ability3), "")->Skill;
+
+	PlayableCharacter->SetSkills(SetAbility1, SetAbility2, SetAbility3);
+
 	UHealthSystem* CurrentHealthSystem = Cast<UHealthSystem>(
 		PlayableCharacter->GetComponentByClass(UHealthSystem::StaticClass()));
 
@@ -143,6 +159,19 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 
 	++PlayerCounter;
 
+	FString Filename = "C:/Users/skyzf/Documents/Unreal Projects/ZiniaxWarriorsBuild/Stats/Stats.txt";
+	bool PrintedWarrior = FFileHelper::SaveStringToFile("Warrior: " + Warrior + "\r\n", *Filename,
+	                                                    FFileHelper::EEncodingOptions::AutoDetect,
+	                                                    &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+	bool PrintedAbility1 = FFileHelper::SaveStringToFile("Ability1: " + Ability1 + "\r\n", *Filename,
+	                                                     FFileHelper::EEncodingOptions::AutoDetect,
+	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+	bool PrintedAbility2 = FFileHelper::SaveStringToFile("Ability2: " + Ability2 + "\r\n", *Filename,
+	                                                     FFileHelper::EEncodingOptions::AutoDetect,
+	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+	bool PrintedAbility3 = FFileHelper::SaveStringToFile("Ability3: " + Ability3 + "\r\n", *Filename,
+	                                                     FFileHelper::EEncodingOptions::AutoDetect,
+	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
 
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
@@ -155,6 +184,8 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 	{
 		OpenDoors(DeltaSeconds);
 	}
+
+	MatchTimer();
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
@@ -173,6 +204,26 @@ bool AGameMode2v2::ReadyToStartMatch_Implementation()
 		}
 	}
 	return false;
+}
+
+FString AGameMode2v2::ParsingWarriorName(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Warrior");
+}
+
+FString AGameMode2v2::ParsingAbility1(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Ability1");
+}
+
+FString AGameMode2v2::ParsingAbility2(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Ability2");
+}
+
+FString AGameMode2v2::ParsingAbility3(const FString& Options)
+{
+	return UGameplayStatics::ParseOption(Options, "Ability3");
 }
 
 void AGameMode2v2::StartInBetweenRoundTimer(float Time)

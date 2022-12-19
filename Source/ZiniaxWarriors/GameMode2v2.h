@@ -31,6 +31,11 @@ protected:
 	UFUNCTION()
 	void BeginPlay() override;
 	
+	static FString ParsingWarriorName(const FString& Options);
+	static FString ParsingAbility1(const FString& Options);
+	static FString ParsingAbility2(const FString& Options);
+	static FString ParsingAbility3(const FString& Options);
+
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()
@@ -74,8 +79,12 @@ protected:
 	void CloseDoors();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
+	void MatchTimer();
 
+	UPROPERTY(BlueprintReadWrite)
+	int Minutes = 1;
+	UPROPERTY(BlueprintReadWrite)
+	int Seconds = 30.f;
 
 private:
 	UPROPERTY()
@@ -102,8 +111,8 @@ private:
 	UPROPERTY()
 	bool bIsGameStarted = false;
 
-	UPROPERTY()
-	int MaxPlayers = 4;
+	UPROPERTY(EditAnywhere)
+	int MaxPlayers;
 
 	UPROPERTY(VisibleAnywhere)
 	int Team1DeathCounter = 0;
@@ -120,4 +129,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
 	UDataTable* SpawnableCharacters;
+
+	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
+	UDataTable* SkillsDatatable;
 };

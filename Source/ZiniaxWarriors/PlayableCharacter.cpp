@@ -111,6 +111,14 @@ bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* 
 	return Wrote;
 }
 
+void APlayableCharacter::SetSkills(TSubclassOf<USkillBase> Ability1, TSubclassOf<USkillBase> Ability2,
+                                   TSubclassOf<USkillBase> Ability3)
+{
+	Skills[1] = Ability1;
+	Skills[2] = Ability2;
+	Skills[3] = Ability3;
+}
+
 void APlayableCharacter::SetServerTeamId_Implementation(float Value)
 {
 	ServerTeamID = Value;
