@@ -375,6 +375,8 @@ void TCPClient::SendGameServerInfo(FString host,FString port)
 		if (successfulHost)
 		{
 			UE_LOG(LogTemp, Log, TEXT("IP MESSAGE SENT!!!!"));
+			this->Stop();
+				
 		}
 	}
 }

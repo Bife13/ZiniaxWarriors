@@ -75,6 +75,7 @@ void AGameMode2v2::BeginPlay()
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
+<<<<<<< HEAD
 	// TODO if need to go back to old method, just override the Variables
 	UE_LOG(LogTemp, Log, TEXT("RECEIVED: '%s'"), *Options);
 				
@@ -83,6 +84,10 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
 	FString Ability3 = ParsingAbility3(OptionsTest);
+=======
+
+		UE_LOG(LogTemp, Warning, TEXT("Player Loadout: %s"), *Options);
+>>>>>>> MatchMakingStart
 
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
