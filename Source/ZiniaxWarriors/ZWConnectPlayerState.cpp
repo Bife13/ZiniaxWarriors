@@ -13,6 +13,11 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 
+void AZWConnectPlayerState::UpdateCanvas()
+{
+	
+}
+
 void AZWConnectPlayerState::BeginPlay()
 {
 	
@@ -20,7 +25,7 @@ void AZWConnectPlayerState::BeginPlay()
 	levelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	HasConfig =false;
 	
-	if (levelName == "MatchMakingMenu") // change to == for working again on server
+	if (levelName == "LoginMenu") // change to == for working again on server
 	{
 		LoginWidget = CreateWidget<UUserWidget>(GetWorld(),LoginWidgetClass);
 		LoginWidget->AddToViewport();
@@ -156,7 +161,7 @@ void AZWConnectPlayerState::OnConnectGameClick()
 	if(CustomizationWidget){
 		UE_LOG(LogTemp, Log, TEXT("Send my config to server!"));
 		FString CustomizationMessage = Cast<UCpp_CustomizationWidget>(CustomizationWidget)->GetConfigInString();
-		UE_LOG(LogTemp, Log, TEXT("RECEIVED: '%s'"), *CustomizationMessage);
+		UE_LOG(LogTemp, Log, TEXT("Cutomization To send: '%s'"), *CustomizationMessage);
 
 		tcpClient->ConnectPlayerToGame(CustomizationMessage);
 	}
@@ -167,17 +172,39 @@ void AZWConnectPlayerState::OnConnectGameClick()
 	}
 }
 
+void AZWConnectPlayerState::WaitingForGame(bool waiting)
+{
+	ClientWaitingforGame = waiting;
+
+	if(ClientWaitingforGame)
+	{
+		ConnectToGameButton = Cast<UButton>(CustomizationWidget->GetWidgetFromName(TEXT("ConnectToGameButton")));
+		
+		if (ConnectToGameButton)
+		{
+			UTextBlock* BTNText = Cast<UTextBlock>(CustomizationWidget->GetWidgetFromName("ConnectButtonText"));
+			FString btnTextSet ="Cancel MatchMaking";
+			BTNText->SetText(FText::FromString(btnTextSet));
+			
+		}
+	}
+	else
+	{
+		UTextBlock* BTNText = Cast<UTextBlock>(CustomizationWidget->GetWidgetFromName("ConnectButtonText"));
+		FString f= "Connect to Game";
+		BTNText->SetText(FText::FromString(f));
+	}	
+	
+}
+
 
 void AZWConnectPlayerState::ReceiveWarriorConfigUI(int w,int a1,int a2, int a3)
 {
-
 	Config.WarriorID=w;
 	Config.Ability1=a1;
 	Config.Ability2=a2;
 	Config.Ability3=a3;
-
 	HasConfig = true;
-	
 }
 
 void AZWConnectPlayerState::WaringMessage(FString msg,UUserWidget* WidgetOfWarning)
@@ -201,18 +228,9 @@ void AZWConnectPlayerState::SendNameFromInput()
 	
 }
 
-void AZWConnectPlayerState::OnSendNameButtonClicked()
-{
-	ClientName = NameInput->GetText().ToString();
-	tcpClient->SendPlayerNameCommand();
-
-}
 
 
-void AZWConnectPlayerState::OnNewSessionClicked()
-{
-	tcpClient->CreateNewGameSession("My test session");
-}
+
 
 
 
@@ -236,6 +254,37 @@ void AZWConnectPlayerState::ConnectToGameServer(FSessionInfo session)
 	canConnectToGameServer = true;
 	connectToGameServerSession = session;  
 }
+
+
+
+void AZWConnectPlayerState::GotoGameLevel()
+{
+	if(tcpClient)
+	{
+		if (tcpClient->IsConnected() && CustomizationWidget){
+			UE_LOG(LogTemp, Log, TEXT("Send my config to server!"));
+			FString CustomizationMessage = Cast<UCpp_CustomizationWidget>(CustomizationWidget)->GetConfigInString();
+			UE_LOG(LogTemp, Log, TEXT("Cutomization To send: '%s'"), *CustomizationMessage);
+			
+			APlayerController* pController = GetWorld()->  GetFirstPlayerController();
+			
+			if (pController)
+			{
+				FString cmd = "open " + tcpClient->getGameIP() + " " +CustomizationMessage;
+				tcpClient->Stop();
+				canConnectToGameServer = false;
+				CustomizationWidget->RemoveFromViewport();
+				pController->ConsoleCommand(cmd);
+			}
+			
+		}
+		
+	}
+	
+}
+
+
+
 
 void AZWConnectPlayerState::OnUpdateServerList()
 {

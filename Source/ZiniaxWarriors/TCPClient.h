@@ -13,22 +13,31 @@ class ZINIAXWARRIORS_API TCPClient: public FRunnable
 public:
 	
 	TCPClient(AZWConnectPlayerState* pState);
+	TCPClient();
+	TCPClient(FString MMIP);
 	bool isClient;
 	~TCPClient();
 	virtual bool Init() override;
 	virtual uint32 Run() override;
+	void SaveServerIP(FString tosave);
 	void ConnectPlayerToGame(FString ConfigStr);
+	void SendPlayerPass(FString name, FString pass);
 	void SendPlayerLogin(FString name, FString pass);
 	void SendLoginToServer(FString MessageToSend);
 	virtual void Stop() override;  
-	void CreateNewGameSession(FString sname);
-	void SendPlayerNameCommand();
+
 	void SendMessageToServer(FString MessageToSend);
-	
-	void JoinGameSession(int sID);
+
+	bool saveIp=false;
+
+	void SendGameServerInfo(FString host, FString port);
 	bool IsConnected();
+
+	
+	FString getGameIP(){return  GameServerToConnect;}
 	
 	private:
+	FString GameServerToConnect;
 	FIPv4Address serverIP;
 	FRunnableThread* Thread;
 	FSocket* Socket;

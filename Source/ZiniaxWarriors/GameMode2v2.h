@@ -30,6 +30,12 @@ protected:
 	static FString ParsingAbility2(const FString& Options);
 	static FString ParsingAbility3(const FString& Options);
 
+	
+	class TCPClient* MMServerConnection;
+	
+	UFUNCTION()
+	void BeginPlay() override;
+	
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()
@@ -62,7 +68,6 @@ protected:
 	void StartInBetweenRoundTimer(float Time);
 	UFUNCTION()
 	void StartDoorTimer(float Time);
-
 	UFUNCTION()
 	void ActivateAllCharacters();
 	UFUNCTION()

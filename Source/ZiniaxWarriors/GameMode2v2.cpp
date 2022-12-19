@@ -4,30 +4,94 @@
 #include "GameMode2v2.h"
 
 #include "BasePlayerController.h"
-#include "DTR_SkillsDatatable.h"
 #include "DTR_SpawnableCharacter.h"
 #include "GameState2v2.h"
+#include "TCPClient.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+void AGameMode2v2::BeginPlay()
+{
+	Super::BeginPlay();
+    UE_LOG(LogTemp, Log, TEXT("Check Am Server:"),);
 
+	if(GetWorld()->IsServer())
+	{
+		// check if on execute is created via exe with OpstionsString v
+		if(!OptionsString.IsEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Opened with Options string"));
+			FString MMIP = UGameplayStatics::ParseOption(OptionsString,"IP");
+			UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*MMIP);
+			FString tempPort = FString::FromInt( GetWorld()->URL.Port);
+			UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
+			MMServerConnection = new TCPClient(MMIP);
+		
+			if(MMServerConnection->IsConnected())
+			{
+
+				MMServerConnection->SendGameServerInfo(MMIP,tempPort);
+			}
+			else
+			{
+
+				UE_LOG(LogTemp, Error, TEXT("MATCH MAKING NOT FOUND SHUT ME DOWN PLEASE!!! OR manually connect clients to IP:1337 "));
+				// TODO shut down aplication
+				// or
+				// TODO try creating matchmaking server from folder path exe and restarting level after a time
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Check Self Machine for Matchmaking server"));
+			FString tempPort = FString::FromInt( GetWorld()->URL.Port);
+			UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
+			MMServerConnection = new TCPClient();
+		
+			if(MMServerConnection->IsConnected())
+			{
+				FString MMIP ="127.0.0.1";
+				MMServerConnection->SendGameServerInfo(MMIP,tempPort);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("MATCH MAKING NOT FOUND SHUT ME DOWN PLEASE!!! OR manually connect clients to IP:1337 "));
+				/// TODO shut down aplication
+				// or
+				// TODO try creating matchmaking server from folder path exe and restarting level after a time
+			}
+		}
+
+	
+		
+	}
+
+	
+	
+	
+	
+}
 
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
+
 	// TODO if need to go back to old method, just override the Variables
-	const FString OptionsTest = "?Warrior=Nyax?Ability1=SmallHeal?Ability2=Anchor?Ability3=EletroGate";
+	UE_LOG(LogTemp, Warning, TEXT("Player Loadout: %s"), *Options);
+	const FString OptionsTest = Options;
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
 	FString Ability3 = ParsingAbility3(OptionsTest);
+
+		
 
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
 	{
 		PlayerStart = GetPlayerStartsForTeam2()[CurrentStart];
 	}
-
 
 	UE_LOG(LogTemp, Warning, TEXT("Picked StartPointNamed: %s"), *PlayerStart->GetName());
 
@@ -315,7 +379,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
 		return true;
 	}
-	if (Team2RoundsWon >= 3)
+	if (Team2RoundsWon >= 3)UE_LOG(LogTemp, Warning, TEXT("Player Loadout: %s"), *Options);
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
 		return true;
