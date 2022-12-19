@@ -21,6 +21,7 @@ public:
 	virtual uint32 Run() override;
 	void SaveServerIP(FString tosave);
 	void ConnectPlayerToGame(FString ConfigStr);
+	void SendPlayerPass(FString name, FString pass);
 	void SendPlayerLogin(FString name, FString pass);
 	void SendLoginToServer(FString MessageToSend);
 	virtual void Stop() override;  
@@ -31,6 +32,9 @@ public:
 
 	void SendGameServerInfo(FString host, FString port);
 	bool IsConnected();
+
+	
+	FString getGameIP(){return  GameServerToConnect;}
 	
 	private:
 	FString GameServerToConnect;

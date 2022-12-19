@@ -161,7 +161,7 @@ void AZWConnectPlayerState::OnConnectGameClick()
 	if(CustomizationWidget){
 		UE_LOG(LogTemp, Log, TEXT("Send my config to server!"));
 		FString CustomizationMessage = Cast<UCpp_CustomizationWidget>(CustomizationWidget)->GetConfigInString();
-		UE_LOG(LogTemp, Log, TEXT("RECEIVED: '%s'"), *CustomizationMessage);
+		UE_LOG(LogTemp, Log, TEXT("Cutomization To send: '%s'"), *CustomizationMessage);
 
 		tcpClient->ConnectPlayerToGame(CustomizationMessage);
 	}
@@ -200,14 +200,11 @@ void AZWConnectPlayerState::WaitingForGame(bool waiting)
 
 void AZWConnectPlayerState::ReceiveWarriorConfigUI(int w,int a1,int a2, int a3)
 {
-
 	Config.WarriorID=w;
 	Config.Ability1=a1;
 	Config.Ability2=a2;
 	Config.Ability3=a3;
-
 	HasConfig = true;
-	
 }
 
 void AZWConnectPlayerState::WaringMessage(FString msg,UUserWidget* WidgetOfWarning)
@@ -257,6 +254,39 @@ void AZWConnectPlayerState::ConnectToGameServer(FSessionInfo session)
 	canConnectToGameServer = true;
 	connectToGameServerSession = session;  
 }
+
+
+
+void AZWConnectPlayerState::GotoGameLevel()
+{
+	if(tcpClient)
+	{
+		if (tcpClient->IsConnected() && CustomizationWidget){
+			UE_LOG(LogTemp, Log, TEXT("Send my config to server!"));
+			FString CustomizationMessage = Cast<UCpp_CustomizationWidget>(CustomizationWidget)->GetConfigInString();
+			UE_LOG(LogTemp, Log, TEXT("Cutomization To send: '%s'"), *CustomizationMessage);
+		
+
+			APlayerController* pController = GetWorld()->  GetFirstPlayerController();
+				
+				
+			if (pController)
+			{
+				FString cmd = "open " + tcpClient->getGameIP() + " " +CustomizationMessage;
+				tcpClient->Stop();
+				canConnectToGameServer = false;
+				CustomizationWidget->RemoveFromViewport();
+				pController->ConsoleCommand(cmd);
+			}
+			
+		}
+		
+	}
+	
+}
+
+
+
 
 void AZWConnectPlayerState::OnUpdateServerList()
 {

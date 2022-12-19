@@ -21,6 +21,7 @@ void AGameMode2v2::BeginPlay()
 		// check if on execute is created via exe with OpstionsString v
 		if(!OptionsString.IsEmpty())
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Opened with Options string"));
 			FString MMIP = UGameplayStatics::ParseOption(OptionsString,"IP");
 			UE_LOG(LogTemp, Log, TEXT("Ip of Server: '%s'"),*MMIP);
 			FString tempPort = FString::FromInt( GetWorld()->URL.Port);
@@ -34,6 +35,8 @@ void AGameMode2v2::BeginPlay()
 			}
 			else
 			{
+
+				UE_LOG(LogTemp, Error, TEXT("MATCH MAKING NOT FOUND SHUT ME DOWN PLEASE!!! OR manually connect clients to IP:1337 "));
 				// TODO shut down aplication
 				// or
 				// TODO try creating matchmaking server from folder path exe and restarting level after a time
@@ -41,17 +44,19 @@ void AGameMode2v2::BeginPlay()
 		}
 		else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Check Self Machine for Matchmaking server"));
 			FString tempPort = FString::FromInt( GetWorld()->URL.Port);
 			UE_LOG(LogTemp, Log, TEXT("Port of Server: '%s'"),*tempPort);
 			MMServerConnection = new TCPClient();
 		
 			if(MMServerConnection->IsConnected())
 			{
-				FString MMIP ="";
+				FString MMIP ="127.0.0.1";
 				MMServerConnection->SendGameServerInfo(MMIP,tempPort);
 			}
 			else
 			{
+				UE_LOG(LogTemp, Error, TEXT("MATCH MAKING NOT FOUND SHUT ME DOWN PLEASE!!! OR manually connect clients to IP:1337 "));
 				/// TODO shut down aplication
 				// or
 				// TODO try creating matchmaking server from folder path exe and restarting level after a time

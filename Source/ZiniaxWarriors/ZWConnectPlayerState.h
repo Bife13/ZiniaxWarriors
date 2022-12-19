@@ -57,6 +57,8 @@ class ZINIAXWARRIORS_API AZWConnectPlayerState : public APlayerState
 	void UpdateSessionsList(FString Serverinfo);
 	void ConnectToGameServer(FSessionInfo session);
 	UFUNCTION()
+	void GotoGameLevel();
+	UFUNCTION()
 	void SendNameFromInput();
 	UPROPERTY()
 	FString ClientName;
@@ -66,8 +68,10 @@ class ZINIAXWARRIORS_API AZWConnectPlayerState : public APlayerState
 	int WarriorID;
 	
 	FIPv4Address MatchmakingIP;
+	UFUNCTION()
 	void ShowCustomizationMenu();
 
+	UFUNCTION()
 	void ReceiveWarriorConfigUI(int w, int a1, int a2, int a3);
 
 	UFUNCTION()
@@ -84,18 +88,11 @@ protected:
 	virtual void BeginPlay() override;
 	UFUNCTION()
 	void OnLoginClick();
-
-	
 	
 	UFUNCTION()
 	void WaringMessage(FString msg, UUserWidget* WidgetOfWarning);
-
-
-	
-
+	//UPROPERTY(VisibleAnywhere)
 	class TCPClient* tcpClient;
-
-
 	
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> MatchmakingWidgetClass;
@@ -140,7 +137,6 @@ protected:
 	UEditableText* ClientNameInput;
 	UPROPERTY(VisibleAnywhere,Category = "UI")
 	UEditableText* ClientPassInput;
-	
 	
 	UFUNCTION()
 	void OnUpdateServerList(); 

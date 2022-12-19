@@ -44,9 +44,63 @@ int UCpp_CustomizationWidget::GetAbility(int number)
 FString UCpp_CustomizationWidget::GetConfigInString()
 {
 	FString result;
-	result = "W"+FString::FromInt(WarriorID)+";A"+FString::FromInt(Ability1ID)+";B"+FString::FromInt(Ability2ID)+";C"+FString::FromInt(Ability2ID)+";";
+	
+	result = "?Warrior="+WarriorIndexToString(WarriorID)+"?Ability1="+AbilityIndexToString(Ability1ID)
+			+"?Ability2="+AbilityIndexToString(Ability2ID)+"?Ability3="+AbilityIndexToString(Ability3ID);
 	return result;
 }
+
+
+FString UCpp_CustomizationWidget::WarriorIndexToString(int index)
+{
+	FString Name;
+	switch (index)
+	{
+	case 1:
+		Name ="Drex";
+		break;
+	case 2:
+		Name ="Nyax";
+		break;
+
+	case 3:
+		Name ="Zerher";
+		break;
+	default:
+		break;
+	}
+	return Name;
+}
+FString UCpp_CustomizationWidget::AbilityIndexToString(int index)
+{
+	FString abilityName;
+
+	switch (index)
+	{
+	case 0:
+		abilityName ="Small Heal";
+		break;
+	case 1:
+		abilityName ="Roar";
+		break;
+	case 2:
+		abilityName ="EletroGate";
+		break;
+	case 3:
+		abilityName ="Anchor";
+		break;
+	case 4:
+		abilityName ="DarkSwarm";
+		break;
+	case 5:
+		abilityName ="SingleShot";
+		break;
+	default: break;
+	}
+	return abilityName;
+}
+
+
 
 void UCpp_CustomizationWidget::SetWarrior(int index)
 {

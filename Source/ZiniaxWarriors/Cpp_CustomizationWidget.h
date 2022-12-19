@@ -36,6 +36,8 @@ class ZINIAXWARRIORS_API UCpp_CustomizationWidget : public UUserWidget
 	int GetAbility(int number);
 	UFUNCTION()
 	FString GetConfigInString();
+	FString WarriorIndexToString(int index);
+	FString AbilityIndexToString(int index);
 	UFUNCTION(BlueprintCallable)
 	void SetWarrior(int index);
 	
