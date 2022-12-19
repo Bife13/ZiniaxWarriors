@@ -10,32 +10,50 @@
 
 //AttackPower Buff/Debuff events
 DECLARE_EVENT_OneParam(UStatsComponent, EnrageAppliedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, EnrageRemovedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, WeakenAppliedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, WeakenRemovedEvent, float)
+
 //Defense Buff/Debuff events
 DECLARE_EVENT_OneParam(UStatsComponent, BulkAppliedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, BulkRemovedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, VulnerableAppliedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, VulnerableRemovedEvent, float)
+
 //Speed Buff/Debuff events
 DECLARE_EVENT_OneParam(UStatsComponent, SlowAppliedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, HasteAppliedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, SlowRemovedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, HasteRemovedEvent, float)
+
 //Root Debuff events
 DECLARE_EVENT(UStatsComponent, RootAppliedEvent)
+
 DECLARE_EVENT(UStatsComponent, RootRemoveEvent)
+
 //Shield Buff events
-DECLARE_EVENT_OneParam(UStatsComponent, ShieldAppliedEvent,float);
-DECLARE_EVENT_OneParam(UStatsComponent, ShieldRemovedEvent,float);
+DECLARE_EVENT_OneParam(UStatsComponent, ShieldAppliedEvent, float);
+
+DECLARE_EVENT_OneParam(UStatsComponent, ShieldRemovedEvent, float);
+
 //Casting Slow events
 DECLARE_EVENT_OneParam(UStatsComponent, CastingSlowRemovedEvent, float)
+
 DECLARE_EVENT_OneParam(UStatsComponent, CastingSlowAppliedEvent, float)
 
 //UI Stuff
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRemoveBuffEvent,FString,NameOfBuff,bool,IsBuff,int,BuffIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent, FString, NameOfBuff, bool, IsBuff, int, BuffIndex);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRemoveBuffEvent, FString, NameOfBuff, bool, IsBuff, int, BuffIndex);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
@@ -48,61 +66,103 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
-
 	UFUNCTION(BlueprintCallable)
 	float GetSpeed() const { return CurrentSpeed; }
+
 	UFUNCTION(BlueprintCallable)
 	float GetPower() const { return CurrentPower; }
+
 	UFUNCTION(BlueprintCallable)
 	float GetMaximumHealth() const { return CurrentMaximumHealth; }
+
 	UFUNCTION(BlueprintCallable)
 	float GetResistance() const { return CurrentResistance; }
+
 	UFUNCTION(BlueprintCallable)
 	float GetViewRange() const { return CurrentViewRange; }
-	UFUNCTION(BlueprintCallable)
-	float GetShield() const {return CurrentShield;}
 
-    void Enrage(float Amount);
+	UFUNCTION(BlueprintCallable)
+	float GetShield() const { return CurrentShield; }
+
+	UFUNCTION()
+	void Enrage(float Amount);
 	EnrageAppliedEvent OnEnrageAppliedEvent;
 	EnrageRemovedEvent OnEnrageRemovedEvent;
-	
-	void Weaken(float Amount);
-    WeakenAppliedEvent OnWeakenAppliedEvent;
-	WeakenRemovedEvent OnWeakenRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleEnrageEvents(float Amount);
 
+	UFUNCTION()
+	void Weaken(float Amount);
+	WeakenAppliedEvent OnWeakenAppliedEvent;
+	WeakenRemovedEvent OnWeakenRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleWeakenEvents(float Amount);
+
+	UFUNCTION()
 	void Bulk(float Amount);
 	BulkAppliedEvent OnBulkAppliedEvent;
 	BulkRemovedEvent OnBulkRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleBulkEvents(float Amount);
 
+	UFUNCTION()
 	void Vulnerable(float Amount);
 	VulnerableAppliedEvent OnVulnerableAppliedEvent;
 	VulnerableRemovedEvent OnVulnerableRemovedEvent;
-	
+	UFUNCTION(NetMulticast, Reliable)
+	void HandleVulnerableEvents(float Amount);
+
+	UFUNCTION()
 	void Haste(float Amount);
+	UFUNCTION()
 	void HasteRemove(float Amount);
 	HasteAppliedEvent OnHasteAppliedEvent;
-    HasteRemovedEvent OnHasteRemovedEvent;
-	
+	HasteRemovedEvent OnHasteRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleHasteEventsRemove(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleHasteEventsApplied(float Amount);
+
+	UFUNCTION()
 	void Slow(float Amount);
+	UFUNCTION()
 	void SlowRemove(float Amount);
 	SlowAppliedEvent OnSlowAppliedEvent;
 	SlowRemovedEvent OnSlowRemovedEvent;
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleSlowAppliedEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+    void HandleSlowRemoveEvent(float Amount);
 
+	UFUNCTION()
 	void Root();
+	UFUNCTION()
 	void EndRoot(float Amount);
 	RootAppliedEvent OnRootApplied;
 	RootRemoveEvent OnRootRemoved;
-
+    UFUNCTION(NetMulticast,Reliable)
+	void HandleRootAppliedEvent();
+	UFUNCTION(NetMulticast,Reliable)
+    void HandleRootRemovedEvent();
+	
+	UFUNCTION()
 	void Shield(float Amount);
+	UFUNCTION()
 	void RemoveShield(float Amount);
 	ShieldAppliedEvent OnShieldApplied;
 	ShieldRemovedEvent OnShieldRemoved;
+	UFUNCTION(NetMulticast,Reliable)
+    void HandleShieldAppliedEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleShieldRemovedEvent(float Amount);
 
+	UFUNCTION()
 	void CastingSlow(float Amount);
+	UFUNCTION()
 	void RemoveCastingSlow(float Amount);
 	CastingSlowAppliedEvent OnCastingSlowApplied;
 	CastingSlowRemovedEvent OnCastingSlowRemovedEvent;
-	
+
 	// FORCEINLINE void SetSpeed(float Value) { Speed = Value; }
 	// FORCEINLINE void SetPower(float Value) { Power = Value; }
 	// FORCEINLINE void SetMaximumHealth(float Value) { MaximumHealth = Value; }
@@ -119,23 +179,35 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FRemoveBuffEvent BuffRemove;
-    
+
 protected:
 	// Called when the game starts
+	UFUNCTION()
 	virtual void BeginPlay() override;
+	UPROPERTY()
 	float BasePower;
+	UPROPERTY()
 	float BaseSpeed;
+	UPROPERTY()
 	float BaseMaximumHealth;
+	UPROPERTY()
 	float BaseResistance;
+	UPROPERTY()
 	float BaseViewRange;
 
 	UPROPERTY()
 	UHealthSystem* HealthSystem;
-	
+
+	UPROPERTY(Replicated, VisibleAnywhere)
 	float CurrentPower;
+	UPROPERTY(Replicated, VisibleAnywhere)
 	float CurrentSpeed;
+	UPROPERTY(Replicated, VisibleAnywhere)
 	float CurrentMaximumHealth;
+	UPROPERTY(Replicated, VisibleAnywhere)
 	float CurrentResistance;
+	UPROPERTY(Replicated, VisibleAnywhere)
 	float CurrentViewRange;
+	UPROPERTY(Replicated, VisibleAnywhere)
 	float CurrentShield;
 };

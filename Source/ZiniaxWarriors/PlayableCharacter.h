@@ -46,6 +46,11 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SetServerTeamId(float Value);
 
+	UFUNCTION()
+	void SetSkills(TSubclassOf<USkillBase> Ability1, TSubclassOf<USkillBase> Ability2,
+	               TSubclassOf<USkillBase> Ability3);
+
+
 	UFUNCTION(NetMulticast, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(NetMulticast, Unreliable)
@@ -53,7 +58,7 @@ public:
 	UFUNCTION(Server, Unreliable)
 	virtual void MoveMouse(FVector Value) override;
 
-	
+
 	UPROPERTY(BlueprintReadOnly)
 	FRotator CachedMouseRotator;
 	UFUNCTION(BlueprintCallable)
@@ -62,14 +67,11 @@ public:
 	FVector CachedMousePosition;
 
 	UFUNCTION(BlueprintImplementableEvent)
-    void OnSpecialAbilityCast();
+	void OnSpecialAbilityCast(int Index);
 
-    UFUNCTION(BlueprintCallable)
-	void OnSpecialAbility();
+	UFUNCTION(BlueprintCallable)
+	void OnSpecialAbility(int Index);
 
-	
-	UFUNCTION(Server, Reliable)
-	void Respawn(FVector Location);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
@@ -107,33 +109,33 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCastEffect(UParticleSystem* NewParticle);
 
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartRootEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndRootEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void Shielded() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void ShieldOver() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartEnrageEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndEnrageEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartVulnerableEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndVulnerableEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartHasteEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndHasteEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartSlowEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndSlowEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void StartWeakenEffect() const;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void EndWeakenEffect() const;
 	UFUNCTION()
 	void SetSpawnLocation(FVector newLocation) { SpawnLocation = newLocation; }
@@ -142,12 +144,21 @@ public:
 	UFUNCTION()
 	virtual bool GetIsCasting() override;
 
-	UFUNCTION(NetMulticast,Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void SetIsCasting(bool Value) override;
 
+	UFUNCTION(BlueprintCallable)
+	bool GetIsDead();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetIsDead(bool Value);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<USkillBase*> GetRunTimeSkill();
+
+	UFUNCTION()
+	void ResetCharacter() const;
+
 
 protected:
 	UFUNCTION()
@@ -207,9 +218,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<USkillBase>> Skills;
-	UPROPERTY(VisibleAnywhere,Replicated)
+	UPROPERTY(VisibleAnywhere, Replicated)
 	TArray<USkillBase*> RuntimeSkills;
-	UPROPERTY(EditAnywhere,Replicated,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, Replicated, BlueprintReadOnly)
 	TArray<UAnimMontage*> AttackAnimations;
 
 	UPROPERTY(EditAnywhere)
@@ -240,6 +251,9 @@ protected:
 
 	UPROPERTY(Replicated)
 	bool bIsCasting = false;
+
+	UPROPERTY(Replicated)
+	bool bIsDead = false;
 
 	UPROPERTY(Replicated, VisibleAnywhere)
 	int ServerTeamID;
@@ -284,11 +298,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Particle)
 	UParticleSystemComponent* HasteParticleSystem;
 
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* ShieldedEffect;
-
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* ShieldOverEffect;
 
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

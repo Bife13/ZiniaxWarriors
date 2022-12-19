@@ -9,8 +9,10 @@
 #include "UObject/NoExportTypes.h"
 #include "SkillBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted,float,Cooldown);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillReset,bool,isReset);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted, float, Cooldown);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillReset, bool, isReset);
+
 UCLASS(Blueprintable)
 class ZINIAXWARRIORS_API USkillBase : public UObject, public IUsableSkill
 {
@@ -25,13 +27,18 @@ public:
 	virtual bool IsSupportedForNetworking() const override;
 	
 
+	UFUNCTION(Client, Reliable)
+	void HandleCastEvents(float Value);
+	UFUNCTION(Client, Reliable)
+	void HandleResetEvents();
+
 	UFUNCTION(BlueprintCallable)
 	void DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfProjectile);
 
 	UFUNCTION()
 	void DelayedSpawn(const FVector& SpawnPosition);
-	
-	UFUNCTION(Server,Reliable)
+
+	UFUNCTION(Server, Reliable)
 	void ResetCooldown();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -88,10 +95,10 @@ public:
 	int GetTeamId() const { return TeamId; }
 
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
-	
+
 	UPROPERTY(BlueprintReadWrite, Replicated)
-    UTexture* SkillIconTexture;
-	
+	UTexture* SkillIconTexture;
+
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSkillActor(const FVector& SpawnPosition);
@@ -100,18 +107,17 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ChangeRotator(const float ZOffsetAngle);
 	UFUNCTION(BlueprintCallable)
-	FVector CalculateMaxRangeSpawn(const FVector& MousePosition,const FVector& PlayerPosition);
+	FVector CalculateMaxRangeSpawn(const FVector& MousePosition, const FVector& PlayerPosition);
 	UPROPERTY()
 	int TeamId;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	float CooldownForUi(){ return  AbilityCooldown;}
+	float CooldownForUi() { return AbilityCooldown; }
 
 	UPROPERTY(BlueprintAssignable)
 	FSkillCasted CastEvent;
 
 	UPROPERTY(BlueprintAssignable)
 	FSkillReset ResetEvent;
-	
 };
