@@ -76,6 +76,9 @@ void AGameMode2v2::BeginPlay()
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
+
+		UE_LOG(LogTemp, Warning, TEXT("Player Loadout: %s"), *Options);
+
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
 	{
