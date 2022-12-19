@@ -79,6 +79,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 
 	// TODO if need to go back to old method, just override the Variables
 	UE_LOG(LogTemp, Warning, TEXT("Player Loadout: %s"), *Options);
+
 	const FString OptionsTest = Options;
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
@@ -162,7 +163,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	}
 
 	++PlayerCounter;
-
+	/*
 	FString Filename = "C:/Users/skyzf/Documents/Unreal Projects/ZiniaxWarriorsBuild/Stats/Stats.txt";
 	bool PrintedWarrior = FFileHelper::SaveStringToFile("Warrior: " + Warrior + "\r\n", *Filename,
 	                                                    FFileHelper::EEncodingOptions::AutoDetect,
@@ -176,7 +177,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	bool PrintedAbility3 = FFileHelper::SaveStringToFile("Ability3: " + Ability3 + "\r\n", *Filename,
 	                                                     FFileHelper::EEncodingOptions::AutoDetect,
 	                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
-
+	*/
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
 
