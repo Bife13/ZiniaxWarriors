@@ -265,11 +265,9 @@ void AZWConnectPlayerState::GotoGameLevel()
 			UE_LOG(LogTemp, Log, TEXT("Send my config to server!"));
 			FString CustomizationMessage = Cast<UCpp_CustomizationWidget>(CustomizationWidget)->GetConfigInString();
 			UE_LOG(LogTemp, Log, TEXT("Cutomization To send: '%s'"), *CustomizationMessage);
-		
-
+			
 			APlayerController* pController = GetWorld()->  GetFirstPlayerController();
-				
-				
+			
 			if (pController)
 			{
 				FString cmd = "open " + tcpClient->getGameIP() + " " +CustomizationMessage;
