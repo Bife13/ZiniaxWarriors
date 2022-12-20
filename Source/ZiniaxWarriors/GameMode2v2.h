@@ -30,6 +30,12 @@ protected:
 	static FString ParsingAbility2(const FString& Options);
 	static FString ParsingAbility3(const FString& Options);
 
+	
+	class TCPClient* MMServerConnection;
+	
+	UFUNCTION()
+	void BeginPlay() override;
+	
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()
@@ -63,6 +69,7 @@ protected:
 	UFUNCTION()
 	void StartDoorTimer(float Time);
 
+	
 	UFUNCTION()
 	void ActivateAllCharacters();
 	UFUNCTION()
@@ -80,6 +87,10 @@ protected:
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)
 	int Seconds = 30.f;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
+
 
 private:
 	UPROPERTY()

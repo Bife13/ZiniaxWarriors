@@ -599,3 +599,4 @@ void APlayableCharacter::ResetCharacter() const
 	HealthComponent->SetHealthToMaxHealth();
 	StatusEffectsComponent->CleanBuffs();
 }
+

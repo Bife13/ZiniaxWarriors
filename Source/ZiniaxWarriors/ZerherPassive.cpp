@@ -13,6 +13,7 @@ void UZerherPassive::OnTick_Implementation(float DeltaTime)
 	}
 	else
 	{	
+
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("GOT HERE")));
 		PassiveOwner->AddShieldPassive(Cooldown / 3,ShieldForce);
 		Timer = Cooldown;
@@ -21,7 +22,7 @@ void UZerherPassive::OnTick_Implementation(float DeltaTime)
 
 void UZerherPassive::OnHit()
 {
-	Super::OnHit();
+	Super::OnHit();	
 }
 
 float UZerherPassive::CheckDistance(float Damage, APawn* Owner, APawn* Target)
