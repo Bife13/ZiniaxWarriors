@@ -31,9 +31,15 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealthAsPercentage() const;
 	//General functions
-	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
+	UFUNCTION(BlueprintCallable,Server,Reliable)
 	void TakeDamage(float Amount);
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleShieldBrokenEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleDamageTakenEvent(float Amount);
+	UFUNCTION(NetMulticast,Reliable)
+	void HandleHealEvent(float Amount);
+	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void RecoverHealth(float Amount);
 	//Sets
 	UFUNCTION(BlueprintCallable)
@@ -42,9 +48,10 @@ public:
 	void SetMaxHealth(float Amount);
 	UFUNCTION(BlueprintCallable)
 	void SetResistance(float Amount);
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void SetShield(float Amount);
-
+	UFUNCTION(BlueprintCallable)
+	float GetShield() const{return Shield;}
 	UFUNCTION()
 	void ResetHealth();
 	
@@ -66,8 +73,8 @@ public: // Events
 	
 private: // This can be protected if we want to subclass the Health Component
 
-	UPROPERTY(VisibleAnywhere)
-	float Shield = 0;
+	UPROPERTY(VisibleAnywhere,Replicated)
+	float Shield;
 	UPROPERTY(VisibleAnywhere, Replicated)
 	float Health;
 	UPROPERTY(VisibleAnywhere)

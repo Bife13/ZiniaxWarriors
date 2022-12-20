@@ -30,7 +30,7 @@ APlayableCharacter::APlayableCharacter()
 
 	SetupStatsComponent();
 
-	// Create a camera boom...
+	// Create a camera boom... 
 	SetupCameraBoom();
 
 	// Create a camera...
@@ -61,60 +61,6 @@ void APlayableCharacter::StartBeginPlay()
 
 	PopulateSkillArray();
 	PassiveInitializeFunction();
-}
-
-bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool Wrote = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-		for (int i = 0; i < RuntimeSkills.Num(); ++i)
-		{
-			Wrote |= Channel->ReplicateSubobject(RuntimeSkills[i], *Bunch, *RepFlags);
-		}
-	return Wrote;
-}
-
-void APlayableCharacter::SetServerTeamId_Implementation(float Value)
-{
-	ServerTeamID = Value;
-}
-
-void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
-	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
-	DOREPLIFETIME(APlayableCharacter, bIsCasting);
-	DOREPLIFETIME(APlayableCharacter, AttackAnimations);
-	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
-}
-
-
-void APlayableCharacter::MoveMouse_Implementation(FVector Value)
-{
-	const FVector PlayerPosition = this->GetTransform().GetLocation();
-	const FVector CursorPosition = Value;
-	FRotator ActualRotation = UKismetMathLibrary::FindLookAtRotation(PlayerPosition, CursorPosition);
-	ActualRotation.Roll = 0;
-	ActualRotation.Pitch = 0;
-	CachedMousePosition = CursorPosition;
-	CachedMouseRotator = ActualRotation;
-	this->SetActorRotation(ActualRotation);
-	// GetCapsuleComponent()->SetWorldRotation(ActualRotation);
-}
-
-FVector APlayableCharacter::GetMousePos()
-{
-	return CachedMousePosition;
-}
-
-
-// Called every frame
-void APlayableCharacter::Tick(const float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	OnTickPassive(DeltaTime);
 
 	//Haste observe
 	StatsComponent->OnHasteAppliedEvent.AddUFunction(this, "ObserveSpeedBuffs");
@@ -151,9 +97,69 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	//Weaken Observe
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
+}
+
+bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool Wrote = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	for (int i = 0; i < RuntimeSkills.Num(); ++i)
+	{
+		Wrote |= Channel->ReplicateSubobject(RuntimeSkills[i], *Bunch, *RepFlags);
+	}
+	return Wrote;
+}
+
+void APlayableCharacter::SetSkills(TSubclassOf<USkillBase> Ability1, TSubclassOf<USkillBase> Ability2,
+                                   TSubclassOf<USkillBase> Ability3)
+{
+	Skills[1] = Ability1;
+	Skills[2] = Ability2;
+	Skills[3] = Ability3;
+}
+
+void APlayableCharacter::SetServerTeamId_Implementation(float Value)
+{
+	ServerTeamID = Value;
+}
+
+void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(APlayableCharacter, CachedMousePosition);
+	DOREPLIFETIME(APlayableCharacter, ServerTeamID);
+	DOREPLIFETIME(APlayableCharacter, bIsCasting);
+	DOREPLIFETIME(APlayableCharacter, bIsDead);
+	DOREPLIFETIME(APlayableCharacter, AttackAnimations);
+	DOREPLIFETIME(APlayableCharacter, RuntimeSkills);
+}
 
 
-	HealthComponent->OnDeathEvent.AddUFunction(this, "Respawn");
+void APlayableCharacter::MoveMouse_Implementation(FVector Value)
+{
+	const FVector PlayerPosition = this->GetTransform().GetLocation();
+	const FVector CursorPosition = Value;
+	FRotator ActualRotation = UKismetMathLibrary::FindLookAtRotation(PlayerPosition, CursorPosition);
+	ActualRotation.Roll = 0;
+	ActualRotation.Pitch = 0;
+	CachedMousePosition = CursorPosition;
+	CachedMouseRotator = ActualRotation;
+	this->SetActorRotation(FMath::Lerp(GetActorRotation(), ActualRotation, 0.6f));
+}
+
+FVector APlayableCharacter::GetMousePos()
+{
+	return CachedMousePosition;
+}
+
+
+// Called every frame
+void APlayableCharacter::Tick(const float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	OnTickPassive(DeltaTime);
+
 
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
@@ -380,10 +386,9 @@ void APlayableCharacter::OnTickPassive(float DeltaTime) const
 			CachedPassiveInterface->OnTick(DeltaTime);
 }
 
-void APlayableCharacter::Respawn_Implementation(FVector Location)
+void APlayableCharacter::OnSpecialAbility(int Index)
 {
-	//this->SetActorLocation(Location.X,Location.Y,0);
-	HealthComponent->ResetHealth();
+	OnSpecialAbilityCast(Index);
 }
 
 void APlayableCharacter::TakeDamage(float Amount)
@@ -476,13 +481,13 @@ void APlayableCharacter::SetCastEffect(UParticleSystem* NewParticle)
 	//  }
 }
 
-void APlayableCharacter::StartRootEffect() const
+void APlayableCharacter::StartRootEffect_Implementation() const
 {
 	if (RootParticleSystem)
 		RootParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndRootEffect() const
+void APlayableCharacter::EndRootEffect_Implementation() const
 {
 	if (RootParticleSystem)
 	{
@@ -490,75 +495,74 @@ void APlayableCharacter::EndRootEffect() const
 	}
 }
 
-void APlayableCharacter::Shielded() const
+void APlayableCharacter::Shielded_Implementation() const
 {
 	if (ShieldParticleSystem)
 	{
-		ShieldParticleSystem->Template = ShieldedEffect;
 		ShieldParticleSystem->Activate(true);
 	}
 }
 
-void APlayableCharacter::ShieldOver() const
+void APlayableCharacter::ShieldOver_Implementation() const
 {
 	if (ShieldParticleSystemOver && ShieldParticleSystem)
 	{
 		ShieldParticleSystem->Deactivate();
 
-		ShieldParticleSystemOver->Template = ShieldOverEffect;
 		ShieldParticleSystemOver->Activate(true);
 	}
 }
 
-void APlayableCharacter::StartEnrageEffect() const
+void APlayableCharacter::StartEnrageEffect_Implementation() const
 {
 	EnrageParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndEnrageEffect() const
+void APlayableCharacter::EndEnrageEffect_Implementation() const
 {
 	EnrageParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartVulnerableEffect() const
+void APlayableCharacter::StartVulnerableEffect_Implementation() const
 {
 	VulnerableParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndVulnerableEffect() const
+void APlayableCharacter::EndVulnerableEffect_Implementation() const
 {
 	VulnerableParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartHasteEffect() const
+void APlayableCharacter::StartHasteEffect_Implementation() const
 {
 	HasteParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndHasteEffect() const
+void APlayableCharacter::EndHasteEffect_Implementation() const
 {
 	HasteParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartSlowEffect() const
+void APlayableCharacter::StartSlowEffect_Implementation() const
 {
 	SlowParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndSlowEffect() const
+void APlayableCharacter::EndSlowEffect_Implementation() const
 {
 	SlowParticleSystem->Deactivate();
 }
 
-void APlayableCharacter::StartWeakenEffect() const
+void APlayableCharacter::StartWeakenEffect_Implementation() const
 {
 	WeakenParticleSystem->Activate(true);
 }
 
-void APlayableCharacter::EndWeakenEffect() const
+void APlayableCharacter::EndWeakenEffect_Implementation() const
 {
 	WeakenParticleSystem->Deactivate();
 }
+
 
 bool APlayableCharacter::GetIsCasting()
 {
@@ -570,9 +574,26 @@ void APlayableCharacter::SetIsCasting_Implementation(bool Value)
 	bIsCasting = Value;
 }
 
+bool APlayableCharacter::GetIsDead()
+{
+	return bIsCasting;
+}
+
+void APlayableCharacter::SetIsDead_Implementation(bool Value)
+{
+	bIsCasting = Value;
+}
+
 
 TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 {
 	TArray<USkillBase*> SkillsToSend = RuntimeSkills;
 	return SkillsToSend;
 }
+
+void APlayableCharacter::ResetCharacter() const
+{
+	HealthComponent->SetHealthToMaxHealth();
+	StatusEffectsComponent->CleanBuffs();
+}
+

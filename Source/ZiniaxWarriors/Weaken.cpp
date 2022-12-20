@@ -26,3 +26,8 @@ void UWeaken::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->Weaken(-Amount);
 }
+
+float UWeaken::GetTimer()
+{
+	return Timer;
+}

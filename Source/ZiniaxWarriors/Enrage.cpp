@@ -21,8 +21,12 @@ void UEnrage::OnBuffTick(float DeltaTime)
 		Timer = 0;
 	}
 }
-
 void UEnrage::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->Enrage(-Amount);
+}
+
+float UEnrage::GetTimer()
+{
+	return Timer;
 }

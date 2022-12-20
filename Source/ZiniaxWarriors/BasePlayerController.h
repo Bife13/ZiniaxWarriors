@@ -18,9 +18,13 @@ class ZINIAXWARRIORS_API ABasePlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	ABasePlayerController();	
+	ABasePlayerController();
 	// void OnCharacterPossess(ACharacter* InCharacter) ;
+	UFUNCTION()
+	void CharacterActivate();
 
+	UFUNCTION()
+	void CharacterDeactivate();
 
 protected:
 	// Begin PlayerController interface
@@ -40,7 +44,10 @@ protected:
 	void MoveHorizontalInput(float Value);
 	void MouseChanged(FVector Value);
 	void CalculateMousePosition();
-	
+
 	IUsableCharacterSkillSlot* CachedCharacterInterface;
 	IMoveableCharacter* CachedMoveableInterface;
+
+	UPROPERTY(Replicated)
+	bool bIsCharacterActivated = false;
 };

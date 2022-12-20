@@ -22,8 +22,12 @@ void UHaste::OnBuffTick(float DeltaTime)
 		Timer = 0;
 	}
 }
-
 void UHaste::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->HasteRemove(TemporarySpeedToSend);
+}
+
+float UHaste::GetTimer()
+{
+	return Timer;
 }

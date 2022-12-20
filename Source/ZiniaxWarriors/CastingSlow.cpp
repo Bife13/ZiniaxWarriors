@@ -20,6 +20,7 @@ void UCastingSlow::OnBuffTick(float DeltaTime)
 		Timer -= DeltaTime;
 	}else
 	{
+		
 		Timer = 0;
 	}
 }
@@ -27,5 +28,10 @@ void UCastingSlow::OnBuffTick(float DeltaTime)
 void UCastingSlow::OnBuffEnd(UStatsComponent* StatsComponent)
 {
 	StatsComponent->RemoveCastingSlow(TemporarySpeed);
+}
+
+float UCastingSlow::GetTimer()
+{
+	return Timer;
 }
 

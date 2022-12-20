@@ -11,7 +11,6 @@ void USkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(USkillBase, SkillIconTexture);
-
 }
 
 void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
@@ -21,7 +20,7 @@ void USkillBase::InitializeSkill(ACharacter* Playable, UWorld* World, int Team)
 	TeamId = Team;
 	CachedCharacterInterface = Cast<IUsableCharacterSkillSlot>(OwnerCharacter);
 	bCanUse = true;
-	OnInitialize();	
+	OnInitialize();
 }
 
 
@@ -32,8 +31,7 @@ void USkillBase::CastSkill(UAnimMontage* AnimationToPlay)
 		CachedCharacterInterface->SetIsCasting(true);
 		AttackAnimation = AnimationToPlay;
 		bCanUse = false;
-		CastEvent.Broadcast(AbilityCooldown);
-
+		HandleCastEvents(AbilityCooldown);
 		OnCast();
 	}
 	else
@@ -47,6 +45,16 @@ bool USkillBase::IsSupportedForNetworking() const
 	return true;
 }
 
+void USkillBase::HandleCastEvents_Implementation(float Value)
+{
+	CastEvent.Broadcast(Value);
+}
+
+
+void USkillBase::HandleResetEvents_Implementation()
+{
+	ResetEvent.Broadcast(true);
+}
 
 // void USkillBase::StartCooldownTimer()
 // {
@@ -77,7 +85,7 @@ void USkillBase::DelayedSpawn(const FVector& SpawnPosition)
 void USkillBase::ResetCooldown_Implementation()
 {
 	bCanUse = true;
-	ResetEvent.Broadcast(true);
+	HandleResetEvents();
 }
 
 void USkillBase::UseSkill()
@@ -149,4 +157,3 @@ FVector USkillBase::CalculateMaxRangeSpawn(const FVector& MousePosition, const F
 	}
 	return MousePosition;
 }
-

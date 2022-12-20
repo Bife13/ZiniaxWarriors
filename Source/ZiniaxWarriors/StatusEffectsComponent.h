@@ -21,25 +21,45 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(Server, Unreliable)
+	void TickArrays(float DeltaTime);
+	// Called when the game starts
+	virtual void BeginPlay() override;
+	UFUNCTION()
 	void AddEnrage(float TimeAmount, float BuffAmount);
+	UFUNCTION()
 	void AddBulk(float TimeAmount, float BuffAmount);
+	UFUNCTION()
 	void AddHaste(float TimeAmount, float BuffAmount);
+	UFUNCTION()
 	void AddSlow(float TimeAmount, float DebuffAmount);
+	UFUNCTION()
 	void AddWeaken(float TimeAmount, float DebuffAmount);
+	UFUNCTION()
 	void AddVulnerable(float TimeAmount, float DebuffAmount);
+	UFUNCTION()
 	void AddRoot(float TimeAmount);
+	UFUNCTION()
 	void AddShield(float TimeAmount, float BuffAmount);
+	UFUNCTION()
 	void AddCastingSlow(float TimeAmount, float BuffAmount);
+	UFUNCTION()
 	void SetStatsComponent(UStatsComponent* StatsComponentToSet);
+
+	UFUNCTION(Server, Reliable)
+	void CleanBuffs();
 
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-	
 	const FBuffFactory* BuffFactory;
-	TArray<IBuff*> CurrentBuffArray;
-	UPROPERTY(EditAnywhere)
+
+	UPROPERTY(Replicated)
+	TArray<UObject*> CurrentBuffArray;
+	TArray<IBuff*> CurrentBuffInterfaceArray;
+	UPROPERTY()
+	bool bIsCleaning = false;
+
+	UPROPERTY(VisibleAnywhere, Replicated)
 	float ArrayLength;
 	UPROPERTY()
 	UStatsComponent* StatsComponent;
