@@ -56,14 +56,14 @@ FString UCpp_CustomizationWidget::WarriorIndexToString(int index)
 	FString Name;
 	switch (index)
 	{
-	case 1:
+	case 0:
 		Name ="Drex";
 		break;
-	case 2:
+	case 1:
 		Name ="Nyax";
 		break;
 
-	case 3:
+	case 2:
 		Name ="Zerher";
 		break;
 	default:
@@ -78,7 +78,7 @@ FString UCpp_CustomizationWidget::AbilityIndexToString(int index)
 	switch (index)
 	{
 	case 0:
-		abilityName ="Small Heal";
+		abilityName ="SmallHeal";
 		break;
 	case 1:
 		abilityName ="Roar";

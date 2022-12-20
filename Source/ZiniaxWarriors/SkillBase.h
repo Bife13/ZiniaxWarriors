@@ -30,12 +30,7 @@ public:
 	void HandleCastEvents(float Value);
 	UFUNCTION(Client, Reliable)
 	void HandleResetEvents();
-
-	UFUNCTION(Client, Reliable)
-	void HandleCastEvents(float Value);
-	UFUNCTION(Client, Reliable)
-	void HandleResetEvents();
-
+	
 	UFUNCTION(BlueprintCallable)
 	void DelayedSpawnTimer(const FVector& SpawnPosition, float NumberOfProjectile);
 
