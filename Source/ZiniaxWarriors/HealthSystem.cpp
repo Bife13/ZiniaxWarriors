@@ -37,6 +37,7 @@ void UHealthSystem::TakeDamage_Implementation(const float Amount)
 			damageTaken = Amount * ((100) / (100 + Resistance));
 		else
 			damageTaken = Amount * (2 - 100 / (100 - Resistance));
+
 		if (Shield > 0)
 		{
 			Shield -= damageTaken;

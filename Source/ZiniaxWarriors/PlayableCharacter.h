@@ -16,6 +16,7 @@
 #include "Components/WidgetComponent.h"
 #include "PlayableCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted, float, Cooldown);
 
 UCLASS()
 class ZINIAXWARRIORS_API APlayableCharacter : public ACharacter, public IUsableCharacterSkillSlot,
@@ -159,6 +160,24 @@ public:
 	UFUNCTION()
 	void ResetCharacter() const;
 
+	UPROPERTY(BlueprintAssignable)
+	 FSkillCasted  CastEventBasic;
+	UPROPERTY(BlueprintAssignable)
+	 FSkillCasted  CastEventAbility1;
+	UPROPERTY(BlueprintAssignable)
+	 FSkillCasted  CastEventAbility2;
+	UPROPERTY(BlueprintAssignable)
+	 FSkillCasted  CastEventAbility3;
+
+	UFUNCTION(Client, Reliable)
+	void HandleCastEvent1(float Value);
+	UFUNCTION(Client, Reliable)
+	void HandleCastEvent2(float Value);
+	UFUNCTION(Client, Reliable)
+	void HandleCastEvent3(float Value);
+	UFUNCTION(Client, Reliable)
+	void HandleCastEvent4(float Value);
+	
 
 protected:
 	UFUNCTION()
