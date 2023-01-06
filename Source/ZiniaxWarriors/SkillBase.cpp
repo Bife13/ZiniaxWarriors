@@ -47,7 +47,7 @@ bool USkillBase::IsSupportedForNetworking() const
 
 void USkillBase::HandleCastEvents_Implementation(float Value)
 {
-	CastEvent.Broadcast(Value);
+	// CastEvent.Broadcast(Value);
 }
 
 
