@@ -7,7 +7,7 @@
 #include "HealthSystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealDamageEvent,float,Cpp_HealingValue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamageTakenEvent,float,Cpp_Damage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthChanged,float,CurrentH, float, MaxH,float,GetHAsPercentage, float, DamageTaken);
 
 
 DECLARE_EVENT_OneParam(UHealthSystem,ShieldBrokenEvent,float)
@@ -36,7 +36,7 @@ public:
 	UFUNCTION(NetMulticast,Reliable)
 	void HandleShieldBrokenEvent(float Amount);
 	UFUNCTION(NetMulticast,Reliable)
-	void HandleDamageTakenEvent(float Amount);
+	void HandleHealthChanged(float CurrentH, float MaxH,float GetHAsPercentage, float DamageTaken);
 	UFUNCTION(NetMulticast,Reliable)
 	void HandleHealEvent(float Amount);
 	UFUNCTION(BlueprintCallable, Server, Reliable)
@@ -64,7 +64,7 @@ protected: // Functions
 public: // Events
 
 	UPROPERTY(BlueprintAssignable)
-	FDamageTakenEvent MyOnDamageTakenEvent;
+	FHealthChanged OnHealthChanged;
 	UPROPERTY(BlueprintAssignable)
 	FHealDamageEvent OnDamageHealedEvent;
 
