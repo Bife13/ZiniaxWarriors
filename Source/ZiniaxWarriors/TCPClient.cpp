@@ -86,9 +86,10 @@ bool TCPClient::Init()
 	if (connected)  {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,FString::Printf(TEXT("Connected!")));
 		UE_LOG(LogTemp, Log, TEXT("Match making CONNECTED!"));
+		return true;
 	}
 		
-	return 0;
+	return false;
 }
 
 
@@ -203,7 +204,7 @@ void TCPClient::ConnectPlayerToGame(FString ConfigStr)
 		{
 			UE_LOG(LogTemp, Log, TEXT("Matchmaking is oky!!!"));
 			PlayerState->WaitingForGame(true);
-			this->Run();
+			//this->Run();
 			//running=true;
 			/*
 			FString Command = "/SaveConfig.";
