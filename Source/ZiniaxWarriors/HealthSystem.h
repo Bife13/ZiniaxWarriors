@@ -6,8 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "HealthSystem.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealDamageEvent,float,Cpp_HealingValue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthChanged,float,CurrentH, float, MaxH,float,GetHAsPercentage, float, DamageTaken);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealing,float,CurrentH, float, MaxH,float,GetHAsPercentage, float, HealingValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthDecreased,float,CurrentH, float, MaxH,float,GetHAsPercentage, float, DamageTaken);
 
 
 DECLARE_EVENT_OneParam(UHealthSystem,ShieldBrokenEvent,float)
@@ -38,7 +38,7 @@ public:
 	UFUNCTION(NetMulticast,Reliable)
 	void HandleHealthChanged(float CurrentH, float MaxH,float GetHAsPercentage, float DamageTaken);
 	UFUNCTION(NetMulticast,Reliable)
-	void HandleHealEvent(float Amount);
+	void HandleHealEvent(float CurrentH, float MaxH,float GetHAsPercentage, float HealingValue);
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void RecoverHealth(float Amount);
 	//Sets
@@ -64,9 +64,9 @@ protected: // Functions
 public: // Events
 
 	UPROPERTY(BlueprintAssignable)
-	FHealthChanged OnHealthChanged;
+	FHealthDecreased OnHealthDecreased;
 	UPROPERTY(BlueprintAssignable)
-	FHealDamageEvent OnDamageHealedEvent;
+	FHealing OnHealEvent;
 
 	ShieldBrokenEvent OnShieldBrokenEvent;
 	Die OnDeathEvent;
