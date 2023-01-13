@@ -51,9 +51,9 @@ DECLARE_EVENT_OneParam(UStatsComponent, CastingSlowRemovedEvent, float)
 DECLARE_EVENT_OneParam(UStatsComponent, CastingSlowAppliedEvent, float)
 
 //UI Stuff
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FApllyBuffEvent, FString, NameOfBuff, bool, IsBuff, int, BuffIndex, float ,CurrentP, float ,CurrentR, float ,CurrentS, float ,CurrentVR);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FApllyBuffEvent, FString, NameOfBuff, bool, IsBuff, int, BuffIndex);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FRemoveBuffEvent, FString, NameOfBuff, bool, IsBuff, int, BuffIndex, float ,CurrentP, float ,CurrentR, float ,CurrentS, float ,CurrentVR);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRemoveBuffEvent, FString, NameOfBuff, bool, IsBuff, int, BuffIndex);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ZINIAXWARRIORS_API UStatsComponent : public UActorComponent
@@ -119,9 +119,9 @@ public:
 	HasteAppliedEvent OnHasteAppliedEvent;
 	HasteRemovedEvent OnHasteRemovedEvent;
 	UFUNCTION(NetMulticast,Reliable)
-	void HandleHasteEventsRemove(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount);
+	void HandleHasteEventsRemove(float Amount);
 	UFUNCTION(NetMulticast,Reliable)
-	void HandleHasteEventsApplied(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount);
+	void HandleHasteEventsApplied(float Amount);
 
 	UFUNCTION()
 	void Slow(float Amount);
@@ -130,9 +130,9 @@ public:
 	SlowAppliedEvent OnSlowAppliedEvent;
 	SlowRemovedEvent OnSlowRemovedEvent;
 	UFUNCTION(NetMulticast,Reliable)
-	void HandleSlowAppliedEvent(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount);
+	void HandleSlowAppliedEvent(float Amount);
 	UFUNCTION(NetMulticast,Reliable)
-    void HandleSlowRemoveEvent(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount);
+    void HandleSlowRemoveEvent(float Amount);
 
 	UFUNCTION()
 	void Root();

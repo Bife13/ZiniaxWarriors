@@ -30,13 +30,13 @@ void UStatsComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void UStatsComponent::HandleShieldAppliedEvent_Implementation(float Amount)
 {
 	OnShieldApplied.Broadcast(CurrentShield);
-	BuffApllied.Broadcast("SHIELD", true, 4, GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+	BuffApllied.Broadcast("SHIELD", true, 4);
 }
 
 void UStatsComponent::HandleShieldRemovedEvent_Implementation(float Amount)
 {
 	OnShieldRemoved.Broadcast(CurrentShield);
-	BuffRemove.Broadcast("SHIELD", true, 4,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+	BuffRemove.Broadcast("SHIELD", true, 4);
 }
 
 void UStatsComponent::CastingSlow(float Amount)
@@ -97,12 +97,12 @@ void UStatsComponent::HandleEnrageEvents_Implementation(float Amount)
 	if (Amount > 0)
 	{
 		OnEnrageAppliedEvent.Broadcast(CurrentPower);
-		BuffApllied.Broadcast("ENRAGE", true, 1,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffApllied.Broadcast("ENRAGE", true, 1);
 	}
 	else
 	{
 		OnEnrageRemovedEvent.Broadcast(CurrentPower);
-		BuffRemove.Broadcast("ENRAGE", true, 1,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffRemove.Broadcast("ENRAGE", true, 1);
 	}
 }
 
@@ -117,12 +117,12 @@ void UStatsComponent::HandleWeakenEvents_Implementation(float Amount)
 	if (Amount > 0)
 	{
 		OnWeakenAppliedEvent.Broadcast(CurrentPower);
-		BuffApllied.Broadcast("WEAKEN", false, 1,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffApllied.Broadcast("WEAKEN", false, 1);
 	}
 	else
 	{
 		OnWeakenRemovedEvent.Broadcast(CurrentPower);
-		BuffRemove.Broadcast("WEAKEN", false, 1,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffRemove.Broadcast("WEAKEN", false, 1);
 	}
 }
 
@@ -137,12 +137,12 @@ void UStatsComponent::HandleBulkEvents_Implementation(float Amount)
 	if (Amount > 0)
 	{
 		OnBulkAppliedEvent.Broadcast(CurrentResistance);
-		BuffApllied.Broadcast("BULK", true, 2,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffApllied.Broadcast("BULK", true, 2);
 	}
 	else
 	{
 		OnBulkRemovedEvent.Broadcast(CurrentResistance);
-		BuffRemove.Broadcast("BULK", true, 2,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffRemove.Broadcast("BULK", true, 2);
 	}
 }
 
@@ -157,61 +157,61 @@ void UStatsComponent::HandleVulnerableEvents_Implementation(float Amount)
 	if (Amount > 0)
 	{
 		OnVulnerableAppliedEvent.Broadcast(CurrentResistance);
-		BuffApllied.Broadcast("VULNERABLE", false, 2,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffApllied.Broadcast("VULNERABLE", false, 2);
 	}
 	else
 	{
 		OnVulnerableRemovedEvent.Broadcast(CurrentResistance);
-		BuffRemove.Broadcast("VULNERABLE", false, 2,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+		BuffRemove.Broadcast("VULNERABLE", false, 2);
 	}
 }
 
 void UStatsComponent::Haste(float Amount)
 {
 	CurrentSpeed += (CurrentSpeed * Amount);
-	HandleHasteEventsApplied(GetPower(),GetResistance(),GetSpeed(),GetViewRange(),CurrentSpeed);
+	HandleHasteEventsApplied(CurrentSpeed);
 }
 
 void UStatsComponent::HasteRemove(float Amount)
 {
 	CurrentSpeed -= Amount;
-	HandleHasteEventsRemove(GetPower(),GetResistance(),GetSpeed(),GetViewRange(), Amount);
+	HandleHasteEventsRemove(Amount);
 }
 
-void UStatsComponent::HandleHasteEventsRemove_Implementation(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount)
+void UStatsComponent::HandleHasteEventsRemove_Implementation(float Amount)
 {
 	OnHasteRemovedEvent.Broadcast(Amount);
-	BuffRemove.Broadcast("HASTE", true, 3,CurrentP, CurrentR,CurrentS, CurrentVR);
+	BuffRemove.Broadcast("HASTE", true, 3);
 }
 
-void UStatsComponent::HandleHasteEventsApplied_Implementation(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount)
+void UStatsComponent::HandleHasteEventsApplied_Implementation(float Amount)
 {
 	OnHasteAppliedEvent.Broadcast(Amount);
-	BuffApllied.Broadcast("HASTE", true, 3,CurrentP, CurrentR, CurrentS, CurrentVR);
+	BuffApllied.Broadcast("HASTE", true, 3);
 }
 
 void UStatsComponent::Slow(float Amount)
 {
 	CurrentSpeed -= (CurrentSpeed * Amount);
-	HandleSlowAppliedEvent(GetPower(),GetResistance(),GetSpeed(),GetViewRange(),CurrentSpeed);
+	HandleSlowAppliedEvent(CurrentSpeed);
 }
 
 void UStatsComponent::SlowRemove(float Amount)
 {
 	CurrentSpeed += Amount;
-	HandleSlowRemoveEvent(GetPower(),GetResistance(),GetSpeed(),GetViewRange(),Amount);
+	HandleSlowRemoveEvent(Amount);
 }
 
-void UStatsComponent::HandleSlowAppliedEvent_Implementation(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount)
+void UStatsComponent::HandleSlowAppliedEvent_Implementation(float Amount)
 {
 	OnSlowAppliedEvent.Broadcast(Amount);
-	BuffApllied.Broadcast("SLOW", false, 3,CurrentP, CurrentR, CurrentS, CurrentVR);
+	BuffApllied.Broadcast("SLOW", false, 3);
 }
 
-void UStatsComponent::HandleSlowRemoveEvent_Implementation(float CurrentP, float CurrentR, float CurrentS, float CurrentVR, float Amount)
+void UStatsComponent::HandleSlowRemoveEvent_Implementation(float Amount)
 {
 	OnSlowRemovedEvent.Broadcast(Amount);
-	BuffRemove.Broadcast("SLOW", false, 3,CurrentP, CurrentR, CurrentS, CurrentVR);
+	BuffRemove.Broadcast("SLOW", false, 3);
 }
 
 void UStatsComponent::Root()
@@ -229,13 +229,13 @@ void UStatsComponent::EndRoot(float Amount)
 void UStatsComponent::HandleRootAppliedEvent_Implementation()
 {
 	OnRootApplied.Broadcast();
-	BuffApllied.Broadcast("ROOT", false, 4,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+	BuffApllied.Broadcast("ROOT", false, 4);
 }
 
 void UStatsComponent::HandleRootRemovedEvent_Implementation()
 {
 	OnRootRemoved.Broadcast();
-	BuffRemove.Broadcast("ROOT", false, 4,GetPower(),GetResistance(),GetSpeed(),GetViewRange());
+	BuffRemove.Broadcast("ROOT", false, 4);
 }
 
 void UStatsComponent::Shield(float Amount)
