@@ -237,7 +237,7 @@ void TCPClient::ConnectPlayerToGame(FString ConfigStr)
 	}
 	else
 	{
-		FString Command = "/Cancel.";
+		FString Command = "/cancel.";
 		UE_LOG(LogTemp, Log, TEXT("Command in Thread: '%s'"),*Command);
 
 		TCHAR *serializedCharCommand =	(Command).GetCharArray().GetData();
@@ -269,8 +269,6 @@ void TCPClient::SendPlayerPass(FString name, FString pass)
 
 void TCPClient::SendPlayerLogin(FString name, FString pass)
 {
-
-
 	UE_LOG(LogTemp, Log, TEXT("Sending client"));
 	FString tempC = "/client.\0";
 	UE_LOG(LogTemp, Log, TEXT("name in Thread: '%s'"),*tempC);

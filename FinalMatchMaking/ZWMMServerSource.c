@@ -12,39 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 
-
-
-
-
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
-
-
-/*
-* #define MAXPENDING 5
-#define RCVBUFSIZE 1024
-typedef struct playerinfo {
-    SOCKET client;
-    int id;
-}PlayerInfo;
-
-typedef struct sessioninfo {
-    int id;
-    char name;
-    str serverip;
-    int serverport;
-}SessionInfo;
-
-
-list<PlayerInfo> players;
-list<SessionInfo> sessions;
-int playercount = 0;
-
-int sessioncount = 0;
-*/
-
-
-// #pragma comment (lib, "Mswsock.lib")
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"
@@ -52,7 +21,7 @@ int sessioncount = 0;
 #define WELCOME_MESAAGE "Welcome to ZW MATHMAKING\n"
 #define EXE_MESAAGE "ZW MATHMAKING OPEN "
 
-#define PlayersPerLobby 2
+#define PlayersPerLobby 4
 
 #define ServerWaiting 1
 #define ServerReady 2
@@ -74,6 +43,8 @@ struct ClientInfo {
     char message[DEFAULT_BUFLEN];
     int state;// 0 is off, 1 is on, 2 is looking for game, 3 in game
     int recevingInfo; // 0 is off, 1 is on
+    int ServerToConnectID;
+    int ServerSlot;
     char* clientIp;
 }Clients[DEFAULT_BUFLEN], tempClient;
 
@@ -83,7 +54,7 @@ struct ServerInfo {
     SOCKET socket;
     char ip[DEFAULT_BUFLEN];
     char port[DEFAULT_BUFLEN];
-   // char config[DEFAULT_BUFLEN];
+  
     int idOfPlayers[PlayersPerLobby];
     int playersOn;
     int state; //1 is waiting players, 2 is ready, 3 open to connect
@@ -103,7 +74,7 @@ struct C1_C2 {
     int Client2;
 }CIndexs;
 
-int DoneCommand =0;
+int DoneCommand = 0;
 int ClientConnected = 0;
 int ServersConnected = 0;
 int UsersOn = 0;
@@ -193,13 +164,13 @@ void PrintServers() {
     for (y; y < ServersConnected; y++) {
 
         printf("////////server %d //////////// \n", y);
-        printf("IP : %s:%s\n", Servers[y].ip,Servers[y].port);
+        printf("IP : %s:%s\n", Servers[y].ip, Servers[y].port);
         printf("ID : %d\n", Servers[y].serverID);
         switch (Servers[y].state)
         {
-        case 0: 
+        case 0:
             printf("no players reserved here");
-                break;
+            break;
         case 1:
             printf(waitingforplayerMessage);
             break;
@@ -229,13 +200,13 @@ void CommandLines(void* arguments) {
 
     char comand[DEFAULT_BUFLEN] = ".x";
     while (ServerState)
-    {   
+    {
         if (DoneCommand == 0) {
             DoneCommand = 1;
             printf("Input MM Server Command\n");
             gets(comand);
         }
-      
+
         if (strcmp(comand, "PC") == 0) {
             PrintClientes();
             DoneCommand = 0;
@@ -254,24 +225,19 @@ void CommandLines(void* arguments) {
 #pragma endregion 
 
 
-
-
-
-
-
 void InformClientOfServerofState(void* in) {
     int ID = (int*)in;
     char msgSender[DEFAULT_BUFLEN];
     int snd = 0;
     printf("sending info of server to clients connected: '%s' \n", Servers[ID].ip);
-  
+
 
 
     if (Servers[ID].state == ServerWaiting) {
 
-        for (int j = 0; j < Servers[ID].playersOn; j++) {
+        for (int j = 0; j <= Servers[ID].playersOn; j++) {
 
-            printf("cLIENT with id %d in server", Servers[ID].idOfPlayers[j]);
+            printf("cLIENT with index with name %s in server", Clients[Servers[ID].idOfPlayers[j]].name);
 
         }
         printf("Server is Waiting for more players\n");
@@ -283,9 +249,9 @@ void InformClientOfServerofState(void* in) {
         snd = send(Servers[ID].socket, msgSender, sizeof(msgSender), 0);
         if (snd > 0) {
 
-            for (int j = 0; j < Servers[ID].playersOn; j++) {
+            for (int j = 0; j <=Servers[ID].playersOn; j++) {
                 int tempCid = Servers[ID].idOfPlayers[j];
-                if (Clients[tempCid].socket != INVALID_SOCKET) {
+                if (Clients[tempCid].socket != INVALID_SOCKET && Clients[tempCid].socket != NULL) {
 
                     printf(" try notifiy client '%s'\n", Clients[tempCid].name);
 
@@ -293,8 +259,6 @@ void InformClientOfServerofState(void* in) {
                     if (snd > 0) {
                         //CLIENT NOTIFIED OF SERVER STATE
                         // printf(" client %s notified\n", Clients[Servers[ID].idOfPlayers[j]].name);
-
-
 
                         Clients[tempCid].recevingInfo = 0;
                         if (Servers[ID].state == ServerReady) {
@@ -315,13 +279,13 @@ void InformClientOfServerofState(void* in) {
         snd = send(Servers[ID].socket, msgSender, sizeof(msgSender), 0);
         if (snd > 0) {
 
-            for (int j = 0; j < Servers[ID].playersOn; j++) {
+            for (int j = 0; j <= Servers[ID].playersOn; j++) {
+                int tempCid = Servers[ID].idOfPlayers[j];
+                if (Clients[tempCid].socket != INVALID_SOCKET && Clients[tempCid].socket != NULL) {
 
-                if (Clients[Servers[ID].idOfPlayers[j]].socket != INVALID_SOCKET) {
+                    printf(" try notifiy client %s\n", Clients[tempCid].name);
 
-                    printf(" try notifiy client %s\n", Clients[Servers[ID].idOfPlayers[j]].name);
-
-                    snd = send(Clients[Servers[ID].idOfPlayers[j]].socket, msgSender, sizeof(msgSender), 0);
+                    snd = send(Clients[tempCid].socket, msgSender, sizeof(msgSender), 0);
                     if (snd > 0) {
                         //CLIENT NOTIFIED OF SERVER STATE
                         // printf(" client %s notified\n", Clients[Servers[ID].idOfPlayers[j]].name);
@@ -330,7 +294,6 @@ void InformClientOfServerofState(void* in) {
 
                         Clients[Servers[ID].idOfPlayers[j]].recevingInfo = 0;
                         if (Servers[ID].state == ServerReady) {
-
                             Clients[Servers[ID].idOfPlayers[j]].state = 3;
                             printf("%s is in game\n", Clients[Servers[ID].idOfPlayers[j]].name);
                         }
@@ -342,42 +305,36 @@ void InformClientOfServerofState(void* in) {
         }
     }
 }
-    // Server update 
-    /* snd = send(Servers[ID].socket, msgSender, sizeof(msgSender), 0);
-    if (snd > 0) {
+// Server update 
+/* snd = send(Servers[ID].socket, msgSender, sizeof(msgSender), 0);
+if (snd > 0) {
 
-        for (int j = 0; j < Servers[ID].playersOn; j++) {
+    for (int j = 0; j < Servers[ID].playersOn; j++) {
 
-            if (Clients[Servers[ID].idOfPlayers[j]].socket != INVALID_SOCKET) {
+        if (Clients[Servers[ID].idOfPlayers[j]].socket != INVALID_SOCKET) {
 
-                printf(" client %s notified\n", Clients[Servers[ID].idOfPlayers[j]].name);
+            printf(" client %s notified\n", Clients[Servers[ID].idOfPlayers[j]].name);
 
-                snd = send(Clients[Servers[ID].idOfPlayers[j]].socket, msgSender, sizeof(msgSender), 0);
-                if (snd > 0) {
-                    //CLIENT NOTIFIED OF SERVER STATE
-                    // printf(" client %s notified\n", Clients[Servers[ID].idOfPlayers[j]].name);
-                    
+            snd = send(Clients[Servers[ID].idOfPlayers[j]].socket, msgSender, sizeof(msgSender), 0);
+            if (snd > 0) {
+                //CLIENT NOTIFIED OF SERVER STATE
+                // printf(" client %s notified\n", Clients[Servers[ID].idOfPlayers[j]].name);
 
 
-                    Clients[Servers[ID].idOfPlayers[j]].recevingInfo = 0;
-                    if (Servers[ID].state == ServerReady) {
 
-                        Clients[Servers[ID].idOfPlayers[j]].state = 3;
-                        printf("%s is in game\n", Clients[Servers[ID].idOfPlayers[j]].name);
-                    }
+                Clients[Servers[ID].idOfPlayers[j]].recevingInfo = 0;
+                if (Servers[ID].state == ServerReady) {
+
+                    Clients[Servers[ID].idOfPlayers[j]].state = 3;
+                    printf("%s is in game\n", Clients[Servers[ID].idOfPlayers[j]].name);
                 }
             }
         }
-
-
     }
-    */
-   
 
 
-
-
-
+}
+*/
 
 
 void HandleServerSocket(void* socket) {
@@ -392,7 +349,7 @@ void HandleServerSocket(void* socket) {
     Servers[sid].socket = ServerSocket;
     Servers[sid].state = 0;
     Servers[sid].playersOn = 0;
-    memcpy(Servers[sid].ip, tempIp,sizeof(tempIp));
+    memcpy(Servers[sid].ip, tempIp, sizeof(tempIp));
 
 
 
@@ -420,10 +377,15 @@ void HandleServerSocket(void* socket) {
 
         //printf(" %s .ok \n", msgbuf);
         memcpy(Servers[sid].port, msgbuf, sizeof(msgbuf));
-        printf("Server Registered with %s:%s\n", Servers[sid].ip,Servers[sid].port);
+        printf("Server Registered with %s:%s\n", Servers[sid].ip, Servers[sid].port);
+        
+        //for (int i = 0; i < PlayersPerLobby; i++)
+        //{
+        //    printf("Server slot %d with id %d\n ",i, Servers[sid].idOfPlayers[i]);
+        //}
         isAcceptingClients = 0;
     }
-   
+
     _endthread();
 
 }
@@ -432,41 +394,31 @@ void HandleServerSocket(void* socket) {
 
 #pragma region ClientHandle
 void HandleClientSocketConnect(void* socket) {
-
-    //client connected
+   
     SOCKET ClientSocket = (SOCKET)socket;
+    ClientConnected++;
+    //handle Client thread
+
     int iRes = 0;
     char msgbuf[DEFAULT_BUFLEN];
     char passbuf[DEFAULT_BUFLEN];
     int id = ClientConnected;
- 
+
     iRes = recv(ClientSocket, msgbuf, sizeof(msgbuf), 0);
     if (iRes > 0) {
         //printf("Name of client: %s\n", recvbuf);
-       // int  s = sizeof(recvbuf) / sizeof(char);
+        // int  s = sizeof(recvbuf) / sizeof(char);
         //printf("init is %s \n", init);
-        int count = 0;
-        int j = 0;
-        for (j; j < 100; j++) {
-            if (msgbuf[j] == '.') {
-                j = 100;
-            }
-            else {
-                count++;
-            }
-        }
-        msgbuf[count] = '\0';
         // received name from client
+        // printf("Name of client: %s\n waiting password", msgbuf);
 
-        
-        //printf("Name of client: %s\n waiting password", msgbuf);
 
         iRes = recv(ClientSocket, passbuf, sizeof(passbuf), 0);
         if (iRes > 0) {
             //printf("Pass of client: %s\n", passbuf);
             int countP = 0;
             int Pj = 0;
-            for (Pj; Pj < 100; j++) {
+            for (Pj; Pj < 100; Pj++) {
                 if (passbuf[Pj] == '.') {
                     Pj = 100;
                 }
@@ -474,117 +426,45 @@ void HandleClientSocketConnect(void* socket) {
                     countP++;
                 }
             }
-            isAcceptingClients = 0;
+
+            int count = 0;
+            int j = 0;
+            for (j; j < 100; j++) {
+                if (msgbuf[j] == '.') {
+                    j = 100;
+                }
+                else {
+                    count++;
+                }
+            }
+            msgbuf[count] = '\0';
+
             passbuf[countP] = '\0';
-           // printf("Pass size of  client: %d\n", sizeof(passbuf));
-            memcpy(Clients[id].pass, passbuf, sizeof(passbuf));
-            printf("Pass of client: %s\n", Clients[id].pass);
             memcpy(Clients[id].name, msgbuf, sizeof(msgbuf));
+
+            memcpy(Clients[id].pass, passbuf, sizeof(passbuf));
+            printf("name of  client: %s\n", Clients[id].name);
+            printf("Pass of client: %s\n", Clients[id].pass);
+
             Clients[id].state = 1;
             Clients[id].recevingInfo = 0;
             Clients[id].clientID = id;
             Clients[id].socket = ClientSocket;
+
             UsersOn++;
-            ClientConnected++; 
-          
-            printf("Clietn Set!");
-         
-            
-        }
-        else
-        {
-            printf("Pass ofClient not HERE");
+            // ClientConnected++;
+            printf("Client Set!\n");
             isAcceptingClients = 0;
         }
-
+         
+        
     }
-    else {
-        isAcceptingClients = 0;
-    }
-
-
-    /*
-    iRes = send(Clients[id].socket, WELCOME_MESAAGE, sizeof(WELCOME_MESAAGE), 0);
-    if (iRes > 0) {
-        // set client state to online
-
-    }
-    */
-
+   
+    _endthread();
 
 }
-/*
-*   iRes = recv(Clients[id].socket, msgbuf, sizeof(msgbuf),0);
-
-if(iRes>0)
-{
-    // received name from client
-    printf("Name of client: %s\n", msgbuf);
-    memcpy(Clients[id].name, msgbuf,sizeof(msgbuf));
-
-    //receive client Configurations
-    iRes = recv(Clients[id].socket, msgbuf, sizeof(msgbuf), 0);
-    if (iRes > 0)
-    {
-        // received client config
-        printf("Configs of client: %s\n", msgbuf);
-        memcpy(Clients[id].config, msgbuf, sizeof(msgbuf));
-
-        iRes = send(Clients[id].socket, WELCOME_MESAAGE, sizeof(WELCOME_MESAAGE), 0);
-        if (iRes > 0) {
-            ClientConnected++;
-            // set client state to online
-            Clients[id].state = 1;
-            Clients[id].recevingInfo = 0;
-            //_beginthread(ReceiveClientMessage, 0, (void*)id);
-            UsersOn++;
-        }
-
-
-    }
-}
-*/
-// receive name from client
-
-
-
-
-
 
 #pragma endregion
-
-#pragma region DiogoCodeCHECKOUTLATER
-/*
-*
-*
-* codigo DIogo
-struct MsgBase
-{
-    int type :
-    int length :
-};
-
-struct MsgLogin
-{
-    int type:
-    int length:
-    char name[256];
-    char pass[256];
-};
-
-MsgLogin lmsessage:
-send(so, &lmessage, sizeof(MsgLogin));
-MsgBase base;
-recv(so, &base, sizeof(base));
-if (base.type == 1)
-{
-    MsgLogin login;
-    memcpy(&login, &base, sizeof(MsgBase));
-    recv(so, ((char*)&login) + sizeof(MsgBase), sizeof(masgLogin) - sizeof(MsgBase));
-}*/
-
-#pragma endregion
-
 
 
 #pragma region AcceptSockets
@@ -604,25 +484,25 @@ void AcceptSockets(void* socketToListen) {
     // Accept a client socket
     TempSocket = accept(listenSocket, (struct sockaddr*)&clientIn, &addrsize);
     if (TempSocket == INVALID_SOCKET) {
-        printf("s45: accept failed with error: %d\n", WSAGetLastError());
+        printf("accept failed with error: %d\n", WSAGetLastError());
         closesocket(listenSocket);
         WSACleanup();
         return 1;
     }
     else {
-        
+
         char* ip = inet_ntoa(clientIn.sin_addr);
         strcpy(tempIp, ip);
-        
+
 
         printf(" Connected! from IP: %s\n", tempIp);
-
+     
 
         //Clients[ClientConnected].socket = TempSocket;
 
         iResult = recv(TempSocket, recvbuf, sizeof(recvbuf), 0);
         if (iResult > 0) {
-         
+
             int  s = sizeof(recvbuf) / sizeof(char);
             char init[DEFAULT_BUFLEN];
             strcpy(init, recvbuf, s);
@@ -638,27 +518,22 @@ void AcceptSockets(void* socketToListen) {
             }
             recvbuf[count] = '\0';
             printf("%s  is  ", recvbuf);
-
+          
             if (strcmp(recvbuf, "/client") == 0) {
                 printf("Client\n");
-                //handle Client thread
-
+                  
+              //handle Client thread
+              
                 int iRes = 0;
                 char msgbuf[DEFAULT_BUFLEN];
                 char passbuf[DEFAULT_BUFLEN];
-                int id = ClientConnected;
+                int id = ClientConnected+1;
 
+                //receive name
                 iRes = recv(TempSocket, msgbuf, sizeof(msgbuf), 0);
                 if (iRes > 0) {
-                    //printf("Name of client: %s\n", recvbuf);
-                   // int  s = sizeof(recvbuf) / sizeof(char);
-                    //printf("init is %s \n", init);
-                  
-                    // received name from client
-
-                   // printf("Name of client: %s\n waiting password", msgbuf);
-
-
+    
+                    //receive password
                     iRes = recv(TempSocket, passbuf, sizeof(passbuf), 0);
                     if (iRes > 0) {
                         //printf("Pass of client: %s\n", passbuf);
@@ -687,47 +562,41 @@ void AcceptSockets(void* socketToListen) {
 
                         passbuf[countP] = '\0';
                         memcpy(Clients[id].name, msgbuf, sizeof(msgbuf));
-                      
+
                         memcpy(Clients[id].pass, passbuf, sizeof(passbuf));
-                          printf("name of  client: %s\n", Clients[id].name);
+                        printf("name of  client: %s\n", Clients[id].name);
                         printf("Pass of client: %s\n", Clients[id].pass);
-                      
+
                         Clients[id].state = 1;
                         Clients[id].recevingInfo = 0;
                         Clients[id].clientID = id;
                         Clients[id].socket = TempSocket;
+                        
                         UsersOn++;
                         ClientConnected++;
-
-                        printf("Client Set!");
+                        printf("Client Set!\n");
                         isAcceptingClients = 0;
-
-                        //_endthread();
-
                     }
                     else
                     {
-                        printf("Pass ofClient not HERE");
+                        printf("Pass of Client not HERE");
                         isAcceptingClients = 0;
                     }
-
                 }
                 else {
+                    printf("Name of Client not HERE");
                     isAcceptingClients = 0;
                 }
-            
+
             }
-
-
-
-
-            if (strcmp(recvbuf, "/gameserver") == 0) {
+            
+         
+             if (strcmp(recvbuf, "/gameserver") == 0) {
                 printf("Server\n");
                 //handle server thread
-               
                 _beginthread(HandleServerSocket, 0, (void*)TempSocket);
-            }
-
+               // _endthread();
+             }
 
         }
         else
@@ -736,8 +605,9 @@ void AcceptSockets(void* socketToListen) {
         }
         // _endthread();
 
-
+     
     }
+
 }
 
 #pragma endregion
@@ -814,24 +684,6 @@ int AvailableServer() {
             }
         }
     }
-    /*if (serverID == -1) {
-
-        int sid = ServersConnected;
-        ServersConnected++;
-
-        Servers[sid].serverID = sid;
-        Servers[sid].socket = ServerSocket;
-        Servers[sid].state = 0;
-        Servers[sid].playersOn = 0;
-
-    }
-    */
-
-
-
-
-
-
 
     return servedID;
 }
@@ -857,18 +709,27 @@ void HandleClientMessageTh(void* in) {
         Clients[index].state = 2;
 
         printf("%s joinded server at %s\n", Clients[index].name, Servers[serverID].ip);
-        Servers[serverID].idOfPlayers[Servers[serverID].playersOn++] = Clients[index].clientID;
-        printf("id of player joinded %d\n", Servers[serverID].idOfPlayers[Servers[serverID].playersOn]);
-        
+        Clients[index].ServerToConnectID = serverID;
+        for (int i = 0; i < PlayersPerLobby; i++) {
+            if (Servers[serverID].idOfPlayers[i] == -1  || Servers[serverID].idOfPlayers[i] == 0) {
+                Servers[serverID].idOfPlayers[i] = index;
+                Clients[index].ServerSlot = i;
+                i = 100;
+            }
+        }
+
+        Servers[serverID].playersOn++;
+        printf("Player joinded to slot %d / %d \n", Servers[serverID].idOfPlayers[Clients[index].ServerSlot],PlayersPerLobby);
+
 
         snd = send(Clients[index].socket, "IP", sizeof("IP"), 0);
         if (snd > 0) {
             //inform server ip to join client connected to set server
             char str[DEFAULT_BUFLEN];
-            printf("player knows command of receive IP");
+            //printf("player knows command of receive IP");
             sprintf_s((char*)&str, DEFAULT_BUFLEN, "%s:%s", Servers[serverID].ip, Servers[serverID].port);
             //send 
-               
+
             printf(" ip to send to client %s\n", str);
 
             snd = send(Clients[index].socket, str, sizeof(str), 0);
@@ -877,21 +738,21 @@ void HandleClientMessageTh(void* in) {
                 snd = send(Servers[serverID].socket, serverJoindedMessage, sizeof(serverJoindedMessage), 0);
                 if (snd > 0) {
                     // send info of client to GameServer
-                    snd = send(Servers[serverID].socket, Clients[index].config, sizeof(Clients[index].config), 0);
-                    if (snd > 0) {
-                        //Servers[serverID].playersOn++;
-                        if (Servers[serverID].playersOn == PlayersPerLobby) {
-                            // game can start
-                            Servers[serverID].state = ServerReady;
-                            _beginthread(InformClientOfServerofState, 0, serverID);
-                        }
-                        else {
-                            //server needs more player
+                   // snd = send(Servers[serverID].socket, Clients[index].config, sizeof(Clients[index].config), 0);
+                    //if (snd > 0) {
 
-                            _beginthread(InformClientOfServerofState, 0, serverID);
-
-                        }
+                    if (Servers[serverID].playersOn == PlayersPerLobby) {
+                        // game can start
+                        Servers[serverID].state = ServerReady;
+                        _beginthread(InformClientOfServerofState, 0, serverID);
                     }
+                    else {
+                        //server needs more player
+
+                        _beginthread(InformClientOfServerofState, 0, serverID);
+
+                    }
+                    //}
 
 
                 }
@@ -903,9 +764,21 @@ void HandleClientMessageTh(void* in) {
         }
 
         break;
-        // send player info of game server
+       
 #pragma endregion
 
+    case 2:
+
+        serverID = Clients[index].ServerToConnectID;
+
+        Servers[serverID].idOfPlayers[Clients[index].ServerSlot] = -1;
+
+        Servers[serverID].playersOn--;
+
+        Clients[index].ServerToConnectID = 0;
+        printf("Player id %d canceled matchmaking\n1 slot open for Game Server id %d", Clients[index].clientID, Servers[serverID].serverID);
+        Clients[index].recevingInfo = 0;
+        break;
 
 
     case -1:
@@ -1008,7 +881,7 @@ void ReceiveClientMessage(void* Info) {
     int res = 0;
     //printf("Waiting for messages from  %s \n", tempClient.name);
     //printf("waiting for %s to send message\n", Clients[index].name);
-    if (Clients[index].socket != INVALID_SOCKET) {
+    if (Clients[index].socket != INVALID_SOCKET && Clients[index].state != 0 ) {
 
         // Message Recieved from Client
         res = recv(Clients[index].socket, msgReceiver, sizeof(msgReceiver), 0);
@@ -1061,7 +934,7 @@ void ReceiveClientMessage(void* Info) {
             Clients[index].recevingInfo = 0;
         }
         else {
-            printf("s181: recv failed with error: %d\n", WSAGetLastError());
+            printf(" Client %d '%s' recv failed with error: %d\n", index ,Clients[index].name, WSAGetLastError());
             closesocket(Clients[index].socket);
             WSACleanup();
 
@@ -1088,19 +961,19 @@ void MMServer() {
         _beginthread(CommandLines, 0, (void*)ServerState);
     }
     */
-   
+
 
     if (UsersOn > 0) {
         //for all clients connected // loop clients via servers
-        for (int i = 0; i < ClientConnected; i++) {
-            if (Clients[i].socket != INVALID_SOCKET) {
+        for (int i = 0; i <=ClientConnected; i++) {
+            if (Clients[i].socket != INVALID_SOCKET && Clients[i].socket != NULL) {
 
                 if (Clients[i].state != 3) {
                     //ifnot listening to client
                     if (Clients[i].recevingInfo == 0) {
                         Clients[i].recevingInfo = 1; // listen on for client i
                         printf("Waiting to get message from client number %d \n", Clients[i].clientID);
-                        _beginthread(ReceiveClientMessage, 0, (void*)Clients[i].clientID);
+                        _beginthread(ReceiveClientMessage, 0, (void*)i);
                     }
                     /*   if (Clients[i].hastoSend == 1) {
                         Clients[i].hastoSend = 0;
@@ -1109,9 +982,6 @@ void MMServer() {
                     }
                     */
                 }
-
-
-
             }
         }
     }
@@ -1210,7 +1080,7 @@ int __cdecl main(int argc, char** argv)
 
 
     // do process of commandlines
-    
+
     _beginthread(CommandLines, 0, (void*)ServerState);
     _beginthread(AcceptSockets, 0, (void*)ListenSocket);
 

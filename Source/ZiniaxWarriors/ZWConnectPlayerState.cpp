@@ -143,14 +143,10 @@ void AZWConnectPlayerState::ShowCustomizationMenu()
 		{
 			UE_LOG(LogTemp, Log, TEXT("Connect button set!"));
 			ConnectToGameButton->SetIsEnabled(true);
-			
 			ConnectToGameButton->OnClicked.AddDynamic(this,  &AZWConnectPlayerState::OnConnectGameClick);
 		}
-
 		
 	}
-
-	
 }
 
 
@@ -273,7 +269,7 @@ void AZWConnectPlayerState::GotoGameLevel()
 				FString cmd = "open " + tcpClient->getGameIP() + "" +CustomizationMessage;
 				tcpClient->Stop();
 				canConnectToGameServer = false;
-				CustomizationWidget->RemoveFromViewport();
+				//CustomizationWidget->RemoveFromViewport();
 				pController->ConsoleCommand(cmd);
 			}
 			

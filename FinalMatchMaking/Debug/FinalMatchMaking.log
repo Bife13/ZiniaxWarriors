@@ -1,0 +1,22 @@
+﻿  ZWMMServerSource.c
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(114,43): warning C4047: '==': 'SOCKET' differs in levels of indirection from 'void *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(207,17): warning C4013: 'gets' undefined; assuming extern returning int
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(254,97): warning C4047: '!=': 'SOCKET' differs in levels of indirection from 'void *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(284,97): warning C4047: '!=': 'SOCKET' differs in levels of indirection from 'void *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(229,1): warning C4047: 'initializing': 'int' differs in levels of indirection from 'int *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(365,30): warning C4020: 'strcpy': too many actual parameters
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(389,15): warning C4013: '_endthread' undefined; assuming extern returning int
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(490,17): warning C4098: 'AcceptSockets': 'void' function returning a value
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(508,35): warning C4020: 'strcpy': too many actual parameters
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(596,29): warning C4013: '_beginthread' undefined; assuming extern returning int
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(798,43): warning C4020: 'strcpy': too many actual parameters
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(830,39): warning C4020: 'strcpy': too many actual parameters
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(694,1): warning C4047: 'initializing': 'int' differs in levels of indirection from 'int *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(895,39): warning C4020: 'strcpy': too many actual parameters
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(873,1): warning C4047: 'initializing': 'int' differs in levels of indirection from 'int *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(968,81): warning C4047: '!=': 'SOCKET' differs in levels of indirection from 'void *'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(1109,29): warning C4047: 'function': 'SOCKET' differs in levels of indirection from 'SOCKET [2]'
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(1109,17): warning C4024: 'closesocket': different types for formal and actual parameter 1
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(1011,10): warning C4101: 'recvbuf': unreferenced local variable
+C:\Users\BERNARDO\source\repos\FinalMatchMaking\ZWMMServerSource.c(1010,9): warning C4101: 'iSendResult': unreferenced local variable
+  FinalMatchMaking.vcxproj -> C:\Users\BERNARDO\source\repos\FinalMatchMaking\Debug\FinalMatchMaking.exe
