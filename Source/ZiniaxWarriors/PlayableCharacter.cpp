@@ -166,6 +166,7 @@ void APlayableCharacter::Tick(const float DeltaTime)
 }
 
 
+
 void APlayableCharacter::LockRotation()
 {
 	bUseControllerRotationPitch = false;
@@ -322,35 +323,63 @@ void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 	AddMovementInput(MoveDirection, Value);
 }
 
+
+void APlayableCharacter::HandleCastEvent1_Implementation(float Value)
+{
+	CastEventBasic.Broadcast(Value);
+}
+
+void APlayableCharacter::HandleCastEvent2_Implementation(float Value)
+{
+	CastEventAbility1.Broadcast(Value);
+
+}
+void APlayableCharacter::HandleCastEvent3_Implementation(float Value)
+{
+	CastEventAbility2.Broadcast(Value);
+
+}
+void APlayableCharacter::HandleCastEvent4_Implementation(float Value)
+{
+	CastEventAbility3.Broadcast(Value);
+
+}
+
 void APlayableCharacter::UseBasicAttack_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(0) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(0) && !GetIsCasting() && RuntimeSkills[0]->bCanUse)
 	{
 		RuntimeSkills[0]->CastSkill(AttackAnimations[0]);
+		HandleCastEvent1(RuntimeSkills[0]->AbilityCooldown);
 	}
 }
 
 void APlayableCharacter::UseFirstAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting()&& RuntimeSkills[1]->bCanUse)
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
+		HandleCastEvent2(RuntimeSkills[1]->AbilityCooldown);
+
 	}
 }
 
 void APlayableCharacter::UseSecondAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting()&& RuntimeSkills[2]->bCanUse)
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
+		HandleCastEvent3(RuntimeSkills[2]->AbilityCooldown);
+
 	}
 }
 
 void APlayableCharacter::UseThirdAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(3) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(3) && !GetIsCasting() && RuntimeSkills[3]->bCanUse)
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
+		HandleCastEvent4(RuntimeSkills[3]->AbilityCooldown);
 	}
 }
 

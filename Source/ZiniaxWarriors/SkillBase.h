@@ -9,7 +9,7 @@
 #include "UObject/NoExportTypes.h"
 #include "SkillBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted, float, Cooldown);
+// DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted, float, Cooldown);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillReset, bool, isReset);
 
@@ -115,8 +115,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float CooldownForUi() { return AbilityCooldown; }
 
-	UPROPERTY(BlueprintAssignable)
-	FSkillCasted CastEvent;
+	// UPROPERTY(BlueprintAssignable)
+	// FSkillCasted CastEvent;
 
 	UPROPERTY(BlueprintAssignable)
 	FSkillReset ResetEvent;
