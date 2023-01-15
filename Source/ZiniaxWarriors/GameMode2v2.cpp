@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 
 
+
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
@@ -126,6 +127,15 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 	}
 
 	MatchTimer();
+	
+}
+
+void AGameMode2v2::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
+	UpdateRoundsInGameState();
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
@@ -208,6 +218,45 @@ void AGameMode2v2::CloseDoors()
 		FVector FinalPosition = Location + MoveVector;
 		SpawnDoors[i]->SetActorLocation(FinalPosition);
 	}
+}
+
+void AGameMode2v2::SetMinutesInGameState() 
+{GameState2v2->SetMinutes(Minutes);}
+
+void AGameMode2v2::SetSecondsInGameState() 
+{GameState2v2->SetSeconds(Seconds);}
+
+void AGameMode2v2::SetRoundCountInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("RoundNumber: %d"),RoundCounter);
+	GameState2v2->SetRounds(RoundCounter);
+}
+
+void AGameMode2v2::SetTeam1RoundsWonInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Teeam1 won: %d"),Team1RoundsWon);
+	GameState2v2->SetTeam1Rounds(Team1RoundsWon);
+}
+
+void AGameMode2v2::SetTeam2RoundsWonInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Teeam2 won: %d"),Team2RoundsWon);
+	GameState2v2->SetTeam2Rounds(Team2RoundsWon);
+	
+}
+
+
+void AGameMode2v2::UpdateRoundsInGameState()
+{
+	SetTeam1RoundsWonInGameState();
+	SetTeam2RoundsWonInGameState();
+	SetRoundCountInGameState();
+}
+
+void AGameMode2v2::UpdateGameTimer()
+{
+	SetMinutesInGameState();
+	SetSecondsInGameState();
 }
 
 void AGameMode2v2::OpenDoors(float DeltaTime)
@@ -304,6 +353,7 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			StartInBetweenRoundTimer(2);
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
+		UpdateRoundsInGameState();
 		RespawnCharacters();
 	}
 }

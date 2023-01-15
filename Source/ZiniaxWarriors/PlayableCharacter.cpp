@@ -625,6 +625,6 @@ TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 
 void APlayableCharacter::ResetCharacter() const
 {
-	HealthComponent->SetHealthToMaxHealth();
+	HealthComponent->ResetHealth();
 	StatusEffectsComponent->CleanBuffs();
 }

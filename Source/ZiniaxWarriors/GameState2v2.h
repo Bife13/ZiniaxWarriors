@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameMode2v2.h"
+
 #include "GameFramework/GameState.h"
 #include "GameState2v2.generated.h"
 
 
+DECLARE_EVENT(AGameState2v2,ResetRound)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FScoreUpdate,int, rounds,int,Team1, int, Team2);
 /**
  * 
  */
@@ -15,43 +17,57 @@ UCLASS()
 class ZINIAXWARRIORS_API AGameState2v2 : public AGameState
 {
 	GENERATED_BODY()
-
-	UPROPERTY()
-	AGameMode2v2* GameMode;
-
-	UFUNCTION()
-	void BeginPlay() override;
 	
 public:
-	UFUNCTION(BlueprintCallable)
-	int GetTeam1Rounds()
-	{
-		return GameMode->GetTeam1RoundsWon();
-	}
 
-	UFUNCTION(BlueprintCallable)
-	int GetTeam2Rounds()
-	{
-		return GameMode->GetTeam2RoundsWon();
-	}
 
-	UFUNCTION(BlueprintCallable)
-	int GetRoundNumber()
-	{
-		return GameMode->GetRoundCount();
-	}
+
+
+	UPROPERTY(BlueprintAssignable)
+	FScoreUpdate ScoreUpdate;
+
+	UPROPERTY()
+	int Team1Rounds =10;
+
+	UPROPERTY()
+	int Team2Rounds =20;
 	
-	UFUNCTION(BlueprintCallable)
-	int GetMinutes()
-	{
-		return GameMode->GetMinutes();
-	}
+	UPROPERTY()
+	int Rounds =11;
+	
+	UPROPERTY()
+	int Minutes;
+	
+	UPROPERTY()
+	int Seconds;
 
 	UFUNCTION(BlueprintCallable)
-	int GetSeconds()
-	{
-		return GameMode->GetSeconds();
-	}
+	int GetTeam1Rounds();
+	UFUNCTION()
+	void SetTeam1Rounds(int T1Rounds);
+	UFUNCTION(BlueprintCallable)
+	int GetTeam2Rounds();
+	UFUNCTION()
+	void SetTeam2Rounds(int T2Rounds);
+	UFUNCTION(BlueprintCallable)
+	int GetRoundNumber();
+	UFUNCTION()
+	void SetRounds(int roundstoset);
+	UFUNCTION(BlueprintCallable)
+	int GetMinutes();
+	UFUNCTION()
+	void SetMinutes(int Minutestoset);
+	UFUNCTION(BlueprintCallable)
+	int GetSeconds();
+	UFUNCTION()
+	void SetSeconds(int Secondstoset);
+
+	UFUNCTION()
+	void SetAllRounds(int round, int t1, int t2);
+	
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void OnScoreChanged();
 
 
 };
