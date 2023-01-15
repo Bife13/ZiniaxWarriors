@@ -5,6 +5,7 @@
 
 #include "PlayableCharacter.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
 ABasePlayerController::ABasePlayerController()
@@ -131,4 +132,9 @@ void ABasePlayerController::CalculateMousePosition()
 	const FVector CursorFv = TraceHitResult.ImpactNormal;
 	const FRotator CursorR = CursorFv.Rotation();
 	MouseChanged(TraceHitResult.Location);
+}
+
+void ABasePlayerController::ReopenLogin_Implementation()
+{
+	UGameplayStatics::OpenLevel(GetWorld(),"Test",true);
 }

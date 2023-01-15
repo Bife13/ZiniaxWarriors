@@ -7,16 +7,60 @@
 #include "DTR_SkillsDatatable.h"
 #include "DTR_SpawnableCharacter.h"
 #include "GameState2v2.h"
+#include "Sockets.h"
+#include "SocketSubsystem.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Interfaces/IPv4/IPv4Address.h"
 #include "Kismet/GameplayStatics.h"
 
+
+void AGameMode2v2::BeginPlay()
+{
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("Playe Begin"));
+	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream,TEXT("default"), false);
+	
+	FIPv4Address Ip;
+
+	bool ValidIp = FIPv4Address::Parse(IpString, Ip);
+	if(ValidIp)
+	{
+		const TSharedRef<FInternetAddr> Addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+		Addr->SetIp(Ip.Value);
+		Addr->SetPort(7778);
+		const bool connected = Socket->Connect(*Addr);
+
+		if (connected)
+		{	
+			GEngine->AddOnScreenDebugMessage(1, 5, FColor::Black, "Connected");
+		
+			int32 Sent = 0;
+
+			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*PlayerName)), PlayerName.Len(), Sent);
+			GEngine->AddOnScreenDebugMessage(2, 5, FColor::Red, "Sent Name");
+			Sent = 0;
+			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*PlayerPass)), PlayerPass.Len(), Sent);
+			GEngine->AddOnScreenDebugMessage(3, 5, FColor::Black, "Sent Pass");
+			Sent = 0;
+			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*OptionsString)), OptionsString.Len(), Sent);
+			GEngine->AddOnScreenDebugMessage(5, 5, FColor::Black, "Sent Options");
+		}
+	}
+
+}
 
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
 	// TODO if need to go back to old method, just override the Variables
-	const FString OptionsTest = "?Warrior=Zerher?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
+	FString OptionsTest = "?Warrior=Zerher?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
+
+	if(Options.Len() > 0)
+	{
+		OptionsTest = Options;
+	}
+	
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
@@ -310,14 +354,32 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 
 bool AGameMode2v2::CheckRoundCounter()
 {
+	// TODO WAit a bit before ending Game
+	
+	FString EndString = "END";
 	if (Team1RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
+		int32 Sent = 0;
+		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
+		// GetWorld()->ServerTravel("Test", true,true);
+		for (int i = 0;i<PlayerControllers.Num();i++)
+		{
+			PlayerControllers[i]->ReopenLogin();
+		}
+		RestartGame();
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
+		int32 Sent = 0;
+		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
+		for (int i = 0;i<PlayerControllers.Num();i++)
+		{
+			PlayerControllers[i]->ReopenLogin();
+		}
+		RestartGame();
 		return true;
 	}
 	return false;

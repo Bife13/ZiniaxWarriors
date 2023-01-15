@@ -1,5 +1,5 @@
 :: This is th actual path to the unreal engine, so make sure it follows the correct path in your machines
-set UE4Dir="D:\EpicGames\UE_4.27\Engine\Binaries\Win64\UE4Editor.exe"
+set UE4Dir="C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.exe"
 
 :: Project directory, this is auto configured, if you have a different project name then switch change this
 set ProjectDir="%cd%/ZiniaxWarriors.uproject"
@@ -11,7 +11,7 @@ set Role=-game
 set Port="1337"
 
 :: Default Map To Load Into As A Server
-set Map="127.0.0.1:1337"
+set Map=/Game/Maps/Test
 
 :: Comment this out if you dont want your server logging
 set Log=-log

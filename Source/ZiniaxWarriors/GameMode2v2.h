@@ -19,6 +19,7 @@ class ZINIAXWARRIORS_API AGameMode2v2 : public AGameMode
 	GENERATED_BODY()
 
 protected:
+	virtual void BeginPlay() override;
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
 	                              const FString& Options, const FString& Portal) override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -47,6 +48,15 @@ protected:
 
 	UPROPERTY()
 	bool bCanDoorOpen = false;
+
+	FSocket* Socket;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FString PlayerName;
+	// For Server just send " |";
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FString PlayerPass;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FString IpString;
 
 
 	UFUNCTION()
