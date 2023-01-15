@@ -81,6 +81,19 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	int Seconds = 30.f;
 
+public:
+	UFUNCTION()
+	int GetMinutes(){return Minutes;}
+	UFUNCTION()
+	int GetSeconds(){return Seconds;}
+	UFUNCTION()
+	int GetRoundCount(){return RoundCounter;}
+
+	UFUNCTION()
+	int GetTeam1RoundsWon(){return Team1RoundsWon;}
+	UFUNCTION()
+	int GetTeam2RoundsWon(){return Team2RoundsWon;}
+	
 private:
 	UPROPERTY()
 	TArray<AActor*> PlayerStarts;
@@ -114,11 +127,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int Team2DeathCounter = 0;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	int RoundCounter = 0;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	int Team1RoundsWon = 0;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	int Team2RoundsWon = 0;
 
 

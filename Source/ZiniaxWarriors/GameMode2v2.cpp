@@ -16,7 +16,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
                                     const FString& Options, const FString& Portal)
 {
 	// TODO if need to go back to old method, just override the Variables
-	const FString OptionsTest = "?Warrior=Zerher?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
+	const FString OptionsTest = "?Warrior=Nyax?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
