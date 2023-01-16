@@ -72,7 +72,7 @@ public:
 
 
 	//UFUNCTION(NetMulticast,BlueprintImplementableEvent)
-//	void InformClients();
+	//	void InformClients();
 
 
 };

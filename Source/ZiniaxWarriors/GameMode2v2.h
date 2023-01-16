@@ -35,10 +35,7 @@ protected:
 
 
 	class TCPClient* MMServerConnection;
-
-	UFUNCTION()
-	void BeginPlay() override;
-
+	
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()

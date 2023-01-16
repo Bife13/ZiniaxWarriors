@@ -15,7 +15,7 @@ void AGameMode2v2::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Log, TEXT("Check Am Server:"),);
-
+	
 	if (GetWorld()->IsServer())
 	{
 		// check if on execute is created via exe with OpstionsString v
@@ -63,6 +63,9 @@ void AGameMode2v2::BeginPlay()
 			}
 		}
 	}
+
+	GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
+	UpdateRoundsInGameState();
 }
 
 
@@ -187,14 +190,6 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 
 	MatchTimer();
 	
-}
-
-void AGameMode2v2::BeginPlay()
-{
-	Super::BeginPlay();
-
-	GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
-	UpdateRoundsInGameState();
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
