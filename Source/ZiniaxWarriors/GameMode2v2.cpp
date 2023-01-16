@@ -65,6 +65,7 @@ void AGameMode2v2::BeginPlay()
 	}
 }
 
+
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
@@ -185,6 +186,15 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 	}
 
 	MatchTimer();
+	
+}
+
+void AGameMode2v2::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
+	UpdateRoundsInGameState();
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
@@ -290,6 +300,48 @@ void AGameMode2v2::CloseDoors()
 	}
 }
 
+void AGameMode2v2::SetMinutesInGameState() 
+{GameState2v2->SetMinutes(Minutes);}
+
+void AGameMode2v2::SetSecondsInGameState() 
+{GameState2v2->SetSeconds(Seconds);}
+
+void AGameMode2v2::SetRoundCountInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("RoundNumber: %d"),RoundCounter);
+	GameState2v2->SetRounds(RoundCounter);
+}
+
+void AGameMode2v2::SetTeam1RoundsWonInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Teeam1 won: %d"),Team1RoundsWon);
+	GameState2v2->SetTeam1Rounds(Team1RoundsWon);
+}
+
+void AGameMode2v2::SetTeam2RoundsWonInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Teeam2 won: %d"),Team2RoundsWon);
+	GameState2v2->SetTeam2Rounds(Team2RoundsWon);
+	
+}
+
+
+void AGameMode2v2::UpdateRoundsInGameState()
+{
+	//SetTeam1RoundsWonInGameState();
+	//SetTeam2RoundsWonInGameState();
+	//SetRoundCountInGameState();
+	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon,Team2RoundsWon);
+	GEngine->AddOnScreenDebugMessage(1, 20, FColor::Black, "GamemodeScoreUpdate");
+	GameState2v2->ScoreUpdate.Broadcast(RoundCounter,Team1RoundsWon,Team2RoundsWon);
+}
+
+void AGameMode2v2::UpdateGameTimer()
+{
+	SetMinutesInGameState();
+	SetSecondsInGameState();
+}
+
 void AGameMode2v2::OpenDoors(float DeltaTime)
 {
 	for (int i = 0; i < SpawnDoors.Num(); i++)
@@ -382,6 +434,7 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
 		RespawnAfterDelay(3);
+		UpdateRoundsInGameState();
 	}
 }
 
