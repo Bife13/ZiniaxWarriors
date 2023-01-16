@@ -239,6 +239,27 @@ void AGameMode2v2::StartDoorTimer(float Time)
 		UnusedHandle, this, &AGameMode2v2::SetCanDoorOpenTrue, Time, false);
 }
 
+void AGameMode2v2::RespawnAfterDelay(float Time)
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::RespawnCharacters, Time, false);
+}
+
+void AGameMode2v2::EndGameAfterDelay(float Time)
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::EndGame, Time, false);
+}
+
+void AGameMode2v2::RestartServerAfterDelay(float Time)
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::RestartServer, Time, false);
+}
+
 void AGameMode2v2::ActivateAllCharacters()
 {
 	for (int i = 0; i < PlayerControllers.Num(); i++)
@@ -327,6 +348,11 @@ void AGameMode2v2::RespawnCharacters()
 	}
 }
 
+void AGameMode2v2::RestartServer()
+{
+	RestartGame();
+}
+
 void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterController,
                               APlayableCharacter* DeadCharacter)
 {
@@ -335,20 +361,12 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 		Team1DeathCounter++;
 		DeadCharacterController->CharacterDeactivate();
 		DeadCharacter->SetIsDead(true);
-		// DeadCharacter->GetCameraBoom()->TargetArmLength = 5000.f;
-		// FVector Position = {0,0,-500};
-		// DeadCharacter->SetActorLocation(Position);
-		// DeactivateHitbox(DeadCharacter);
 	}
 	else
 	{
 		Team2DeathCounter++;
 		DeadCharacterController->CharacterDeactivate();
 		DeadCharacter->SetIsDead(true);
-		// DeadCharacter->GetCameraBoom()->TargetArmLength = 5000.f;
-		// FVector Position = {0,0,-500};
-		// DeadCharacter->SetActorLocation(Position);
-		// DeactivateHitbox(DeadCharacter);
 	}
 
 	if (Team1DeathCounter >= Team1PlayerCharacters.Num() || Team2DeathCounter >= Team2PlayerCharacters.Num())
@@ -360,10 +378,10 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			Team1RoundsWon++;
 		if (!CheckRoundCounter())
 		{
-			StartInBetweenRoundTimer(2);
+			StartInBetweenRoundTimer(5);
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
-		RespawnCharacters();
+		RespawnAfterDelay(3);
 	}
 }
 
@@ -373,19 +391,28 @@ bool AGameMode2v2::CheckRoundCounter()
 	if (Team1RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
-		// GetWorld()->ServerTravel("LoginMenu", true);
-		// this->RestartGame();
+		EndGameAfterDelay(10);
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
-		// GetWorld()->ServerTravel("LoginMenu", true);
-		// this->RestartGame();
+		EndGameAfterDelay(10);
 		return true;
 	}
 	return false;
 }
+
+void AGameMode2v2::EndGame()
+{
+	for (int i = 0;i<PlayerControllers.Num();i++)
+	{
+		PlayerControllers[i]->ReopenLogin();	
+	}
+	RestartServerAfterDelay(2);
+}
+
+
 
 
 TArray<APlayerStart*> AGameMode2v2::GetPlayerStartsForTeam1()

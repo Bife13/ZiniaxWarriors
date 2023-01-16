@@ -5,6 +5,7 @@
 
 #include "PlayableCharacter.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
 ABasePlayerController::ABasePlayerController()
@@ -21,6 +22,11 @@ void ABasePlayerController::CharacterActivate()
 void ABasePlayerController::CharacterDeactivate()
 {
 	bIsCharacterActivated = false;
+}
+
+void ABasePlayerController::ReopenLogin_Implementation()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "LoginMenu", true);
 }
 
 

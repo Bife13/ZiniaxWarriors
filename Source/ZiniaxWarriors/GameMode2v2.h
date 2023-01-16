@@ -30,16 +30,20 @@ protected:
 	static FString ParsingAbility2(const FString& Options);
 	static FString ParsingAbility3(const FString& Options);
 
-	
+
 	class TCPClient* MMServerConnection;
-	
+
 	UFUNCTION()
 	void BeginPlay() override;
-	
+
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()
 	void RespawnCharacters();
+	UFUNCTION()
+	void RestartServer();
+	UFUNCTION()
+	void EndGame();
 	UFUNCTION()
 	void CountDeath(int TeamId, ABasePlayerController* DeadCharacterController, APlayableCharacter* DeadCharacter);
 	UFUNCTION()
@@ -63,13 +67,19 @@ protected:
 	void CachePlayerStarts();
 	UFUNCTION()
 	void CacheDoors();
-
 	UFUNCTION()
 	void StartInBetweenRoundTimer(float Time);
 	UFUNCTION()
 	void StartDoorTimer(float Time);
-
+	UFUNCTION()
+	void RespawnAfterDelay(float Time);
+	UFUNCTION()
+	void RestartServerAfterDelay(float Time);
 	
+	UFUNCTION()
+	void EndGameAfterDelay(float Time);
+
+
 	UFUNCTION()
 	void ActivateAllCharacters();
 	UFUNCTION()
