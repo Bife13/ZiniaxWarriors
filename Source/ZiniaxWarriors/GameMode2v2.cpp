@@ -367,7 +367,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		{
 			PlayerControllers[i]->ReopenLogin();
 		}
-		RestartGame();
+		//RestartGame();
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
@@ -379,7 +379,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		{
 			PlayerControllers[i]->ReopenLogin();
 		}
-		RestartGame();
+		//RestartGame();
 		return true;
 	}
 	return false;

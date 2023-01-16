@@ -1,5 +1,5 @@
 :: This is th actual path to the unreal engine, so make sure it follows the correct path in your machines
-set UE4Dir="E:\Epic\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.exe"
+set UE4Dir="C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.exe"
 
 :: Project directory, this is auto configured, if you have a different project name then switch change this
 set ProjectDir="%cd%/ZiniaxWarriors.uproject"
