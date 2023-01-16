@@ -248,9 +248,12 @@ void AGameMode2v2::SetTeam2RoundsWonInGameState()
 
 void AGameMode2v2::UpdateRoundsInGameState()
 {
-	SetTeam1RoundsWonInGameState();
-	SetTeam2RoundsWonInGameState();
-	SetRoundCountInGameState();
+	//SetTeam1RoundsWonInGameState();
+	//SetTeam2RoundsWonInGameState();
+	//SetRoundCountInGameState();
+	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon,Team2RoundsWon);
+	GEngine->AddOnScreenDebugMessage(1, 20, FColor::Black, "GamemodeScoreUpdate");
+	GameState2v2->ScoreUpdate.Broadcast(RoundCounter,Team1RoundsWon,Team2RoundsWon);
 }
 
 void AGameMode2v2::UpdateGameTimer()

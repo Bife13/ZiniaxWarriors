@@ -32,11 +32,10 @@ int AGameState2v2::GetRoundNumber()
 	return Rounds;
 }
 
-void AGameState2v2::SetRounds(int roundstoset)
+void AGameState2v2::SetRounds_Implementation(int RoundsToSet)
 {
-	Rounds =roundstoset;
+	Rounds =RoundsToSet;
 	OnScoreChanged();
-	
 }
 
 int AGameState2v2::GetMinutes()
@@ -44,9 +43,9 @@ int AGameState2v2::GetMinutes()
 	return Minutes;
 }
 
-void AGameState2v2::SetMinutes(int Minutestoset)
+void AGameState2v2::SetMinutes(int MinutesToSet)
 {
-	Minutes = Minutestoset;
+	Minutes = MinutesToSet;
 }
 
 int AGameState2v2::GetSeconds()
@@ -59,7 +58,7 @@ void AGameState2v2::SetSeconds(int Secondstoset)
 	Seconds=Secondstoset;
 }
 
-void AGameState2v2::SetAllRounds(int round,int t1,int t2)
+void AGameState2v2::SetAllRounds_Implementation(int round,int t1,int t2)
 {
 	Team1Rounds = t1;
 	Team2Rounds = t2;
@@ -70,6 +69,7 @@ void AGameState2v2::SetAllRounds(int round,int t1,int t2)
 void AGameState2v2::OnScoreChanged_Implementation()
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Round: %d , TEAM1: %d, TEAM2: %d"), Rounds,Team1Rounds,Team2Rounds);
+	//	UE_LOG(LogTemp, Warning, TEXT("Round: %d , TEAM1: %d, TEAM2: %d"), Rounds,Team1Rounds,Team2Rounds);
 	ScoreUpdate.Broadcast(Rounds,Team1Rounds,Team2Rounds);
+	
 }

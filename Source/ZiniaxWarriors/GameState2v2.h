@@ -9,7 +9,7 @@
 
 
 DECLARE_EVENT(AGameState2v2,ResetRound)
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FScoreUpdate,int, rounds,int,Team1, int, Team2);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FScoreUpdate,int, Rounds,int,Team1, int, Team2);
 /**
  * 
  */
@@ -26,14 +26,16 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FScoreUpdate ScoreUpdate;
 
+
+	ResetRound ResetEvent;
 	UPROPERTY()
-	int Team1Rounds =10;
+	int Team1Rounds =0;
 
 	UPROPERTY()
-	int Team2Rounds =20;
+	int Team2Rounds =0;
 	
 	UPROPERTY()
-	int Rounds =11;
+	int Rounds =1;
 	
 	UPROPERTY()
 	int Minutes;
@@ -51,23 +53,26 @@ public:
 	void SetTeam2Rounds(int T2Rounds);
 	UFUNCTION(BlueprintCallable)
 	int GetRoundNumber();
-	UFUNCTION()
-	void SetRounds(int roundstoset);
+	UFUNCTION(NetMulticast, Reliable)
+	void SetRounds(int RoundsToSet);
 	UFUNCTION(BlueprintCallable)
 	int GetMinutes();
 	UFUNCTION()
-	void SetMinutes(int Minutestoset);
+	void SetMinutes(int MinutesToSet);
 	UFUNCTION(BlueprintCallable)
 	int GetSeconds();
 	UFUNCTION()
 	void SetSeconds(int Secondstoset);
 
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void SetAllRounds(int round, int t1, int t2);
 	
-	
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(NetMulticast, Reliable)
 	void OnScoreChanged();
+
+
+	//UFUNCTION(NetMulticast,BlueprintImplementableEvent)
+//	void InformClients();
 
 
 };
