@@ -60,6 +60,8 @@ void APlayableCharacter::StartBeginPlay()
 		CachedWorld = World;
 	}
 
+	OnCatchphraseSound();
+
 	PopulateSkillArray();
 	PassiveInitializeFunction();
 
@@ -98,6 +100,11 @@ void APlayableCharacter::StartBeginPlay()
 	//Weaken Observe
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
+
+	HealthComponent->OnDeathEvent.AddUFunction(this,"CallBPDeathEvent");
+	HealthComponent->OnGotHitEvent.AddUFunction(this,"CallBPGotHitEvent");
+	HealthComponent->OnLowHealth.AddUFunction(this,"CallBPLowHealthEvent");
+	HealthComponent->OnHealedEvent.AddUFunction(this,"CallBPHealedEvent");
 }
 
 bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -362,6 +369,10 @@ void APlayableCharacter::UseFirstAbility_Implementation()
 		HandleCastEvent2(RuntimeSkills[1]->AbilityCooldown);
 		OnHandleAbilitySound();
 	}
+	else
+	{
+		OnAbilityOnCooldownSound();
+	}
 }
 
 void APlayableCharacter::UseSecondAbility_Implementation()
@@ -371,6 +382,9 @@ void APlayableCharacter::UseSecondAbility_Implementation()
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 		HandleCastEvent3(RuntimeSkills[2]->AbilityCooldown);
 		OnHandleAbilitySound();
+	}else
+	{
+		OnAbilityOnCooldownSound();
 	}
 }
 
@@ -381,6 +395,9 @@ void APlayableCharacter::UseThirdAbility_Implementation()
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 		HandleCastEvent4(RuntimeSkills[3]->AbilityCooldown);
 		OnHandleAbilitySound();
+	}else
+	{
+		OnAbilityOnCooldownSound();
 	}
 }
 
@@ -399,7 +416,10 @@ void APlayableCharacter::OnHit()
 {
 	if (HasAuthority())
 		if (CachedPassiveInterface && RunTimePassive)
+		{
 			CachedPassiveInterface->OnHit();
+			OnHitSound();
+		}
 }
 
 float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target)
@@ -599,6 +619,26 @@ void APlayableCharacter::EndWeakenEffect_Implementation() const
 }
 
 
+void APlayableCharacter::CallBPDeathEvent()
+{
+	OnDeathSound();
+}
+
+void APlayableCharacter::CallBPGotHitEvent()
+{
+	OnGotHitSound();
+}
+
+void APlayableCharacter::CallBPLowHealthEvent()
+{
+	OnLowHealthSound();
+}
+
+void APlayableCharacter::CallBPHealedEvent()
+{
+	OnHealedSound();
+}
+
 bool APlayableCharacter::GetIsCasting()
 {
 	return bIsCasting;
@@ -626,8 +666,9 @@ TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 	return SkillsToSend;
 }
 
-void APlayableCharacter::ResetCharacter() const
+void APlayableCharacter::ResetCharacter()
 {
 	HealthComponent->SetHealthToMaxHealth();
 	StatusEffectsComponent->CleanBuffs();
+	OnCatchphraseSound();
 }

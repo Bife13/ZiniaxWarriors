@@ -60,11 +60,26 @@ void UHealthSystem::TakeDamage_Implementation(const float Amount)
 			HandleHealthChanged(GetHealth(),GetMaxHealth(),GetHealthAsPercentage(),DamageTaken);
 		}
 
+		
+
 		if (Health <= 0)
 		{
 			Health = 0;
 			OnDeathEvent.Broadcast();
+		}else
+		{
+			if(Health <= GetMaxHealth()*0.35 && !bLowHealth)
+			{
+				OnLowHealth.Broadcast();
+				bLowHealth = true;
+			}
+			else
+			{
+				OnGotHitEvent.Broadcast();
+			}
 		}
+
+		
 	}
 }
 
@@ -93,6 +108,9 @@ void UHealthSystem::RecoverHealth_Implementation(const float Amount)
 			Health += HealAmount;
 		}
 		HandleHealEvent(GetHealth(),GetMaxHealth(),GetHealthAsPercentage(),HealAmount);
+		OnHealedEvent.Broadcast();
+		if(Health > GetMaxHealth()*0.35)
+			bLowHealth = false;
 	}
 }
 

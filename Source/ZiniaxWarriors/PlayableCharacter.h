@@ -73,6 +73,21 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
     void OnHandleAbilitySound();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHitSound();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDeathSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnGotHitSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnLowHealthSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHealedSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnCatchphraseSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnAbilityOnCooldownSound();
 	UFUNCTION(BlueprintCallable)
 	void OnSpecialAbility(int Index);
 
@@ -144,6 +159,15 @@ public:
 	UFUNCTION()
 	void SetSpawnLocation(FVector newLocation) { SpawnLocation = newLocation; }
 
+	UFUNCTION()
+	void CallBPDeathEvent();
+	UFUNCTION()
+	void CallBPGotHitEvent();
+	UFUNCTION()
+	void CallBPLowHealthEvent();
+	UFUNCTION()
+	void CallBPHealedEvent();
+
 
 	UFUNCTION()
 	virtual bool GetIsCasting() override;
@@ -161,7 +185,7 @@ public:
 	TArray<USkillBase*> GetRunTimeSkill();
 
 	UFUNCTION()
-	void ResetCharacter() const;
+	void ResetCharacter();
 
 	UPROPERTY(BlueprintAssignable)
 	 FSkillCasted  CastEventBasic;
