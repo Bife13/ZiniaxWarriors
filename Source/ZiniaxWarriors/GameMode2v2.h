@@ -26,7 +26,6 @@ protected:
 	                              const FString& Options, const FString& Portal) override;
 	virtual void Tick(float DeltaSeconds) override;
 
-	virtual void BeginPlay() override;
 	virtual bool ReadyToStartMatch_Implementation() override;
 
 	static FString ParsingWarriorName(const FString& Options);

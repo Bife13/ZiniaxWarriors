@@ -34,17 +34,23 @@ void AGameMode2v2::BeginPlay()
 		if (connected)
 		{	
 			GEngine->AddOnScreenDebugMessage(1, 5, FColor::Black, "Connected");
-		
+
+			FString FinalString = "";
+
+			FinalString.Append(PlayerName);
+			FinalString.Append(PlayerPass);
+			FinalString.Append(OptionsString);
+			
 			int32 Sent = 0;
 
-			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*PlayerName)), PlayerName.Len(), Sent);
+			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*FinalString)), FinalString.Len(), Sent);
 			GEngine->AddOnScreenDebugMessage(2, 5, FColor::Red, "Sent Name");
-			Sent = 0;
-			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*PlayerPass)), PlayerPass.Len(), Sent);
-			GEngine->AddOnScreenDebugMessage(3, 5, FColor::Black, "Sent Pass");
-			Sent = 0;
-			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*OptionsString)), OptionsString.Len(), Sent);
-			GEngine->AddOnScreenDebugMessage(5, 5, FColor::Black, "Sent Options");
+			// Sent = 0;
+			// Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*PlayerPass)), PlayerPass.Len(), Sent);
+			// GEngine->AddOnScreenDebugMessage(3, 5, FColor::Black, "Sent Pass");
+			// Sent = 0;
+			// Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*OptionsString)), OptionsString.Len(), Sent);
+			// GEngine->AddOnScreenDebugMessage(5, 5, FColor::Black, "Sent Options");
 
 			GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
 			UpdateRoundsInGameState();
