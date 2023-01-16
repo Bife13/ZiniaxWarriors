@@ -12,6 +12,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthDecreased,float,CurrentH, f
 
 DECLARE_EVENT_OneParam(UHealthSystem,ShieldBrokenEvent,float)
 DECLARE_EVENT(UHealthSystem,Die)
+DECLARE_EVENT(UHealthSystem,Hit)
+DECLARE_EVENT(UHealthSystem,LowHealth)
+DECLARE_EVENT(UHealthSystem,Healed)
 
 
 
@@ -67,10 +70,14 @@ public: // Events
 	FHealthDecreased OnHealthDecreased;
 	UPROPERTY(BlueprintAssignable)
 	FHealing OnHealEvent;
+	
 
 	ShieldBrokenEvent OnShieldBrokenEvent;
 	Die OnDeathEvent;
-	
+	Hit OnGotHitEvent;
+	LowHealth OnLowHealth;
+	LowHealth OnHealedEvent;
+
 private: // This can be protected if we want to subclass the Health Component
 
 	UPROPERTY(VisibleAnywhere,Replicated)
@@ -81,4 +88,6 @@ private: // This can be protected if we want to subclass the Health Component
 	float MaxHealth;
 	UPROPERTY(VisibleAnywhere)
 	float Resistance;
+	UPROPERTY()
+	bool bLowHealth = false;
 };
