@@ -542,3 +542,11 @@ Warrior: Nyax
 Ability1: Eletrogate
 Ability2: SmallHeal
 Ability3: Anchor
+Warrior: Drex
+Ability1: SmallHeal
+Ability2: Eletrogate
+Ability3: Anchor
+Warrior: Drex
+Ability1: Anchor
+Ability2: SmallHeal
+Ability3: Eletrogate
