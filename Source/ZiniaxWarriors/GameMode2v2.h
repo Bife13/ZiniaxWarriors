@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasePlayerController.h"
+#include "GameState2v2.h"
 #include "PlayableCharacter.h"
 #include "Engine/DataTable.h"
 #include "GameFramework/GameMode.h"
@@ -18,12 +19,14 @@ class ZINIAXWARRIORS_API AGameMode2v2 : public AGameMode
 {
 	GENERATED_BODY()
 
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
 	                              const FString& Options, const FString& Portal) override;
 	virtual void Tick(float DeltaSeconds) override;
 
+	virtual void BeginPlay() override;
 	virtual bool ReadyToStartMatch_Implementation() override;
 
 	static FString ParsingWarriorName(const FString& Options);
@@ -90,8 +93,21 @@ protected:
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)
 	int Seconds = 30.f;
+	
+	void SetMinutesInGameState();
+	void SetSecondsInGameState();
+	void SetRoundCountInGameState() ;
+	void SetTeam1RoundsWonInGameState();
+	void SetTeam2RoundsWonInGameState();
+	void UpdateRoundsInGameState();
+	UFUNCTION(BlueprintCallable)
+	void UpdateGameTimer();
+
 
 private:
+	UPROPERTY()
+	AGameState2v2* GameState2v2;
+	
 	UPROPERTY()
 	TArray<AActor*> PlayerStarts;
 	UPROPERTY()
@@ -124,11 +140,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int Team2DeathCounter = 0;
 
-	UPROPERTY()
-	int RoundCounter = 0;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
+	int RoundCounter = 1;
+	UPROPERTY(VisibleAnywhere)
 	int Team1RoundsWon = 0;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	int Team2RoundsWon = 0;
 
 
