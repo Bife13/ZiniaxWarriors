@@ -360,7 +360,7 @@ void APlayableCharacter::UseFirstAbility_Implementation()
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
 		HandleCastEvent2(RuntimeSkills[1]->AbilityCooldown);
-
+		OnHandleAbilitySound();
 	}
 }
 
@@ -370,7 +370,7 @@ void APlayableCharacter::UseSecondAbility_Implementation()
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 		HandleCastEvent3(RuntimeSkills[2]->AbilityCooldown);
-
+		OnHandleAbilitySound();
 	}
 }
 
@@ -380,6 +380,7 @@ void APlayableCharacter::UseThirdAbility_Implementation()
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 		HandleCastEvent4(RuntimeSkills[3]->AbilityCooldown);
+		OnHandleAbilitySound();
 	}
 }
 
@@ -422,6 +423,8 @@ void APlayableCharacter::OnSpecialAbility(int Index)
 {
 	OnSpecialAbilityCast(Index);
 }
+
+
 
 void APlayableCharacter::TakeDamage(float Amount)
 {

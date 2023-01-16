@@ -69,6 +69,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnSpecialAbilityCast(int Index);
+	
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnHandleAbilitySound();
 
 	UFUNCTION(BlueprintCallable)
 	void OnSpecialAbility(int Index);
