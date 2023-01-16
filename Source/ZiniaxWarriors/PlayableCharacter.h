@@ -88,6 +88,8 @@ public:
 	void OnCatchphraseSound();
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnAbilityOnCooldownSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFootstepsSound();
 	UFUNCTION(BlueprintCallable)
 	void OnSpecialAbility(int Index);
 
