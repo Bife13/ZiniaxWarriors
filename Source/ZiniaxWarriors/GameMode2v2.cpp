@@ -409,13 +409,29 @@ bool AGameMode2v2::CheckRoundCounter()
 	if (Team1RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
+		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+		{
+			Team1PlayerCharacters[i]->AnnounceVictory();
+		}
 
+		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+		{
+			Team2PlayerCharacters[i]->AnnounceDefeat();
+		}
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
-	
+		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+		{
+			Team2PlayerCharacters[i]->AnnounceVictory();
+		}
+
+		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+		{
+			Team1PlayerCharacters[i]->AnnounceDefeat();
+		}
 		return true;
 	}
 	return false;
