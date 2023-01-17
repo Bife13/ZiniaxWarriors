@@ -17,4 +17,4 @@ set Map=/Game/Maps/Test
 set Log=-log
 
 :: Finally Run The Command
-%UE4Dir% %ProjectDir% %Map% %Role% %Log% -ResX=800 -ResY=700 -WinX=0 -WinY=30 -windowed
+%UE4Dir% %ProjectDir% %Map% %Role% %Log% -ResX=1920 -ResY=1080 -WinX=0 -WinY=30 -windowed
