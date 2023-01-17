@@ -12,11 +12,12 @@
 #include "Kismet/GameplayStatics.h"
 
 
+
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                     const FString& Options, const FString& Portal)
 {
 	// TODO if need to go back to old method, just override the Variables
-	const FString OptionsTest = "?Warrior=Zerher?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
+	const FString OptionsTest = "?Warrior=Nyax?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
@@ -126,6 +127,15 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 	}
 
 	MatchTimer();
+	
+}
+
+void AGameMode2v2::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
+	UpdateRoundsInGameState();
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
@@ -208,6 +218,48 @@ void AGameMode2v2::CloseDoors()
 		FVector FinalPosition = Location + MoveVector;
 		SpawnDoors[i]->SetActorLocation(FinalPosition);
 	}
+}
+
+void AGameMode2v2::SetMinutesInGameState() 
+{GameState2v2->SetMinutes(Minutes);}
+
+void AGameMode2v2::SetSecondsInGameState() 
+{GameState2v2->SetSeconds(Seconds);}
+
+void AGameMode2v2::SetRoundCountInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("RoundNumber: %d"),RoundCounter);
+	GameState2v2->SetRounds(RoundCounter);
+}
+
+void AGameMode2v2::SetTeam1RoundsWonInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Teeam1 won: %d"),Team1RoundsWon);
+	GameState2v2->SetTeam1Rounds(Team1RoundsWon);
+}
+
+void AGameMode2v2::SetTeam2RoundsWonInGameState() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Teeam2 won: %d"),Team2RoundsWon);
+	GameState2v2->SetTeam2Rounds(Team2RoundsWon);
+	
+}
+
+
+void AGameMode2v2::UpdateRoundsInGameState()
+{
+	//SetTeam1RoundsWonInGameState();
+	//SetTeam2RoundsWonInGameState();
+	//SetRoundCountInGameState();
+	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon,Team2RoundsWon);
+	GEngine->AddOnScreenDebugMessage(1, 20, FColor::Black, "GamemodeScoreUpdate");
+	GameState2v2->ScoreUpdate.Broadcast(RoundCounter,Team1RoundsWon,Team2RoundsWon);
+}
+
+void AGameMode2v2::UpdateGameTimer()
+{
+	SetMinutesInGameState();
+	SetSecondsInGameState();
 }
 
 void AGameMode2v2::OpenDoors(float DeltaTime)
@@ -304,6 +356,7 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			StartInBetweenRoundTimer(2);
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
+		UpdateRoundsInGameState();
 		RespawnCharacters();
 	}
 }
