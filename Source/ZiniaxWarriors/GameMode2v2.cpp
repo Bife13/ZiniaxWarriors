@@ -475,7 +475,7 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
 		UpdateRoundsInGameState();
-		RespawnAfterDelay(3);
+		RespawnAfterDelay(5);
 	}
 }
 
