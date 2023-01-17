@@ -17,11 +17,13 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
                                     const FString& Options, const FString& Portal)
 {
 	// TODO if need to go back to old method, just override the Variables
-	const FString OptionsTest = "?Warrior=Nyax?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
+	const FString OptionsTest = "?Warrior=Drex?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
 	FString Ability3 = ParsingAbility3(OptionsTest);
+	
+	
 
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
@@ -264,6 +266,7 @@ void AGameMode2v2::UpdateGameTimer()
 
 void AGameMode2v2::OpenDoors(float DeltaTime)
 {
+	
 	for (int i = 0; i < SpawnDoors.Num(); i++)
 	{
 		FVector Location = SpawnDoors[i]->GetActorLocation();
@@ -274,6 +277,16 @@ void AGameMode2v2::OpenDoors(float DeltaTime)
 		{
 			SetCanDoorOpenFalse();
 		}
+	}
+
+	for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+	{
+		Team1PlayerCharacters[i]->CallRoundStartSound();
+	}
+
+	for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+	{
+		Team2PlayerCharacters[i]->CallRoundStartSound();
 	}
 }
 
@@ -348,9 +361,39 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 	{
 		RoundCounter++;
 		if (Team1DeathCounter >= Team1PlayerCharacters.Num())
+		{
 			Team2RoundsWon++;
+			if (Team1RoundsWon < 3 && Team2RoundsWon < 3)
+			{
+				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+				{
+					Team1PlayerCharacters[i]->CallVictorySound();
+				}
+
+				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+				{
+					Team2PlayerCharacters[i]->CallDefeatSound();
+				}
+			}
+		
+
+		}
 		else if (Team2DeathCounter >= Team2PlayerCharacters.Num())
+		{
 			Team1RoundsWon++;
+			if (Team1RoundsWon < 3 && Team2RoundsWon < 3)
+			{
+				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+				{
+					Team2PlayerCharacters[i]->CallVictorySound();
+				}
+
+				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+				{
+					Team1PlayerCharacters[i]->CallDefeatSound();
+				}
+			}
+		}
 		if (!CheckRoundCounter())
 		{
 			StartInBetweenRoundTimer(2);
@@ -366,11 +409,13 @@ bool AGameMode2v2::CheckRoundCounter()
 	if (Team1RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
+
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
+	
 		return true;
 	}
 	return false;
