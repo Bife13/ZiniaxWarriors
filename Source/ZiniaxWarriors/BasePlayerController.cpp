@@ -136,5 +136,5 @@ void ABasePlayerController::CalculateMousePosition()
 
 void ABasePlayerController::ReopenLogin_Implementation()
 {
-	UGameplayStatics::OpenLevel(GetWorld(),"Test",true);
+	UGameplayStatics::OpenLevel(GetWorld(),"LoginMenu",true);
 }

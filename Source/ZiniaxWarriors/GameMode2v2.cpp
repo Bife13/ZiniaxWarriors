@@ -18,9 +18,16 @@
 void AGameMode2v2::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Playe Begin"));
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream,TEXT("default"), false);
 
+	if(!OptionsString.IsEmpty())
+	{
+		IpString = UGameplayStatics::ParseOption(OptionsString, "IP");
+		PlayerName = IpString;
+		PlayerName.Append(FString::FromInt(GetWorld()->URL.Port));
+		PlayerName.Append("|");
+	}
+	
 	FIPv4Address Ip;
 
 	bool ValidIp = FIPv4Address::Parse(IpString, Ip);
@@ -33,6 +40,8 @@ void AGameMode2v2::BeginPlay()
 
 		if (connected)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Server Connected To Matchmaking"));
+
 			GEngine->AddOnScreenDebugMessage(1, 5, FColor::Black, "Connected");
 
 			int32 Sent = 0;
@@ -48,6 +57,10 @@ void AGameMode2v2::BeginPlay()
 
 			GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
 			UpdateRoundsInGameState();
+		}else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Server Not connected to Matchmaking"));
+
 		}
 	}
 }
