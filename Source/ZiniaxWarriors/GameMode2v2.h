@@ -100,6 +100,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void MatchTimer();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartMatchMusicEvent();
+	
 	UPROPERTY(BlueprintReadWrite)
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)

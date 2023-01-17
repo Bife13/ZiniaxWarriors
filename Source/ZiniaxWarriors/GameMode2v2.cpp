@@ -208,6 +208,7 @@ bool AGameMode2v2::ReadyToStartMatch_Implementation()
 		{
 			SetDeathEvents();
 			StartInBetweenRoundTimer(DelayBetweenRounds);
+			StartMatchMusicEvent();
 			return true;
 		}
 	}
