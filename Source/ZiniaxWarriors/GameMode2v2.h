@@ -162,6 +162,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int Team2RoundsWon = 0;
 
+	UPROPERTY(VisibleAnywhere)
+	int DelayAfterRoundEnd = 3;
+	UPROPERTY(VisibleAnywhere)
+	int DelayAfterGameEnd = 10;
+	UPROPERTY(VisibleAnywhere)
+	int DelayBetweenRounds = 2;
+	
+
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
 	UDataTable* SpawnableCharacters;

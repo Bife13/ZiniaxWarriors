@@ -330,11 +330,7 @@ void AGameMode2v2::SetTeam2RoundsWonInGameState()
 
 void AGameMode2v2::UpdateRoundsInGameState()
 {
-	//SetTeam1RoundsWonInGameState();
-	//SetTeam2RoundsWonInGameState();
-	//SetRoundCountInGameState();
 	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon, Team2RoundsWon);
-	//GEngine->AddOnScreenDebugMessage(1, 20, FColor::Black, "GamemodeScoreUpdate");
 	GameState2v2->ScoreUpdate.Broadcast(RoundCounter, Team1RoundsWon, Team2RoundsWon);
 }
 
@@ -471,11 +467,11 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 		
 		if (!CheckRoundCounter())
 		{
-			StartInBetweenRoundTimer(2);
+			StartInBetweenRoundTimer(DelayAfterRoundEnd+ DelayBetweenRounds);
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
 		UpdateRoundsInGameState();
-		RespawnAfterDelay(3);
+		RespawnAfterDelay(DelayAfterRoundEnd);
 	}
 }
 
@@ -489,7 +485,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
-		RestartGameAfterDelay(10);
+		RestartGameAfterDelay(DelayAfterGameEnd);
 		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
 		{
 			Team1PlayerCharacters[i]->AnnounceVictory();
@@ -506,7 +502,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
-		RestartGameAfterDelay(10);
+		RestartGameAfterDelay(DelayAfterGameEnd);
 		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
 		{
 			Team2PlayerCharacters[i]->AnnounceVictory();
@@ -527,7 +523,7 @@ void AGameMode2v2::SendPlayersToLogin()
 	{
 		PlayerControllers[i]->ReopenLogin();
 	}
-	RestartServerAfterDelay(2);
+	RestartServerAfterDelay(1);
 }
 
 void AGameMode2v2::RestartServer()
