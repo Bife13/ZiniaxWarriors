@@ -59,9 +59,7 @@ void APlayableCharacter::StartBeginPlay()
 	{
 		CachedWorld = World;
 	}
-
-	PlayCatchphrase();
-
+	
 	PopulateSkillArray();
 	PassiveInitializeFunction();
 
