@@ -20,11 +20,11 @@ void AGameMode2v2::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Playe Begin"));
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream,TEXT("default"), false);
-	
+
 	FIPv4Address Ip;
 
 	bool ValidIp = FIPv4Address::Parse(IpString, Ip);
-	if(ValidIp)
+	if (ValidIp)
 	{
 		const TSharedRef<FInternetAddr> Addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 		Addr->SetIp(Ip.Value);
@@ -32,9 +32,9 @@ void AGameMode2v2::BeginPlay()
 		const bool connected = Socket->Connect(*Addr);
 
 		if (connected)
-		{	
+		{
 			GEngine->AddOnScreenDebugMessage(1, 5, FColor::Black, "Connected");
-			
+
 			int32 Sent = 0;
 
 			Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*PlayerName)), PlayerName.Len(), Sent);
@@ -48,10 +48,8 @@ void AGameMode2v2::BeginPlay()
 
 			GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
 			UpdateRoundsInGameState();
-
 		}
 	}
-
 }
 
 FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
@@ -60,11 +58,11 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	// TODO if need to go back to old method, just override the Variables
 	FString OptionsTest = "?Warrior=Zerher?Ability1=Roar?Ability2=SniperShot?Ability3=EletroGate";
 
-	if(Options.Len() > 0)
+	if (Options.Len() > 0)
 	{
 		OptionsTest = Options;
 	}
-	
+
 	FString Warrior = ParsingWarriorName(OptionsTest);
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
@@ -174,7 +172,6 @@ void AGameMode2v2::Tick(float DeltaSeconds)
 	}
 
 	MatchTimer();
-	
 }
 
 bool AGameMode2v2::ReadyToStartMatch_Implementation()
@@ -229,6 +226,20 @@ void AGameMode2v2::StartDoorTimer(float Time)
 		UnusedHandle, this, &AGameMode2v2::SetCanDoorOpenTrue, Time, false);
 }
 
+void AGameMode2v2::RestartGameAfterDelay(float Time)
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::SendPlayersToLogin, Time, false);
+}
+
+void AGameMode2v2::RestartServerAfterDelay(float Time)
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::RestartServer, Time, false);
+}
+
 void AGameMode2v2::ActivateAllCharacters()
 {
 	for (int i = 0; i < PlayerControllers.Num(); i++)
@@ -259,29 +270,32 @@ void AGameMode2v2::CloseDoors()
 	}
 }
 
-void AGameMode2v2::SetMinutesInGameState() 
-{GameState2v2->SetMinutes(Minutes);}
-
-void AGameMode2v2::SetSecondsInGameState() 
-{GameState2v2->SetSeconds(Seconds);}
-
-void AGameMode2v2::SetRoundCountInGameState() 
+void AGameMode2v2::SetMinutesInGameState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("RoundNumber: %d"),RoundCounter);
+	GameState2v2->SetMinutes(Minutes);
+}
+
+void AGameMode2v2::SetSecondsInGameState()
+{
+	GameState2v2->SetSeconds(Seconds);
+}
+
+void AGameMode2v2::SetRoundCountInGameState()
+{
+	UE_LOG(LogTemp, Warning, TEXT("RoundNumber: %d"), RoundCounter);
 	GameState2v2->SetRounds(RoundCounter);
 }
 
-void AGameMode2v2::SetTeam1RoundsWonInGameState() 
+void AGameMode2v2::SetTeam1RoundsWonInGameState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Teeam1 won: %d"),Team1RoundsWon);
+	UE_LOG(LogTemp, Warning, TEXT("Teeam1 won: %d"), Team1RoundsWon);
 	GameState2v2->SetTeam1Rounds(Team1RoundsWon);
 }
 
-void AGameMode2v2::SetTeam2RoundsWonInGameState() 
+void AGameMode2v2::SetTeam2RoundsWonInGameState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Teeam2 won: %d"),Team2RoundsWon);
+	UE_LOG(LogTemp, Warning, TEXT("Teeam2 won: %d"), Team2RoundsWon);
 	GameState2v2->SetTeam2Rounds(Team2RoundsWon);
-	
 }
 
 
@@ -290,9 +304,9 @@ void AGameMode2v2::UpdateRoundsInGameState()
 	//SetTeam1RoundsWonInGameState();
 	//SetTeam2RoundsWonInGameState();
 	//SetRoundCountInGameState();
-	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon,Team2RoundsWon);
+	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon, Team2RoundsWon);
 	GEngine->AddOnScreenDebugMessage(1, 20, FColor::Black, "GamemodeScoreUpdate");
-	GameState2v2->ScoreUpdate.Broadcast(RoundCounter,Team1RoundsWon,Team2RoundsWon);
+	GameState2v2->ScoreUpdate.Broadcast(RoundCounter, Team1RoundsWon, Team2RoundsWon);
 }
 
 void AGameMode2v2::UpdateGameTimer()
@@ -367,20 +381,12 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 		Team1DeathCounter++;
 		DeadCharacterController->CharacterDeactivate();
 		DeadCharacter->SetIsDead(true);
-		// DeadCharacter->GetCameraBoom()->TargetArmLength = 5000.f;
-		// FVector Position = {0,0,-500};
-		// DeadCharacter->SetActorLocation(Position);
-		// DeactivateHitbox(DeadCharacter);
 	}
 	else
 	{
 		Team2DeathCounter++;
 		DeadCharacterController->CharacterDeactivate();
 		DeadCharacter->SetIsDead(true);
-		// DeadCharacter->GetCameraBoom()->TargetArmLength = 5000.f;
-		// FVector Position = {0,0,-500};
-		// DeadCharacter->SetActorLocation(Position);
-		// DeactivateHitbox(DeadCharacter);
 	}
 
 	if (Team1DeathCounter >= Team1PlayerCharacters.Num() || Team2DeathCounter >= Team2PlayerCharacters.Num())
@@ -403,19 +409,14 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 bool AGameMode2v2::CheckRoundCounter()
 {
 	// TODO WAit a bit before ending Game
-	
+
 	FString EndString = "END";
 	if (Team1RoundsWon >= 3)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 1 Won");
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
-		// GetWorld()->ServerTravel("Test", true,true);
-		for (int i = 0;i<PlayerControllers.Num();i++)
-		{
-			PlayerControllers[i]->ReopenLogin();
-		}
-		//RestartGame();
+		RestartGameAfterDelay(10);
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
@@ -423,14 +424,24 @@ bool AGameMode2v2::CheckRoundCounter()
 		GEngine->AddOnScreenDebugMessage(1, 2, FColor::Black, "Team 2 Won");
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
-		for (int i = 0;i<PlayerControllers.Num();i++)
-		{
-			PlayerControllers[i]->ReopenLogin();
-		}
-		//RestartGame();
+		RestartGameAfterDelay(10);
 		return true;
 	}
 	return false;
+}
+
+void AGameMode2v2::SendPlayersToLogin()
+{
+	for (int i = 0; i < PlayerControllers.Num(); i++)
+	{
+		PlayerControllers[i]->ReopenLogin();
+	}
+	RestartServerAfterDelay(2);
+}
+
+void AGameMode2v2::RestartServer()
+{
+	RestartGame();
 }
 
 
