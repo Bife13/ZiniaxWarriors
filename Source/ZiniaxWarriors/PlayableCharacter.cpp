@@ -194,7 +194,6 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	OnTickPassive(DeltaTime);
 
 
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
 
@@ -328,6 +327,7 @@ void APlayableCharacter::PopulateSkillArray_Implementation()
 void APlayableCharacter::ObserveSpeedBuffs()
 {
 	BaseSpeed = StatsComponent->GetSpeed();
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
 void APlayableCharacter::ObserverResistanceBuffs()
@@ -700,7 +700,7 @@ void APlayableCharacter::ResetCharacter()
 	StatusEffectsComponent->CleanBuffs();
 }
 
-void APlayableCharacter::PlayCatchphrase_Implementation()
+void APlayableCharacter::PlayCatchphrase()
 {
 	OnCatchphraseSound();
 }

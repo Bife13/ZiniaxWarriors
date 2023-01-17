@@ -163,11 +163,11 @@ private:
 	int Team2RoundsWon = 0;
 
 	UPROPERTY(VisibleAnywhere)
-	int DelayAfterRoundEnd = 3;
+	int DelayAfterRoundEnd = 5;
 	UPROPERTY(VisibleAnywhere)
-	int DelayAfterGameEnd = 10;
+	int DelayAfterGameEnd = 15;
 	UPROPERTY(VisibleAnywhere)
-	int DelayBetweenRounds = 2;
+	int DelayBetweenRounds = 3;
 	
 
 

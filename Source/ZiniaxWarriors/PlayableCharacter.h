@@ -210,7 +210,7 @@ public:
 
 	UFUNCTION()
 	void ResetCharacter();
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void PlayCatchphrase();
 
 	UFUNCTION(Server, Reliable)
