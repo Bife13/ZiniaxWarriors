@@ -700,3 +700,8 @@ void APlayableCharacter::ResetCharacter()
 	StatusEffectsComponent->CleanBuffs();
 	OnCatchphraseSound();
 }
+
+void APlayableCharacter::ResetMesh_Implementation()
+{
+	OnResetMeshEvent();
+}

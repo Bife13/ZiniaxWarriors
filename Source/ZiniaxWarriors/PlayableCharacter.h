@@ -113,7 +113,8 @@ public:
 	void OnFootstepsSound();
 	UFUNCTION(BlueprintCallable)
 	void OnSpecialAbility(int Index);
-
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnResetMeshEvent();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void TakeDamage(float Amount) override;
@@ -209,6 +210,9 @@ public:
 
 	UFUNCTION()
 	void ResetCharacter();
+
+	UFUNCTION(Server, Reliable)
+	void ResetMesh();
 
 	UPROPERTY(BlueprintAssignable)
 	 FSkillCasted  CastEventBasic;
