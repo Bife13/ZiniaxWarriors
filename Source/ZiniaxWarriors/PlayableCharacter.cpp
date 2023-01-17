@@ -60,7 +60,7 @@ void APlayableCharacter::StartBeginPlay()
 		CachedWorld = World;
 	}
 
-	OnCatchphraseSound();
+	PlayCatchphrase();
 
 	PopulateSkillArray();
 	PassiveInitializeFunction();
@@ -698,8 +698,13 @@ void APlayableCharacter::ResetCharacter()
 {
 	HealthComponent->ResetHealth();
 	StatusEffectsComponent->CleanBuffs();
+}
+
+void APlayableCharacter::PlayCatchphrase_Implementation()
+{
 	OnCatchphraseSound();
 }
+
 
 void APlayableCharacter::ResetMesh_Implementation()
 {

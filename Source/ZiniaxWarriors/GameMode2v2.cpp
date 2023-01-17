@@ -398,6 +398,7 @@ void AGameMode2v2::RespawnCharacters()
 	{
 		Team1PlayerCharacters[i]->SetActorLocation(GetPlayerStartsForTeam1()[i]->GetActorLocation());
 		Team1PlayerCharacters[i]->ResetCharacter();
+		Team1PlayerCharacters[i]->PlayCatchphrase();
 		Team1PlayerCharacters[i]->ResetMesh();
 		Team1PlayerCharacters[i]->SetIsDead(false);
 	}
@@ -406,6 +407,7 @@ void AGameMode2v2::RespawnCharacters()
 	{
 		Team2PlayerCharacters[i]->SetActorLocation(GetPlayerStartsForTeam2()[i]->GetActorLocation());
 		Team2PlayerCharacters[i]->ResetCharacter();
+		Team1PlayerCharacters[i]->PlayCatchphrase();
 		Team2PlayerCharacters[i]->ResetMesh();
 		Team2PlayerCharacters[i]->SetIsDead(false);
 	}

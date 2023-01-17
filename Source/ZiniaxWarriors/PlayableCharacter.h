@@ -210,6 +210,8 @@ public:
 
 	UFUNCTION()
 	void ResetCharacter();
+	UFUNCTION(Server, Reliable)
+	void PlayCatchphrase();
 
 	UFUNCTION(Server, Reliable)
 	void ResetMesh();
