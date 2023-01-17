@@ -437,12 +437,12 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			{
 				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
 				{
-					Team1PlayerCharacters[i]->CallVictorySound();
+					Team1PlayerCharacters[i]->CallDefeatSound();
 				}
 
 				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
 				{
-					Team2PlayerCharacters[i]->CallDefeatSound();
+					Team2PlayerCharacters[i]->CallVictorySound();
 				}
 			}
 		
@@ -455,12 +455,12 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			{
 				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
 				{
-					Team2PlayerCharacters[i]->CallVictorySound();
+					Team2PlayerCharacters[i]->CallDefeatSound();
 				}
 
 				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
 				{
-					Team1PlayerCharacters[i]->CallDefeatSound();
+					Team1PlayerCharacters[i]->CallVictorySound();
 				}
 			}
 		}
