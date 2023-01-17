@@ -143,11 +143,12 @@ void APlayableCharacter::CallDefeatSound()
 
 void APlayableCharacter::AnnounceVictory()
 {
-	
+	OnFinalVictorySound();
 }
 
 void APlayableCharacter::AnnounceDefeat()
 {
+	OnFinalDefeatSound();
 }
 
 void APlayableCharacter::SetServerTeamId_Implementation(float Value)
