@@ -19,7 +19,7 @@ class ZINIAXWARRIORS_API AGameMode2v2 : public AGameMode
 {
 	GENERATED_BODY()
 
-	
+
 protected:
 	virtual void BeginPlay() override;
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
@@ -52,12 +52,12 @@ protected:
 	bool bCanDoorOpen = false;
 
 	FSocket* Socket;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString PlayerName;
 	// For Server just send " |";
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString PlayerPass;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString IpString;
 
 
@@ -74,6 +74,10 @@ protected:
 	void StartInBetweenRoundTimer(float Time);
 	UFUNCTION()
 	void StartDoorTimer(float Time);
+	UFUNCTION()
+	void RestartGameAfterDelay(float Time);
+	UFUNCTION()
+	void RestartServerAfterDelay(float Time);
 
 	UFUNCTION()
 	void ActivateAllCharacters();
@@ -84,6 +88,10 @@ protected:
 	void OpenDoors(float DeltaTime);
 	UFUNCTION()
 	void CloseDoors();
+	UFUNCTION()
+	void SendPlayersToLogin();
+	UFUNCTION()
+	void RestartServer();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void MatchTimer();
@@ -92,10 +100,10 @@ protected:
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)
 	int Seconds = 30.f;
-	
+
 	void SetMinutesInGameState();
 	void SetSecondsInGameState();
-	void SetRoundCountInGameState() ;
+	void SetRoundCountInGameState();
 	void SetTeam1RoundsWonInGameState();
 	void SetTeam2RoundsWonInGameState();
 	void UpdateRoundsInGameState();
@@ -106,7 +114,7 @@ protected:
 private:
 	UPROPERTY()
 	AGameState2v2* GameState2v2;
-	
+
 	UPROPERTY()
 	TArray<AActor*> PlayerStarts;
 	UPROPERTY()
