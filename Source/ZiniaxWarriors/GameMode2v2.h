@@ -79,6 +79,8 @@ protected:
 	UFUNCTION()
 	void RestartGameAfterDelay(float Time);
 	UFUNCTION()
+	void RespawnAfterDelay(float Time);
+	UFUNCTION()
 	void RestartServerAfterDelay(float Time);
 
 	UFUNCTION()
@@ -102,12 +104,17 @@ protected:
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)
 	int Seconds = 30.f;
-
+	UFUNCTION()
 	void SetMinutesInGameState();
+	UFUNCTION()
 	void SetSecondsInGameState();
+	UFUNCTION()
 	void SetRoundCountInGameState();
+	UFUNCTION()
 	void SetTeam1RoundsWonInGameState();
+	UFUNCTION()
 	void SetTeam2RoundsWonInGameState();
+	UFUNCTION()
 	void UpdateRoundsInGameState();
 	UFUNCTION(BlueprintCallable)
 	void UpdateGameTimer();

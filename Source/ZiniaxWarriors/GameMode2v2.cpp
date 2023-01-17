@@ -255,6 +255,13 @@ void AGameMode2v2::RestartGameAfterDelay(float Time)
 		UnusedHandle, this, &AGameMode2v2::SendPlayersToLogin, Time, false);
 }
 
+void AGameMode2v2::RespawnAfterDelay(float Time)
+{
+    FTimerHandle UnusedHandle;
+    GetWorldTimerManager().SetTimer(
+        UnusedHandle, this, &AGameMode2v2::RespawnCharacters, Time, false);
+}
+
 void AGameMode2v2::RestartServerAfterDelay(float Time)
 {
 	FTimerHandle UnusedHandle;
@@ -468,7 +475,7 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
 		UpdateRoundsInGameState();
-		RespawnCharacters();
+		RespawnAfterDelay(3);
 	}
 }
 
