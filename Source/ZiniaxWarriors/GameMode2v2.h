@@ -32,7 +32,9 @@ protected:
 	static FString ParsingAbility1(const FString& Options);
 	static FString ParsingAbility2(const FString& Options);
 	static FString ParsingAbility3(const FString& Options);
+	
 
+	
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()
@@ -110,7 +112,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void UpdateGameTimer();
 
-
+	UPROPERTY(BlueprintReadWrite)
+	TArray<APlayableCharacter*> Team1PlayerCharacters;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<APlayableCharacter*> Team2PlayerCharacters;
 private:
 	UPROPERTY()
 	AGameState2v2* GameState2v2;
@@ -122,11 +127,7 @@ private:
 	UPROPERTY()
 	TArray<ABasePlayerController*> PlayerControllers;
 	UPROPERTY()
-	TArray<APlayableCharacter*> Team1PlayerCharacters;
-	UPROPERTY()
 	TArray<UHealthSystem*> Team1HealthComponents;
-	UPROPERTY()
-	TArray<APlayableCharacter*> Team2PlayerCharacters;
 	UPROPERTY()
 	TArray<UHealthSystem*> Team2HealthComponents;
 

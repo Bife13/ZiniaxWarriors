@@ -12,8 +12,6 @@
 #include "StatusEffectsComponent.h"
 #include "UsableCharacterSkillSlot.h"
 #include "GameFramework/Character.h"
-#include "WorldWidget.h"
-#include "Components/WidgetComponent.h"
 #include "PlayableCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillCasted, float, Cooldown);
@@ -52,6 +50,29 @@ public:
 	               TSubclassOf<USkillBase> Ability3);
 
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnRoundStartedEventSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnVictorySound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDefeatSound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFinalVictorySound();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFinalDefeatSound();
+	
+	UFUNCTION()
+	void CallRoundStartSound();
+	UFUNCTION()
+	void CallVictorySound();
+	UFUNCTION()
+	void CallDefeatSound();
+
+	UFUNCTION()
+	void AnnounceVictory();
+	UFUNCTION()
+	void AnnounceDefeat();
+	
 	UFUNCTION(NetMulticast, Unreliable)
 	virtual void MoveVertical(float Value) override;
 	UFUNCTION(NetMulticast, Unreliable)

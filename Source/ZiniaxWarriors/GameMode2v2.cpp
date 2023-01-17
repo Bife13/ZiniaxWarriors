@@ -87,6 +87,8 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	FString Ability1 = ParsingAbility1(OptionsTest);
 	FString Ability2 = ParsingAbility2(OptionsTest);
 	FString Ability3 = ParsingAbility3(OptionsTest);
+	
+	
 
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
@@ -337,6 +339,7 @@ void AGameMode2v2::UpdateGameTimer()
 
 void AGameMode2v2::OpenDoors(float DeltaTime)
 {
+	
 	for (int i = 0; i < SpawnDoors.Num(); i++)
 	{
 		FVector Location = SpawnDoors[i]->GetActorLocation();
@@ -347,6 +350,16 @@ void AGameMode2v2::OpenDoors(float DeltaTime)
 		{
 			SetCanDoorOpenFalse();
 		}
+	}
+
+	for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+	{
+		Team1PlayerCharacters[i]->CallRoundStartSound();
+	}
+
+	for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+	{
+		Team2PlayerCharacters[i]->CallRoundStartSound();
 	}
 }
 
@@ -413,9 +426,39 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 	{
 		RoundCounter++;
 		if (Team1DeathCounter >= Team1PlayerCharacters.Num())
+		{
 			Team2RoundsWon++;
+			if (Team1RoundsWon < 3 && Team2RoundsWon < 3)
+			{
+				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+				{
+					Team1PlayerCharacters[i]->CallVictorySound();
+				}
+
+				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+				{
+					Team2PlayerCharacters[i]->CallDefeatSound();
+				}
+			}
+		
+
+		}
 		else if (Team2DeathCounter >= Team2PlayerCharacters.Num())
+		{
 			Team1RoundsWon++;
+			if (Team1RoundsWon < 3 && Team2RoundsWon < 3)
+			{
+				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+				{
+					Team2PlayerCharacters[i]->CallVictorySound();
+				}
+
+				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+				{
+					Team1PlayerCharacters[i]->CallDefeatSound();
+				}
+			}
+		}
 		if (!CheckRoundCounter())
 		{
 			StartInBetweenRoundTimer(2);
@@ -437,6 +480,15 @@ bool AGameMode2v2::CheckRoundCounter()
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
 		RestartGameAfterDelay(10);
+		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+		{
+			Team1PlayerCharacters[i]->AnnounceVictory();
+		}
+
+		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+		{
+			Team2PlayerCharacters[i]->AnnounceDefeat();
+		}
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
@@ -445,6 +497,15 @@ bool AGameMode2v2::CheckRoundCounter()
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
 		RestartGameAfterDelay(10);
+		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+		{
+			Team2PlayerCharacters[i]->AnnounceVictory();
+		}
+
+		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+		{
+			Team1PlayerCharacters[i]->AnnounceDefeat();
+		}
 		return true;
 	}
 	return false;

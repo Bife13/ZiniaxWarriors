@@ -126,6 +126,31 @@ void APlayableCharacter::SetSkills(TSubclassOf<USkillBase> Ability1, TSubclassOf
 	Skills[3] = Ability3;
 }
 
+void APlayableCharacter::CallRoundStartSound()
+{
+	OnRoundStartedEventSound();
+}
+
+void APlayableCharacter::CallVictorySound()
+{
+	OnVictorySound();
+}
+
+void APlayableCharacter::CallDefeatSound()
+{
+	OnDefeatSound();
+}
+
+void APlayableCharacter::AnnounceVictory()
+{
+	OnFinalVictorySound();
+}
+
+void APlayableCharacter::AnnounceDefeat()
+{
+	OnFinalDefeatSound();
+}
+
 void APlayableCharacter::SetServerTeamId_Implementation(float Value)
 {
 	ServerTeamID = Value;
