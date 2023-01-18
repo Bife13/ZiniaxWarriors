@@ -25,5 +25,5 @@ class ZINIAXWARRIORS_API UZerherPassive : public UPassiveBase
     float Timer = 15;
     UPROPERTY(Replicated)
 	float Cooldown = 15;
-	float ShieldForce = 0.2;
+	float ShieldForce = 0.15;
 };

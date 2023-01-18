@@ -188,7 +188,7 @@ FVector APlayableCharacter::GetMousePos()
 void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+     if(!bIsDead)
 	OnTickPassive(DeltaTime);
 
 if(GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed())
@@ -687,12 +687,12 @@ void APlayableCharacter::SetIsCasting_Implementation(bool Value)
 
 bool APlayableCharacter::GetIsDead()
 {
-	return bIsCasting;
+	return bIsDead;
 }
 
 void APlayableCharacter::SetIsDead_Implementation(bool Value)
 {
-	bIsCasting = Value;
+	bIsDead = Value;
 }
 
 
