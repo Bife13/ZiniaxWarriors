@@ -9,7 +9,7 @@ public class ZiniaxWarriorsClientTarget : TargetRules
 	{
 		Type = TargetType.Client;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		bUseLoggingInShipping = true; // If you want logging in shipping build
+		//bUseLoggingInShipping = true; // If you want logging in shipping build
 		ExtraModuleNames.AddRange( new string[] { "ZiniaxWarriors" } );
 	}
 }
