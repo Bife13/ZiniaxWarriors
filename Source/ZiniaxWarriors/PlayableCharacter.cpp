@@ -693,6 +693,7 @@ bool APlayableCharacter::GetIsDead()
 void APlayableCharacter::SetIsDead_Implementation(bool Value)
 {
 	bIsCasting = Value;
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Ignore);
 }
 
 
@@ -706,6 +707,8 @@ void APlayableCharacter::ResetCharacter()
 {
 	HealthComponent->ResetHealth();
 	StatusEffectsComponent->CleanBuffs();
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
+
 }
 
 void APlayableCharacter::PlayCatchphrase()

@@ -20,7 +20,7 @@ void AGameMode2v2::BeginPlay()
 	Super::BeginPlay();
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream,TEXT("default"), false);
 
-	if(!OptionsString.IsEmpty())
+	if (!OptionsString.IsEmpty())
 	{
 		IpString = UGameplayStatics::ParseOption(OptionsString, "IP");
 		PlayerName = IpString;
@@ -28,7 +28,7 @@ void AGameMode2v2::BeginPlay()
 		PlayerName.Append(FString::FromInt(GetWorld()->URL.Port));
 		PlayerName.Append("|");
 	}
-	
+
 	FIPv4Address Ip;
 
 	bool ValidIp = FIPv4Address::Parse(IpString, Ip);
@@ -62,13 +62,17 @@ void AGameMode2v2::BeginPlay()
 			// Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*OptionsString)), OptionsString.Len(), Sent);
 			// GEngine->AddOnScreenDebugMessage(5, 5, FColor::Black, "Sent Options");
 
-			
-		}else
+
+			FString Filename = "/Stats/Stats.txt";
+			bool ServerNamePrint = FFileHelper::SaveStringToFile("ServerIP: " + PlayerName + "\r\n", *Filename,
+			                                                     FFileHelper::EEncodingOptions::AutoDetect,
+			                                                     &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+			UpdateRoundsInGameState();
+		}
+		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Server Not connected to Matchmaking"));
-
 		}
-		UpdateRoundsInGameState();
 	}
 }
 
@@ -87,8 +91,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 	FString Ability1 = ParsingAbility1(TestOptions);
 	FString Ability2 = ParsingAbility2(TestOptions);
 	FString Ability3 = ParsingAbility3(TestOptions);
-	
-	
+
 
 	APlayerStart* PlayerStart = GetPlayerStartsForTeam1()[CurrentStart];
 	if (SpawnedPlayer)
@@ -167,7 +170,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
 
 	++PlayerCounter;
 
-	FString Filename = "C:/Users/skyzf/Documents/Unreal Projects/ZiniaxWarriorsBuild/Stats/Stats.txt";
+	FString Filename = "/Stats/Stats.txt";
 	bool PrintedWarrior = FFileHelper::SaveStringToFile("Warrior: " + Warrior + "\r\n", *Filename,
 	                                                    FFileHelper::EEncodingOptions::AutoDetect,
 	                                                    &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
@@ -258,9 +261,9 @@ void AGameMode2v2::RestartGameAfterDelay(float Time)
 
 void AGameMode2v2::RespawnAfterDelay(float Time)
 {
-    FTimerHandle UnusedHandle;
-    GetWorldTimerManager().SetTimer(
-        UnusedHandle, this, &AGameMode2v2::RespawnCharacters, Time, false);
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, this, &AGameMode2v2::RespawnCharacters, Time, false);
 }
 
 void AGameMode2v2::RestartServerAfterDelay(float Time)
@@ -281,7 +284,7 @@ void AGameMode2v2::ActivateAllCharacters()
 		Team1PlayerCharacters[i]->PlayCatchphrase();
 		Team2PlayerCharacters[i]->PlayCatchphrase();
 	}
-	
+
 	StartDoorTimer(5);
 }
 
@@ -313,7 +316,7 @@ void AGameMode2v2::SetMinutesInGameState()
 
 void AGameMode2v2::SetSecondsInGameState()
 {
-GetGameState<AGameState2v2>()->SetSeconds(Seconds);
+	GetGameState<AGameState2v2>()->SetSeconds(Seconds);
 }
 
 void AGameMode2v2::SetRoundCountInGameState()
@@ -338,7 +341,6 @@ void AGameMode2v2::SetTeam2RoundsWonInGameState()
 void AGameMode2v2::UpdateRoundsInGameState()
 {
 	GetGameState<AGameState2v2>()->SetAllRounds(RoundCounter, Team1RoundsWon, Team2RoundsWon);
-
 }
 
 void AGameMode2v2::UpdateGameTimer()
@@ -349,7 +351,6 @@ void AGameMode2v2::UpdateGameTimer()
 
 void AGameMode2v2::OpenDoors(float DeltaTime)
 {
-	
 	for (int i = 0; i < SpawnDoors.Num(); i++)
 	{
 		FVector Location = SpawnDoors[i]->GetActorLocation();
@@ -362,12 +363,12 @@ void AGameMode2v2::OpenDoors(float DeltaTime)
 		}
 	}
 
-	for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+	for (int i = 0; i < Team1PlayerCharacters.Num(); i++)
 	{
 		Team1PlayerCharacters[i]->CallRoundStartSound();
 	}
 
-	for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+	for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
 	{
 		Team2PlayerCharacters[i]->CallRoundStartSound();
 	}
@@ -444,39 +445,37 @@ void AGameMode2v2::CountDeath(int TeamId, ABasePlayerController* DeadCharacterCo
 			Team2RoundsWon++;
 			if (Team1RoundsWon < 3 && Team2RoundsWon < 3)
 			{
-				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+				for (int i = 0; i < Team1PlayerCharacters.Num(); i++)
 				{
 					Team1PlayerCharacters[i]->CallDefeatSound();
 				}
 
-				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+				for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
 				{
 					Team2PlayerCharacters[i]->CallVictorySound();
 				}
 			}
-		
-
 		}
 		else if (Team2DeathCounter >= Team2PlayerCharacters.Num())
 		{
 			Team1RoundsWon++;
 			if (Team1RoundsWon < 3 && Team2RoundsWon < 3)
 			{
-				for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+				for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
 				{
 					Team2PlayerCharacters[i]->CallDefeatSound();
 				}
 
-				for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+				for (int i = 0; i < Team1PlayerCharacters.Num(); i++)
 				{
 					Team1PlayerCharacters[i]->CallVictorySound();
 				}
 			}
 		}
-		
+
 		if (!CheckRoundCounter())
 		{
-			StartInBetweenRoundTimer(DelayAfterRoundEnd+ DelayBetweenRounds);
+			StartInBetweenRoundTimer(DelayAfterRoundEnd + DelayBetweenRounds);
 			Team1DeathCounter = Team2DeathCounter = 0;
 		}
 		UpdateRoundsInGameState();
@@ -495,12 +494,12 @@ bool AGameMode2v2::CheckRoundCounter()
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
 		RestartGameAfterDelay(DelayAfterGameEnd);
-		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+		for (int i = 0; i < Team1PlayerCharacters.Num(); i++)
 		{
 			Team1PlayerCharacters[i]->AnnounceVictory();
 		}
 
-		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+		for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
 		{
 			Team2PlayerCharacters[i]->AnnounceDefeat();
 		}
@@ -512,12 +511,12 @@ bool AGameMode2v2::CheckRoundCounter()
 		int32 Sent = 0;
 		Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*EndString)), EndString.Len(), Sent);
 		RestartGameAfterDelay(DelayAfterGameEnd);
-		for(int i = 0; i < Team2PlayerCharacters.Num(); i++)
+		for (int i = 0; i < Team2PlayerCharacters.Num(); i++)
 		{
 			Team2PlayerCharacters[i]->AnnounceVictory();
 		}
 
-		for(int i = 0; i < Team1PlayerCharacters.Num(); i++)
+		for (int i = 0; i < Team1PlayerCharacters.Num(); i++)
 		{
 			Team1PlayerCharacters[i]->AnnounceDefeat();
 		}

@@ -1576,3 +1576,11 @@ Warrior: Nyax
 Ability1: SmallHeal
 Ability2: SniperShot
 Ability3: EletroGate
+Warrior: Nyax
+Ability1: SmallHeal
+Ability2: SniperShot
+Ability3: EletroGate
+Warrior: Nyax
+Ability1: SmallHeal
+Ability2: SniperShot
+Ability3: EletroGate
