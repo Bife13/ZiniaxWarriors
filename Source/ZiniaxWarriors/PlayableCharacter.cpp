@@ -48,12 +48,12 @@ APlayableCharacter::APlayableCharacter()
 	SetupWeakenParticleSystem();
 	SetupSlowParticleSystem();
 
-
+	
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
-void APlayableCharacter::StartBeginPlay()
+void APlayableCharacter::StartBeginPlay_Implementation()
 {
 	if (UWorld* World = GetWorld())
 	{
@@ -191,7 +191,8 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	OnTickPassive(DeltaTime);
 
-
+if(GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed())
+	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
 }
 
 
@@ -322,10 +323,19 @@ void APlayableCharacter::PopulateSkillArray_Implementation()
 	}
 }
 
-void APlayableCharacter::ObserveSpeedBuffs()
+void APlayableCharacter::ObserveSpeedBuffs_Implementation()
 {
-	BaseSpeed = StatsComponent->GetSpeed();
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
+	ChangeServerSpeed();
+	GEngine->AddOnScreenDebugMessage(1,0.5,FColor::Green, "FODASSEeeeeeeeeeeeeeeeeeeeeee");
+}
+
+
+void APlayableCharacter::ChangeServerSpeed_Implementation()
+{
+	GetCharacterMovement()->MaxWalkSpeed =  StatsComponent->GetSpeed();
+	//GEngine->AddOnScreenDebugMessage(2,0.5,FColor::Blue, "got here");
+
 }
 
 void APlayableCharacter::ObserverResistanceBuffs()

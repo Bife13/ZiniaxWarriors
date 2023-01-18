@@ -222,7 +222,7 @@ void UStatsComponent::Root()
 
 void UStatsComponent::EndRoot(float Amount)
 {
-	CurrentSpeed = Amount;
+	CurrentSpeed = BaseSpeed;
     HandleRootRemovedEvent();
 }
 
