@@ -62,13 +62,13 @@ void AGameMode2v2::BeginPlay()
 			// Socket->Send(reinterpret_cast<uint8*>(TCHAR_TO_UTF8(*OptionsString)), OptionsString.Len(), Sent);
 			// GEngine->AddOnScreenDebugMessage(5, 5, FColor::Black, "Sent Options");
 
-			GameState2v2 = GetWorld()->GetGameState<AGameState2v2>();
-			UpdateRoundsInGameState();
+			
 		}else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Server Not connected to Matchmaking"));
 
 		}
+		UpdateRoundsInGameState();
 	}
 }
 
@@ -308,37 +308,37 @@ void AGameMode2v2::CloseDoors()
 
 void AGameMode2v2::SetMinutesInGameState()
 {
-	GameState2v2->SetMinutes(Minutes);
+	GetGameState<AGameState2v2>()->SetMinutes(Minutes);
 }
 
 void AGameMode2v2::SetSecondsInGameState()
 {
-	GameState2v2->SetSeconds(Seconds);
+GetGameState<AGameState2v2>()->SetSeconds(Seconds);
 }
 
 void AGameMode2v2::SetRoundCountInGameState()
 {
 	UE_LOG(LogTemp, Warning, TEXT("RoundNumber: %d"), RoundCounter);
-	GameState2v2->SetRounds(RoundCounter);
+	GetGameState<AGameState2v2>()->SetRounds(RoundCounter);
 }
 
 void AGameMode2v2::SetTeam1RoundsWonInGameState()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Teeam1 won: %d"), Team1RoundsWon);
-	GameState2v2->SetTeam1Rounds(Team1RoundsWon);
+	GetGameState<AGameState2v2>()->SetTeam1Rounds(Team1RoundsWon);
 }
 
 void AGameMode2v2::SetTeam2RoundsWonInGameState()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Teeam2 won: %d"), Team2RoundsWon);
-	GameState2v2->SetTeam2Rounds(Team2RoundsWon);
+	GetGameState<AGameState2v2>()->SetTeam2Rounds(Team2RoundsWon);
 }
 
 
 void AGameMode2v2::UpdateRoundsInGameState()
 {
-	GameState2v2->SetAllRounds(RoundCounter, Team1RoundsWon, Team2RoundsWon);
-	GameState2v2->ScoreUpdate.Broadcast(RoundCounter, Team1RoundsWon, Team2RoundsWon);
+	GetGameState<AGameState2v2>()->SetAllRounds(RoundCounter, Team1RoundsWon, Team2RoundsWon);
+
 }
 
 void AGameMode2v2::UpdateGameTimer()

@@ -19,10 +19,7 @@ class ZINIAXWARRIORS_API AGameState2v2 : public AGameState
 	GENERATED_BODY()
 	
 public:
-
-
-
-
+	
 	UPROPERTY(BlueprintAssignable)
 	FScoreUpdate ScoreUpdate;
 
@@ -35,7 +32,7 @@ public:
 	int Team2Rounds =0;
 	
 	UPROPERTY()
-	int Rounds =1;
+	int Rounds = 1;
 	
 	UPROPERTY()
 	int Minutes;
