@@ -29,6 +29,7 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(NetMulticast, Reliable)
 	void StartBeginPlay();
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
@@ -273,8 +274,10 @@ protected:
 	void SetupTopDownCamera();
 	UFUNCTION(Server, Unreliable)
 	void PopulateSkillArray();
-	UFUNCTION()
+	UFUNCTION(Server,Reliable)
 	void ObserveSpeedBuffs();
+	UFUNCTION(Client, Reliable)
+	void ChangeServerSpeed();
 
 
 	UFUNCTION()
@@ -321,7 +324,7 @@ protected:
 	UPROPERTY()
 	FVector SpawnLocation;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	float BaseSpeed;
 
 	UPROPERTY(Replicated)

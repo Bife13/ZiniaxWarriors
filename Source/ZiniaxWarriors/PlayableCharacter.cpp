@@ -53,7 +53,7 @@ APlayableCharacter::APlayableCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
-void APlayableCharacter::StartBeginPlay()
+void APlayableCharacter::StartBeginPlay_Implementation()
 {
 	if (UWorld* World = GetWorld())
 	{
@@ -322,10 +322,21 @@ void APlayableCharacter::PopulateSkillArray_Implementation()
 	}
 }
 
-void APlayableCharacter::ObserveSpeedBuffs()
+void APlayableCharacter::ObserveSpeedBuffs_Implementation()
 {
 	BaseSpeed = StatsComponent->GetSpeed();
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	ChangeServerSpeed();
+	GEngine->AddOnScreenDebugMessage(1,0.5,FColor::Green, "FODASSEeeeeeeeeeeeeeeeeeeeeee");
+}
+
+
+void APlayableCharacter::ChangeServerSpeed_Implementation()
+{
+	BaseSpeed = StatsComponent->GetSpeed();
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	//GEngine->AddOnScreenDebugMessage(2,0.5,FColor::Blue, "got here");
+
 }
 
 void APlayableCharacter::ObserverResistanceBuffs()
