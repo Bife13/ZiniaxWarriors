@@ -58,7 +58,7 @@ void APlayableCharacter::StartBeginPlay()
 	{
 		CachedWorld = World;
 	}
-
+	
 	PopulateSkillArray();
 	PassiveInitializeFunction();
 
@@ -97,6 +97,11 @@ void APlayableCharacter::StartBeginPlay()
 	//Weaken Observe
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
+
+	HealthComponent->OnDeathEvent.AddUFunction(this,"CallBPDeathEvent");
+	HealthComponent->OnGotHitEvent.AddUFunction(this,"CallBPGotHitEvent");
+	HealthComponent->OnLowHealth.AddUFunction(this,"CallBPLowHealthEvent");
+	HealthComponent->OnHealedEvent.AddUFunction(this,"CallBPHealedEvent");
 }
 
 bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -116,6 +121,31 @@ void APlayableCharacter::SetSkills(TSubclassOf<USkillBase> Ability1, TSubclassOf
 	Skills[1] = Ability1;
 	Skills[2] = Ability2;
 	Skills[3] = Ability3;
+}
+
+void APlayableCharacter::CallRoundStartSound()
+{
+	OnRoundStartedEventSound();
+}
+
+void APlayableCharacter::CallVictorySound()
+{
+	OnVictorySound();
+}
+
+void APlayableCharacter::CallDefeatSound()
+{
+	OnDefeatSound();
+}
+
+void APlayableCharacter::AnnounceVictory()
+{
+	OnFinalVictorySound();
+}
+
+void APlayableCharacter::AnnounceDefeat()
+{
+	OnFinalDefeatSound();
 }
 
 void APlayableCharacter::SetServerTeamId_Implementation(float Value)
@@ -161,8 +191,8 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	OnTickPassive(DeltaTime);
 
 
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
+
 
 
 void APlayableCharacter::LockRotation()
@@ -294,6 +324,7 @@ void APlayableCharacter::PopulateSkillArray_Implementation()
 void APlayableCharacter::ObserveSpeedBuffs()
 {
 	BaseSpeed = StatsComponent->GetSpeed();
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
 void APlayableCharacter::ObserverResistanceBuffs()
@@ -311,43 +342,85 @@ void APlayableCharacter::MoveVertical_Implementation(float Value)
 {
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
+	OnFootstepsSound();
+
 }
 
 void APlayableCharacter::MoveHorizontal_Implementation(float Value)
 {
 	const FVector MoveDirection = {0, 1, 0};
 	AddMovementInput(MoveDirection, Value);
+	OnFootstepsSound();
+}
+
+
+void APlayableCharacter::HandleCastEvent1_Implementation(float Value)
+{
+	CastEventBasic.Broadcast(Value);
+}
+
+void APlayableCharacter::HandleCastEvent2_Implementation(float Value)
+{
+	CastEventAbility1.Broadcast(Value);
+
+}
+void APlayableCharacter::HandleCastEvent3_Implementation(float Value)
+{
+	CastEventAbility2.Broadcast(Value);
+
+}
+void APlayableCharacter::HandleCastEvent4_Implementation(float Value)
+{
+	CastEventAbility3.Broadcast(Value);
+
 }
 
 void APlayableCharacter::UseBasicAttack_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(0) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(0) && !GetIsCasting() && RuntimeSkills[0]->bCanUse)
 	{
 		RuntimeSkills[0]->CastSkill(AttackAnimations[0]);
+		HandleCastEvent1(RuntimeSkills[0]->AbilityCooldown);
 	}
 }
 
 void APlayableCharacter::UseFirstAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting()&& RuntimeSkills[1]->bCanUse)
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
+		HandleCastEvent2(RuntimeSkills[1]->AbilityCooldown);
+		OnHandleAbilitySound();
+	}
+	else
+	{
+		OnAbilityOnCooldownSound();
 	}
 }
 
 void APlayableCharacter::UseSecondAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting()&& RuntimeSkills[2]->bCanUse)
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
+		HandleCastEvent3(RuntimeSkills[2]->AbilityCooldown);
+		OnHandleAbilitySound();
+	}else
+	{
+		OnAbilityOnCooldownSound();
 	}
 }
 
 void APlayableCharacter::UseThirdAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(3) && !GetIsCasting())
+	if (RuntimeSkills.IsValidIndex(3) && !GetIsCasting() && RuntimeSkills[3]->bCanUse)
 	{
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
+		HandleCastEvent4(RuntimeSkills[3]->AbilityCooldown);
+		OnHandleAbilitySound();
+	}else
+	{
+		OnAbilityOnCooldownSound();
 	}
 }
 
@@ -366,7 +439,10 @@ void APlayableCharacter::OnHit()
 {
 	if (HasAuthority())
 		if (CachedPassiveInterface && RunTimePassive)
+		{
 			CachedPassiveInterface->OnHit();
+			OnHitSound();
+		}
 }
 
 float APlayableCharacter::CheckDistance(float Damage, APawn* OwnerPassive, APawn* Target)
@@ -390,6 +466,8 @@ void APlayableCharacter::OnSpecialAbility(int Index)
 {
 	OnSpecialAbilityCast(Index);
 }
+
+
 
 void APlayableCharacter::TakeDamage(float Amount)
 {
@@ -564,6 +642,26 @@ void APlayableCharacter::EndWeakenEffect_Implementation() const
 }
 
 
+void APlayableCharacter::CallBPDeathEvent()
+{
+	OnDeathSound();
+}
+
+void APlayableCharacter::CallBPGotHitEvent()
+{
+	OnGotHitSound();
+}
+
+void APlayableCharacter::CallBPLowHealthEvent()
+{
+	OnLowHealthSound();
+}
+
+void APlayableCharacter::CallBPHealedEvent()
+{
+	OnHealedSound();
+}
+
 bool APlayableCharacter::GetIsCasting()
 {
 	return bIsCasting;
@@ -591,9 +689,19 @@ TArray<USkillBase*> APlayableCharacter::GetRunTimeSkill()
 	return SkillsToSend;
 }
 
-void APlayableCharacter::ResetCharacter() const
+void APlayableCharacter::ResetCharacter()
 {
-	HealthComponent->SetHealthToMaxHealth();
+	HealthComponent->ResetHealth();
 	StatusEffectsComponent->CleanBuffs();
 }
 
+void APlayableCharacter::PlayCatchphrase()
+{
+	OnCatchphraseSound();
+}
+
+
+void APlayableCharacter::ResetMesh_Implementation()
+{
+	OnResetMeshEvent();
+}

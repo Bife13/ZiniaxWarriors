@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasePlayerController.h"
+#include "GameState2v2.h"
 #include "PlayableCharacter.h"
 #include "Engine/DataTable.h"
 #include "GameFramework/GameMode.h"
@@ -18,7 +19,9 @@ class ZINIAXWARRIORS_API AGameMode2v2 : public AGameMode
 {
 	GENERATED_BODY()
 
+
 protected:
+	virtual void BeginPlay() override;
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
 	                              const FString& Options, const FString& Portal) override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -29,12 +32,8 @@ protected:
 	static FString ParsingAbility1(const FString& Options);
 	static FString ParsingAbility2(const FString& Options);
 	static FString ParsingAbility3(const FString& Options);
+	
 
-	
-	class TCPClient* MMServerConnection;
-	
-	UFUNCTION()
-	void BeginPlay() override;
 	
 	UFUNCTION()
 	void SetDeathEvents();
@@ -54,6 +53,15 @@ protected:
 	UPROPERTY()
 	bool bCanDoorOpen = false;
 
+	FSocket* Socket;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString PlayerName;
+	// For Server just send " |";
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString PlayerPass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString IpString;
+
 
 	UFUNCTION()
 	TArray<APlayerStart*> GetPlayerStartsForTeam1();
@@ -68,6 +76,12 @@ protected:
 	void StartInBetweenRoundTimer(float Time);
 	UFUNCTION()
 	void StartDoorTimer(float Time);
+	UFUNCTION()
+	void RestartGameAfterDelay(float Time);
+	UFUNCTION()
+	void RespawnAfterDelay(float Time);
+	UFUNCTION()
+	void RestartServerAfterDelay(float Time);
 
 	
 	UFUNCTION()
@@ -79,20 +93,48 @@ protected:
 	void OpenDoors(float DeltaTime);
 	UFUNCTION()
 	void CloseDoors();
+	UFUNCTION()
+	void SendPlayersToLogin();
+	UFUNCTION()
+	void RestartServer();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void MatchTimer();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartMatchMusicEvent();
+	
 	UPROPERTY(BlueprintReadWrite)
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)
 	int Seconds = 30.f;
+	UFUNCTION()
+	void SetMinutesInGameState();
+	UFUNCTION()
+	void SetSecondsInGameState();
+	UFUNCTION()
+	void SetRoundCountInGameState();
+	UFUNCTION()
+	void SetTeam1RoundsWonInGameState();
+	UFUNCTION()
+	void SetTeam2RoundsWonInGameState();
+	UFUNCTION()
+	void UpdateRoundsInGameState();
+	UFUNCTION(BlueprintCallable)
+	void UpdateGameTimer();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void DeactivateHitbox(APlayableCharacter* DeadCharacter);
 
 
+	UPROPERTY(BlueprintReadWrite)
+	TArray<APlayableCharacter*> Team1PlayerCharacters;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<APlayableCharacter*> Team2PlayerCharacters;
 private:
+	UPROPERTY()
+	AGameState2v2* GameState2v2;
+
 	UPROPERTY()
 	TArray<AActor*> PlayerStarts;
 	UPROPERTY()
@@ -100,11 +142,7 @@ private:
 	UPROPERTY()
 	TArray<ABasePlayerController*> PlayerControllers;
 	UPROPERTY()
-	TArray<APlayableCharacter*> Team1PlayerCharacters;
-	UPROPERTY()
 	TArray<UHealthSystem*> Team1HealthComponents;
-	UPROPERTY()
-	TArray<APlayableCharacter*> Team2PlayerCharacters;
 	UPROPERTY()
 	TArray<UHealthSystem*> Team2HealthComponents;
 
@@ -125,12 +163,20 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int Team2DeathCounter = 0;
 
-	UPROPERTY()
-	int RoundCounter = 0;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
+	int RoundCounter = 1;
+	UPROPERTY(VisibleAnywhere)
 	int Team1RoundsWon = 0;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	int Team2RoundsWon = 0;
+
+	UPROPERTY(VisibleAnywhere)
+	int DelayAfterRoundEnd = 5;
+	UPROPERTY(VisibleAnywhere)
+	int DelayAfterGameEnd = 15;
+	UPROPERTY(VisibleAnywhere)
+	int DelayBetweenRounds = 3;
+	
 
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))

@@ -5,7 +5,7 @@ set UE4Dir="C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.
 set ProjectDir="%cd%/ZiniaxWarriors.uproject"
 
 :: Default Map To Load Into As A Server
-set Map=/Game/Maps/ActualMap?IP=127.0.0.1
+set Map=/Game/Maps/ActualMap?IP=10.72.42.252
 
 :: Nothing To Do Here Just The Role (Client (game) Or Server (server))
 set Role=-server

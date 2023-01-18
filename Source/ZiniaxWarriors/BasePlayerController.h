@@ -26,6 +26,9 @@ public:
 	UFUNCTION()
 	void CharacterDeactivate();
 
+	UFUNCTION(Client,Reliable)
+	void ReopenLogin();
+
 protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
