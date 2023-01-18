@@ -59,9 +59,7 @@ void APlayableCharacter::StartBeginPlay()
 	{
 		CachedWorld = World;
 	}
-
-	OnCatchphraseSound();
-
+	
 	PopulateSkillArray();
 	PassiveInitializeFunction();
 
@@ -194,7 +192,6 @@ void APlayableCharacter::Tick(const float DeltaTime)
 	OnTickPassive(DeltaTime);
 
 
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
 
@@ -328,6 +325,7 @@ void APlayableCharacter::PopulateSkillArray_Implementation()
 void APlayableCharacter::ObserveSpeedBuffs()
 {
 	BaseSpeed = StatsComponent->GetSpeed();
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 }
 
 void APlayableCharacter::ObserverResistanceBuffs()
@@ -698,8 +696,13 @@ void APlayableCharacter::ResetCharacter()
 {
 	HealthComponent->ResetHealth();
 	StatusEffectsComponent->CleanBuffs();
+}
+
+void APlayableCharacter::PlayCatchphrase()
+{
 	OnCatchphraseSound();
 }
+
 
 void APlayableCharacter::ResetMesh_Implementation()
 {
