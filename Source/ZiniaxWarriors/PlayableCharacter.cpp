@@ -190,7 +190,7 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	OnTickPassive(DeltaTime);
 
-if(GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed())
+if(GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed() && !bIsDead)
 	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
 }
 
@@ -684,12 +684,12 @@ void APlayableCharacter::SetIsCasting_Implementation(bool Value)
 
 bool APlayableCharacter::GetIsDead()
 {
-	return bIsCasting;
+	return bIsDead;
 }
 
 void APlayableCharacter::SetIsDead_Implementation(bool Value)
 {
-	bIsCasting = Value;
+	bIsDead = Value;
 }
 
 
