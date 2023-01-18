@@ -44,6 +44,8 @@ protected:
 	UFUNCTION()
 	bool CheckRoundCounter();
 
+	
+
 	UFUNCTION()
 	void SetCanDoorOpenTrue() { bCanDoorOpen = true; }
 

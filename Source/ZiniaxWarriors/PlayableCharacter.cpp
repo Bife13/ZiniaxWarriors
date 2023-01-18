@@ -47,7 +47,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupWeakenParticleSystem();
 	SetupSlowParticleSystem();
 
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
@@ -58,7 +58,7 @@ void APlayableCharacter::StartBeginPlay_Implementation()
 	{
 		CachedWorld = World;
 	}
-	
+
 	PopulateSkillArray();
 	PassiveInitializeFunction();
 
@@ -98,10 +98,10 @@ void APlayableCharacter::StartBeginPlay_Implementation()
 	StatsComponent->OnWeakenAppliedEvent.AddUFunction(this, "StartWeakenEffect");
 	StatsComponent->OnWeakenRemovedEvent.AddUFunction(this, "EndWeakenEffect");
 
-	HealthComponent->OnDeathEvent.AddUFunction(this,"CallBPDeathEvent");
-	HealthComponent->OnGotHitEvent.AddUFunction(this,"CallBPGotHitEvent");
-	HealthComponent->OnLowHealth.AddUFunction(this,"CallBPLowHealthEvent");
-	HealthComponent->OnHealedEvent.AddUFunction(this,"CallBPHealedEvent");
+	HealthComponent->OnDeathEvent.AddUFunction(this, "CallBPDeathEvent");
+	HealthComponent->OnGotHitEvent.AddUFunction(this, "CallBPGotHitEvent");
+	HealthComponent->OnLowHealth.AddUFunction(this, "CallBPLowHealthEvent");
+	HealthComponent->OnHealedEvent.AddUFunction(this, "CallBPHealedEvent");
 }
 
 bool APlayableCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -187,13 +187,12 @@ FVector APlayableCharacter::GetMousePos()
 void APlayableCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+     if(!bIsDead)
 	OnTickPassive(DeltaTime);
 
-if(GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed() && !bIsDead)
-	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
+	if (GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed() && !bIsDead)
+		GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
 }
-
 
 
 void APlayableCharacter::LockRotation()
@@ -326,15 +325,13 @@ void APlayableCharacter::ObserveSpeedBuffs_Implementation()
 {
 	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
 	ChangeServerSpeed();
-	GEngine->AddOnScreenDebugMessage(1,0.5,FColor::Green, "FODASSEeeeeeeeeeeeeeeeeeeeeee");
 }
 
 
 void APlayableCharacter::ChangeServerSpeed_Implementation()
 {
-	GetCharacterMovement()->MaxWalkSpeed =  StatsComponent->GetSpeed();
-	//GEngine->AddOnScreenDebugMessage(2,0.5,FColor::Blue, "got here");
-
+	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
+	
 }
 
 void APlayableCharacter::ObserverResistanceBuffs()
@@ -353,7 +350,6 @@ void APlayableCharacter::MoveVertical_Implementation(float Value)
 	const FVector MoveDirection = {1, 0, 0};
 	AddMovementInput(MoveDirection, Value);
 	OnFootstepsSound();
-
 }
 
 void APlayableCharacter::MoveHorizontal_Implementation(float Value)
@@ -372,17 +368,16 @@ void APlayableCharacter::HandleCastEvent1_Implementation(float Value)
 void APlayableCharacter::HandleCastEvent2_Implementation(float Value)
 {
 	CastEventAbility1.Broadcast(Value);
-
 }
+
 void APlayableCharacter::HandleCastEvent3_Implementation(float Value)
 {
 	CastEventAbility2.Broadcast(Value);
-
 }
+
 void APlayableCharacter::HandleCastEvent4_Implementation(float Value)
 {
 	CastEventAbility3.Broadcast(Value);
-
 }
 
 void APlayableCharacter::UseBasicAttack_Implementation()
@@ -396,7 +391,7 @@ void APlayableCharacter::UseBasicAttack_Implementation()
 
 void APlayableCharacter::UseFirstAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting()&& RuntimeSkills[1]->bCanUse)
+	if (RuntimeSkills.IsValidIndex(1) && !GetIsCasting() && RuntimeSkills[1]->bCanUse)
 	{
 		RuntimeSkills[1]->CastSkill(AttackAnimations[1]);
 		HandleCastEvent2(RuntimeSkills[1]->AbilityCooldown);
@@ -410,12 +405,13 @@ void APlayableCharacter::UseFirstAbility_Implementation()
 
 void APlayableCharacter::UseSecondAbility_Implementation()
 {
-	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting()&& RuntimeSkills[2]->bCanUse)
+	if (RuntimeSkills.IsValidIndex(2) && !GetIsCasting() && RuntimeSkills[2]->bCanUse)
 	{
 		RuntimeSkills[2]->CastSkill(AttackAnimations[2]);
 		HandleCastEvent3(RuntimeSkills[2]->AbilityCooldown);
 		OnHandleAbilitySound();
-	}else
+	}
+	else
 	{
 		OnAbilityOnCooldownSound();
 	}
@@ -428,7 +424,8 @@ void APlayableCharacter::UseThirdAbility_Implementation()
 		RuntimeSkills[3]->CastSkill(AttackAnimations[3]);
 		HandleCastEvent4(RuntimeSkills[3]->AbilityCooldown);
 		OnHandleAbilitySound();
-	}else
+	}
+	else
 	{
 		OnAbilityOnCooldownSound();
 	}
@@ -476,7 +473,6 @@ void APlayableCharacter::OnSpecialAbility(int Index)
 {
 	OnSpecialAbilityCast(Index);
 }
-
 
 
 void APlayableCharacter::TakeDamage(float Amount)
@@ -690,6 +686,17 @@ bool APlayableCharacter::GetIsDead()
 void APlayableCharacter::SetIsDead_Implementation(bool Value)
 {
 	bIsDead = Value;
+	if (Value)
+	{
+		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,
+		                                                     ECollisionResponse::ECR_Ignore);
+	}
+	else
+	{
+		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,
+		                                                     ECollisionResponse::ECR_Block);
+	}
+
 }
 
 
