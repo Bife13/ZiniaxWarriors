@@ -1208,3 +1208,11 @@ Warrior: Zerher
 Ability1: Eletrogate
 Ability2: DarkSwarm
 Ability3: SniperShot
+Warrior: Zerher
+Ability1: Roar
+Ability2: SniperShot
+Ability3: EletroGate
+Warrior: Zerher
+Ability1: Roar
+Ability2: SniperShot
+Ability3: EletroGate
