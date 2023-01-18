@@ -20,10 +20,10 @@ class ZINIAXWARRIORS_API ABasePlayerController : public APlayerController
 public:
 	ABasePlayerController();
 	// void OnCharacterPossess(ACharacter* InCharacter) ;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void CharacterActivate();
 
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void CharacterDeactivate();
 
 	UFUNCTION(Client,Reliable)

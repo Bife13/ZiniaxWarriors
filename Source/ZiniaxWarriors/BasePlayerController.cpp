@@ -14,12 +14,12 @@ ABasePlayerController::ABasePlayerController()
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
 }
 
-void ABasePlayerController::CharacterActivate()
+void ABasePlayerController::CharacterActivate_Implementation()
 {
 	bIsCharacterActivated = true;
 }
 
-void ABasePlayerController::CharacterDeactivate()
+void ABasePlayerController::CharacterDeactivate_Implementation()
 {
 	bIsCharacterActivated = false;
 }
