@@ -324,8 +324,7 @@ void APlayableCharacter::PopulateSkillArray_Implementation()
 
 void APlayableCharacter::ObserveSpeedBuffs_Implementation()
 {
-	BaseSpeed = StatsComponent->GetSpeed();
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
 	ChangeServerSpeed();
 	GEngine->AddOnScreenDebugMessage(1,0.5,FColor::Green, "FODASSEeeeeeeeeeeeeeeeeeeeeee");
 }
@@ -333,8 +332,7 @@ void APlayableCharacter::ObserveSpeedBuffs_Implementation()
 
 void APlayableCharacter::ChangeServerSpeed_Implementation()
 {
-	BaseSpeed = StatsComponent->GetSpeed();
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+	GetCharacterMovement()->MaxWalkSpeed =  StatsComponent->GetSpeed();
 	//GEngine->AddOnScreenDebugMessage(2,0.5,FColor::Blue, "got here");
 
 }

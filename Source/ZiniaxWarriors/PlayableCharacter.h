@@ -274,9 +274,9 @@ protected:
 	void SetupTopDownCamera();
 	UFUNCTION(Server, Unreliable)
 	void PopulateSkillArray();
-	UFUNCTION(Server,Reliable)
+	UFUNCTION(NetMulticast,Reliable)
 	void ObserveSpeedBuffs();
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void ChangeServerSpeed();
 
 
