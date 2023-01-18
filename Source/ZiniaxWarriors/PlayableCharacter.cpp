@@ -48,7 +48,7 @@ APlayableCharacter::APlayableCharacter()
 	SetupWeakenParticleSystem();
 	SetupSlowParticleSystem();
 
-
+	
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
@@ -191,7 +191,8 @@ void APlayableCharacter::Tick(const float DeltaTime)
 
 	OnTickPassive(DeltaTime);
 
-
+if(GetCharacterMovement()->MaxWalkSpeed != StatsComponent->GetSpeed())
+	GetCharacterMovement()->MaxWalkSpeed = StatsComponent->GetSpeed();
 }
 
 
