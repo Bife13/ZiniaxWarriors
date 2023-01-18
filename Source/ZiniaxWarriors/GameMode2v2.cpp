@@ -76,7 +76,7 @@ FString AGameMode2v2::InitNewPlayer(APlayerController* NewPlayerController, cons
                                     const FString& Options, const FString& Portal)
 {
 	// TODO if need to go back to old method, just override the Variables
-	FString TestOptions = "?Warrior=Zerher?Ability1=Anchor?Ability2=SniperShot?Ability3=EletroGate";
+	FString TestOptions = "?Warrior=Zerher?Ability1=SmallHeal?Ability2=SniperShot?Ability3=EletroGate";
 
 	// if (Options.Len() > 0)
 	// {
