@@ -211,7 +211,7 @@ bool AGameMode2v2::ReadyToStartMatch_Implementation()
 		{
 			SetDeathEvents();
 			StartInBetweenRoundTimer(DelayBetweenRounds);
-			StartMatchMusicEvent();
+			StartMatchCameras();
 			return true;
 		}
 	}
@@ -503,6 +503,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		{
 			Team2PlayerCharacters[i]->AnnounceDefeat();
 		}
+		EndMatchCameras();
 		return true;
 	}
 	if (Team2RoundsWon >= 3)
@@ -520,6 +521,7 @@ bool AGameMode2v2::CheckRoundCounter()
 		{
 			Team1PlayerCharacters[i]->AnnounceDefeat();
 		}
+		EndMatchCameras();
 		return true;
 	}
 	return false;

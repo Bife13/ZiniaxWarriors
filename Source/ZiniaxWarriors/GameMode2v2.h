@@ -32,9 +32,8 @@ protected:
 	static FString ParsingAbility1(const FString& Options);
 	static FString ParsingAbility2(const FString& Options);
 	static FString ParsingAbility3(const FString& Options);
-	
 
-	
+
 	UFUNCTION()
 	void SetDeathEvents();
 	UFUNCTION()
@@ -44,7 +43,6 @@ protected:
 	UFUNCTION()
 	bool CheckRoundCounter();
 
-	
 
 	UFUNCTION()
 	void SetCanDoorOpenTrue() { bCanDoorOpen = true; }
@@ -85,7 +83,7 @@ protected:
 	UFUNCTION()
 	void RestartServerAfterDelay(float Time);
 
-	
+
 	UFUNCTION()
 	void ActivateAllCharacters();
 	UFUNCTION()
@@ -102,10 +100,14 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void MatchTimer();
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartMatchCameras();
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndMatchCameras();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartMatchMusicEvent();
-	
+
 	UPROPERTY(BlueprintReadWrite)
 	int Minutes = 1;
 	UPROPERTY(BlueprintReadWrite)
@@ -178,7 +180,6 @@ private:
 	int DelayAfterGameEnd = 15;
 	UPROPERTY(VisibleAnywhere)
 	int DelayBetweenRounds = 3;
-	
 
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess))
